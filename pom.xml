@@ -45,6 +45,13 @@
             <artifactId>mssql-jdbc</artifactId>
             <version>${mssql.jdbc.version}</version>
         </dependency>
+        <!-- Connection pool: avoids opening a brand-new TCP connection to
+             SQL Server on every single DAO call -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>7.0.2</version>
+        </dependency>
     </dependencies>
 
     <build>
