@@ -20,11 +20,8 @@
 /home/ghost-lock/projects/personal/java/cinema-booking-system/src/main/java/Controller/UsertypeController.java
 /home/ghost-lock/projects/personal/java/cinema-booking-system/src/main/java/Controller/WelcomeController.java
 /home/ghost-lock/projects/personal/java/cinema-booking-system/src/main/java/DAO/BookingDAO.java
-/home/ghost-lock/projects/personal/java/cinema-booking-system/src/main/java/DAO/BookingDAOimp.java
 /home/ghost-lock/projects/personal/java/cinema-booking-system/src/main/java/DAO/MovieDAO.java
-/home/ghost-lock/projects/personal/java/cinema-booking-system/src/main/java/DAO/MovieDAOimp.java
 /home/ghost-lock/projects/personal/java/cinema-booking-system/src/main/java/DAO/MovieHallDAO.java
-/home/ghost-lock/projects/personal/java/cinema-booking-system/src/main/java/DAO/MoviehallDAOimp.java
 /home/ghost-lock/projects/personal/java/cinema-booking-system/src/main/java/DAO/PaymentDAO.java
 /home/ghost-lock/projects/personal/java/cinema-booking-system/src/main/java/DAO/PaymentDAOimp.java
 /home/ghost-lock/projects/personal/java/cinema-booking-system/src/main/java/DAO/SeatDAO.java
@@ -33,7 +30,7 @@
 /home/ghost-lock/projects/personal/java/cinema-booking-system/src/main/java/DAO/ShowDAOimp.java
 /home/ghost-lock/projects/personal/java/cinema-booking-system/src/main/java/DAO/UserDAO.java
 /home/ghost-lock/projects/personal/java/cinema-booking-system/src/main/java/DAO/UserDAOimp.java
-/home/ghost-lock/projects/personal/java/cinema-booking-system/src/main/java/Database/Sqlserverdatabaseconnection.java
+/home/ghost-lock/projects/personal/java/cinema-booking-system/src/main/java/Database/DatabaseConnection.java
 /home/ghost-lock/projects/personal/java/cinema-booking-system/src/main/java/Main.java
 /home/ghost-lock/projects/personal/java/cinema-booking-system/src/main/java/Model/Admin.java
 /home/ghost-lock/projects/personal/java/cinema-booking-system/src/main/java/Model/Booking.java

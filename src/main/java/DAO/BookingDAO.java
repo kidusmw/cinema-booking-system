@@ -23,7 +23,7 @@ public class BookingDAO {
                 parsedShowID = Integer.parseInt(booking.getShowID().trim());
             } catch (NumberFormatException e) {
                 logger.warn(
-                    "Invalid Show_ID format for booking: '{}'",
+                    "Invalid show_id format for booking: '{}'",
                     booking.getShowID()
                 );
                 return false;
@@ -31,8 +31,8 @@ public class BookingDAO {
         }
 
         String sql =
-            "INSERT INTO Booking(Booking_date, User_ID, Show_ID, Movie_name, BookingStatus) " +
-            "VALUES(GETDATE(), ?, ?, ?, ?)";
+            "INSERT INTO booking(booking_date, user_id, show_id, movie_name, status) " +
+            "VALUES(CURRENT_DATE, ?, ?, ?, ?)";
 
         try (
             Connection con = DatabaseConnection.getConnection();
@@ -48,7 +48,7 @@ public class BookingDAO {
                 4,
                 booking.getBookingStatus() != null
                     ? booking.getBookingStatus()
-                    : "CONFIRMED"
+                    : "confirmed"
             );
 
             logger.debug(
@@ -85,8 +85,8 @@ public class BookingDAO {
     public List<Booking> getBookingsByUserId(int userId) {
         List<Booking> historyList = new ArrayList<>();
         String sql =
-            "SELECT Booking_ID, Booking_date, Show_ID, Movie_name, BookingStatus " +
-            "FROM Booking WHERE User_ID = ? ORDER BY Booking_date DESC";
+            "SELECT booking_id, booking_date, show_id, movie_name, status " +
+            "FROM booking WHERE user_id = ? ORDER BY booking_date DESC";
 
         try (
             Connection con = DatabaseConnection.getConnection();
@@ -96,10 +96,10 @@ public class BookingDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Booking b = new Booking();
-                    b.setBookingID(rs.getInt("Booking_ID"));
+                    b.setBookingID(rs.getInt("booking_id"));
 
                     java.sql.Timestamp dbTimestamp = rs.getTimestamp(
-                        "Booking_date"
+                        "booking_date"
                     );
                     if (dbTimestamp != null) {
                         b.setBookingDate(
@@ -109,9 +109,9 @@ public class BookingDAO {
                         b.setBookingDate(null);
                     }
 
-                    b.setShowID(String.valueOf(rs.getInt("Show_ID")));
-                    b.setMovieName(rs.getString("Movie_name"));
-                    b.setBookingStatus(rs.getString("BookingStatus"));
+                    b.setShowID(String.valueOf(rs.getInt("show_id")));
+                    b.setMovieName(rs.getString("movie_name"));
+                    b.setBookingStatus(rs.getString("status"));
 
                     historyList.add(b);
                 }
@@ -128,7 +128,7 @@ public class BookingDAO {
 
     public boolean updateBooking(Booking booking) {
         String sql =
-            "UPDATE Booking SET User_ID=?, Show_ID=?, Movie_name=?, BookingStatus=? WHERE Booking_ID=?";
+            "UPDATE booking SET user_id=?, show_id=?, movie_name=?, status=? WHERE booking_id=?";
         try (
             Connection con = DatabaseConnection.getConnection();
             PreparedStatement ps = con.prepareStatement(sql)
@@ -159,7 +159,7 @@ public class BookingDAO {
     }
 
     public boolean deleteBooking(int bookingID) {
-        String sql = "DELETE FROM Booking WHERE Booking_ID=?";
+        String sql = "DELETE FROM booking WHERE booking_id=?";
         try (
             Connection con = DatabaseConnection.getConnection();
             PreparedStatement ps = con.prepareStatement(sql)
@@ -173,15 +173,11 @@ public class BookingDAO {
     }
 
     public Booking searchBookingById(int bookingID) {
-        // NOTE: this query references a "Users" table that does not exist in
-        // script.sql (the real table is "User_") - this almost certainly
-        // throws every time it's called. Left as-is for now; revisit when
-        // script.sql itself gets reviewed.
         String sql =
-            "SELECT b.Booking_ID, b.Booking_date, b.User_ID, b.Show_ID, b.Movie_name, b.BookingStatus, u.Username " +
-            "FROM Booking b " +
-            "LEFT JOIN Users u ON b.User_ID = u.User_ID " +
-            "WHERE b.Booking_ID=?";
+            "SELECT b.booking_id, b.booking_date, b.user_id, b.show_id, b.movie_name, b.status, u.username " +
+            "FROM booking b " +
+            "LEFT JOIN \"user\" u ON b.user_id = u.user_id " +
+            "WHERE b.booking_id=?";
         try (
             Connection con = DatabaseConnection.getConnection();
             PreparedStatement ps = con.prepareStatement(sql)
@@ -201,10 +197,10 @@ public class BookingDAO {
     public List<Booking> getAllBookings() {
         List<Booking> list = new ArrayList<>();
         String sql =
-            "SELECT b.Booking_ID, b.Booking_date, b.User_ID, b.Show_ID, b.Movie_name, b.BookingStatus, u.Username " +
-            "FROM Booking b " +
-            "LEFT JOIN User_ u ON b.User_ID = u.User_ID " +
-            "ORDER BY b.Booking_ID DESC";
+            "SELECT b.booking_id, b.booking_date, b.user_id, b.show_id, b.movie_name, b.status, u.username " +
+            "FROM booking b " +
+            "LEFT JOIN \"user\" u ON b.user_id = u.user_id " +
+            "ORDER BY b.booking_id DESC";
         try (
             Connection con = DatabaseConnection.getConnection();
             PreparedStatement ps = con.prepareStatement(sql);
@@ -222,7 +218,7 @@ public class BookingDAO {
 
     public boolean cancelBooking(int bookingID) {
         String sql =
-            "UPDATE Booking SET BookingStatus='CANCELLED' WHERE Booking_ID=?";
+            "UPDATE booking SET status='cancelled' WHERE booking_id=?";
         try (
             Connection con = DatabaseConnection.getConnection();
             PreparedStatement ps = con.prepareStatement(sql)
@@ -238,18 +234,18 @@ public class BookingDAO {
     private Booking mapRow(ResultSet rs) throws SQLException {
         Booking b = new Booking();
 
-        b.setBookingID(rs.getInt("Booking_ID"));
+        b.setBookingID(rs.getInt("booking_id"));
 
-        java.sql.Timestamp ts = rs.getTimestamp("Booking_date");
+        java.sql.Timestamp ts = rs.getTimestamp("booking_date");
         if (ts != null) {
             b.setBookingDate(new java.util.Date(ts.getTime()));
         }
 
-        b.setUserID(rs.getInt("User_ID"));
-        b.setShowID(String.valueOf(rs.getInt("Show_ID")));
-        b.setMovieName(rs.getString("Movie_name"));
-        b.setBookingStatus(rs.getString("BookingStatus"));
-        b.setCustomerName(rs.getString("Username"));
+        b.setUserID(rs.getInt("user_id"));
+        b.setShowID(String.valueOf(rs.getInt("show_id")));
+        b.setMovieName(rs.getString("movie_name"));
+        b.setBookingStatus(rs.getString("status"));
+        b.setCustomerName(rs.getString("username"));
 
         return b;
     }
