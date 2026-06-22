@@ -17,8 +17,6 @@
         <!-- Matches the JavaFX SDK version already in use (openjfx-21.0.2).
              Bump this if you upgrade JavaFX locally. -->
         <javafx.version>21.0.2</javafx.version>
-        <!-- Matches sqljdbc_13.4.0.0_enu/mssql-jdbc-13.4.0.jre11.jar already in use -->
-        <mssql.jdbc.version>13.4.0.jre11</mssql.jdbc.version>
     </properties>
 
     <dependencies>
@@ -39,18 +37,26 @@
             <version>${javafx.version}</version>
         </dependency>
 
-        <!-- SQL Server JDBC driver -->
+        <!-- PostgreSQL JDBC driver -->
         <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-            <version>${mssql.jdbc.version}</version>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.3</version>
         </dependency>
+
         <!-- Connection pool: avoids opening a brand-new TCP connection to
              SQL Server on every single DAO call -->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>7.0.2</version>
+        </dependency>
+        <!-- Logging backend: SLF4J (used by HikariCP and our own logger
+             calls) needs an actual implementation to write anywhere -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.5.34</version>
         </dependency>
     </dependencies>
 

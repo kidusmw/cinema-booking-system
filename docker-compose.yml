@@ -1,0 +1,28 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: cinema-booking-db
+    environment:
+      POSTGRES_DB: cinema_booking
+      POSTGRES_USER: java_user
+      POSTGRES_PASSWORD: java_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - cinema-db-data:/var/lib/postgresql/data
+      - ./script.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U java_user -d cinema_booking"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  cinema-db-data:

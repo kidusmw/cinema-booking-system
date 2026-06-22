@@ -4,6 +4,13 @@ import DAO.ShowDAO;
 import DAO.ShowDAOimp;
 import Model.Show;
 import View.ShowManagementPage;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,14 +19,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 public class ShowManagmentController {
 
@@ -32,7 +31,11 @@ public class ShowManagmentController {
     private final Map<String, String> hallMap = new HashMap<>();
     private final Map<String, String> movieMapById = new HashMap<>();
     private final Map<String, String> hallMapById = new HashMap<>();
-    public ShowManagmentController(Stage stage, AdminDashboardController dashboard) {
+
+    public ShowManagmentController(
+        Stage stage,
+        AdminDashboardController dashboard
+    ) {
         this.stage = stage;
         this.dashboard = dashboard;
         this.view = new ShowManagementPage();
@@ -47,12 +50,15 @@ public class ShowManagmentController {
         });
         view.btnBack.setOnAction(e -> handleBack());
 
-        view.searchField.textProperty().addListener((obs, oldVal, newVal) -> filterShows(newVal));
+        view.searchField
+            .textProperty()
+            .addListener((obs, oldVal, newVal) -> filterShows(newVal));
 
         view.showTable.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) handleEditShow();
         });
     }
+
     public VBox getRootView() {
         return view.getView();
     }
@@ -66,8 +72,11 @@ public class ShowManagmentController {
         String movieQuery = "SELECT Movie_ID, Title FROM dbo.Movie_";
         String hallQuery = "SELECT Movie_hall_ID, Name FROM dbo.Movie_Hall_";
 
-        try (Connection conn = Database.Sqlserverdatabaseconnection.getConnection()) {
-            try (PreparedStatement ps = conn.prepareStatement(movieQuery); ResultSet rs = ps.executeQuery()) {
+        try (Connection conn = Database.DatabaseConnection.getConnection()) {
+            try (
+                PreparedStatement ps = conn.prepareStatement(movieQuery);
+                ResultSet rs = ps.executeQuery()
+            ) {
                 while (rs.next()) {
                     String id = rs.getString("Movie_ID");
                     String title = rs.getString("Title");
@@ -75,7 +84,10 @@ public class ShowManagmentController {
                     movieMapById.put(id, title);
                 }
             }
-            try (PreparedStatement ps = conn.prepareStatement(hallQuery); ResultSet rs = ps.executeQuery()) {
+            try (
+                PreparedStatement ps = conn.prepareStatement(hallQuery);
+                ResultSet rs = ps.executeQuery()
+            ) {
                 while (rs.next()) {
                     String id = rs.getString("Movie_hall_ID");
                     String name = rs.getString("Name");
@@ -84,17 +96,25 @@ public class ShowManagmentController {
                 }
             }
         } catch (Exception ex) {
-            System.out.println("Error pulling database references: " + ex.getMessage());
+            System.out.println(
+                "Error pulling database references: " + ex.getMessage()
+            );
         }
     }
 
     private void loadShows() {
         List<Show> shows = showDAO.getAllShows();
         for (Show show : shows) {
-            if (show.getMovieID() != null && movieMapById.containsKey(show.getMovieID())) {
+            if (
+                show.getMovieID() != null &&
+                movieMapById.containsKey(show.getMovieID())
+            ) {
                 show.setMovieName(movieMapById.get(show.getMovieID()));
             }
-            if (show.getMovieHallID() != null && hallMapById.containsKey(show.getMovieHallID())) {
+            if (
+                show.getMovieHallID() != null &&
+                hallMapById.containsKey(show.getMovieHallID())
+            ) {
                 show.setHallName(hallMapById.get(show.getMovieHallID()));
             }
         }
@@ -111,10 +131,14 @@ public class ShowManagmentController {
         ObservableList<Show> filtered = FXCollections.observableArrayList();
         String lower = searchText.toLowerCase();
         for (Show show : showList) {
-            if (show.getShowID().toLowerCase().contains(lower) ||
-                    (show.getMovieName() != null && show.getMovieName().toLowerCase().contains(lower)) ||
-                    (show.getHallName() != null && show.getHallName().toLowerCase().contains(lower)) ||
-                    show.getShowTime().toLowerCase().contains(lower)) {
+            if (
+                show.getShowID().toLowerCase().contains(lower) ||
+                (show.getMovieName() != null &&
+                    show.getMovieName().toLowerCase().contains(lower)) ||
+                (show.getHallName() != null &&
+                    show.getHallName().toLowerCase().contains(lower)) ||
+                show.getShowTime().toLowerCase().contains(lower)
+            ) {
                 filtered.add(show);
             }
         }
@@ -157,7 +181,9 @@ public class ShowManagmentController {
         if (selected == null) return;
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setContentText("Delete show ID: \"" + selected.getShowID() + "\"?");
+        confirm.setContentText(
+            "Delete show ID: \"" + selected.getShowID() + "\"?"
+        );
 
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -173,20 +199,35 @@ public class ShowManagmentController {
         if (dashboard != null) {
             dashboard.showDashboard();
         } else {
-            showAlert("Routing Error", "Cannot go back: Dashboard connection lost.");
+            showAlert(
+                "Routing Error",
+                "Cannot go back: Dashboard connection lost."
+            );
         }
     }
+
     private Dialog<Show> createShowDialog(Show existing) {
         Dialog<Show> dialog = new Dialog<>();
-        dialog.setTitle(existing == null ? "Schedule New Screening" : "Modify Screening Properties");
+        dialog.setTitle(
+            existing == null
+                ? "Schedule New Screening"
+                : "Modify Screening Properties"
+        );
 
         ButtonType saveButtonType = ButtonType.OK;
-        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
-        Button btnSave = (Button) dialog.getDialogPane().lookupButton(saveButtonType);
+        dialog
+            .getDialogPane()
+            .getButtonTypes()
+            .addAll(saveButtonType, ButtonType.CANCEL);
+        Button btnSave = (Button) dialog
+            .getDialogPane()
+            .lookupButton(saveButtonType);
         if (btnSave != null) btnSave.setText("Save Configurations");
 
         GridPane grid = new GridPane();
-        grid.setHgap(12); grid.setVgap(12); grid.setPadding(new Insets(20, 40, 10, 20));
+        grid.setHgap(12);
+        grid.setVgap(12);
+        grid.setPadding(new Insets(20, 40, 10, 20));
 
         TextField showIDField = new TextField();
         if (existing != null) showIDField.setText(existing.getShowID());
@@ -202,25 +243,38 @@ public class ShowManagmentController {
 
         DatePicker datePicker = new DatePicker();
         if (existing != null && existing.getShowDate() != null) {
-            datePicker.setValue(new java.sql.Date(existing.getShowDate().getTime()).toLocalDate());
+            datePicker.setValue(
+                new java.sql.Date(
+                    existing.getShowDate().getTime()
+                ).toLocalDate()
+            );
         }
 
         TextField timeField = new TextField();
         if (existing != null) timeField.setText(existing.getShowTime());
 
-        grid.add(new Label("Show Code Key:"), 0, 0); grid.add(showIDField, 1, 0);
-        grid.add(new Label("Film Feature:"), 0, 1); grid.add(movieComboBox, 1, 1);
-        grid.add(new Label("Auditorium:"), 0, 2); grid.add(hallComboBox, 1, 2);
-        grid.add(new Label("Date:"), 0, 3); grid.add(datePicker, 1, 3);
-        grid.add(new Label("Time (24h):"), 0, 4); grid.add(timeField, 1, 4);
+        grid.add(new Label("Show Code Key:"), 0, 0);
+        grid.add(showIDField, 1, 0);
+        grid.add(new Label("Film Feature:"), 0, 1);
+        grid.add(movieComboBox, 1, 1);
+        grid.add(new Label("Auditorium:"), 0, 2);
+        grid.add(hallComboBox, 1, 2);
+        grid.add(new Label("Date:"), 0, 3);
+        grid.add(datePicker, 1, 3);
+        grid.add(new Label("Time (24h):"), 0, 4);
+        grid.add(timeField, 1, 4);
 
         dialog.getDialogPane().setContent(grid);
 
         if (btnSave != null) {
             btnSave.addEventFilter(ActionEvent.ACTION, event -> {
-                if (showIDField.getText().trim().isEmpty() || movieComboBox.getValue() == null ||
-                        hallComboBox.getValue() == null || datePicker.getValue() == null ||
-                        timeField.getText().trim().isEmpty()) {
+                if (
+                    showIDField.getText().trim().isEmpty() ||
+                    movieComboBox.getValue() == null ||
+                    hallComboBox.getValue() == null ||
+                    datePicker.getValue() == null ||
+                    timeField.getText().trim().isEmpty()
+                ) {
                     showAlert("Validation", "All fields are required!");
                     event.consume();
                 }
@@ -242,7 +296,9 @@ public class ShowManagmentController {
                 show.setMovieHallID(hallMap.get(selectedHallName));
 
                 if (datePicker.getValue() != null) {
-                    show.setShowDate(java.sql.Date.valueOf(datePicker.getValue()));
+                    show.setShowDate(
+                        java.sql.Date.valueOf(datePicker.getValue())
+                    );
                 }
                 show.setShowTime(timeField.getText().trim());
                 return show;

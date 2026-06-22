@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class Sqlserverdatabaseconnection {
+public class DatabaseConnection {
 
     private static final HikariDataSource dataSource;
 
@@ -21,33 +21,25 @@ public class Sqlserverdatabaseconnection {
         Properties props = loadProperties();
 
         String host = props.getProperty("db.host", "localhost");
-        String port = props.getProperty("db.port", "1433");
-        String database = props.getProperty("db.name", "Cinema_Booking_System");
+        String port = props.getProperty("db.port", "5432");
+        String database = props.getProperty("db.name", "cinema_booking");
         String user = props.getProperty("db.user", "java_user");
-        String password = props.getProperty("db.password", "java123");
+        String password = props.getProperty("db.password", "java_pass");
 
-        String url =
-            "jdbc:sqlserver://" +
-            host +
-            ":" +
-            port +
-            ";" +
-            "databaseName=" +
-            database +
-            ";" +
-            "encrypt=false;" +
-            "trustServerCertificate=true;";
+        String url = "jdbc:postgresql://" + host + ":" + port + "/" + database;
 
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(url);
         config.setUsername(user);
         config.setPassword(password);
-        config.setDriverClassName(
-            "com.microsoft.sqlserver.jdbc.SQLServerDriver"
-        );
+        config.setDriverClassName("org.postgresql.Driver");
         config.setMaximumPoolSize(10);
         config.setMinimumIdle(2);
         config.setPoolName("CinemaBookingPool");
+
+        // PostgreSQL-specific: disable auto-commit if you want to
+        // manage transactions manually, or leave it as default true
+        // config.setAutoCommit(false);
 
         dataSource = new HikariDataSource(config);
     }
@@ -58,10 +50,9 @@ public class Sqlserverdatabaseconnection {
     private static Properties loadProperties() {
         Properties props = new Properties();
         try (
-            InputStream in =
-                Sqlserverdatabaseconnection.class.getResourceAsStream(
-                    "/db.properties"
-                )
+            InputStream in = DatabaseConnection.class.getResourceAsStream(
+                "/db.properties"
+            )
         ) {
             if (in != null) {
                 props.load(in);
@@ -83,23 +74,15 @@ public class Sqlserverdatabaseconnection {
     // try-with-resources, same as before - calling close() on a pooled
     // connection returns it to the pool instead of actually closing the
     // socket, so no DAO code needs to change.
-    //
-    // This now declares "throws SQLException" instead of silently
-    // swallowing the error and returning null - the old version would
-    // print "CONNECTION FAILED!" and hand back null, which meant the
-    // very next line (conn.prepareStatement(...)) would throw a
-    // NullPointerException instead of a meaningful SQL error.
     public static Connection getConnection() throws SQLException {
         return dataSource.getConnection();
     }
 
     public static void printDatabaseInfo() {
-        String sql = """
-            SELECT
-                DB_NAME() AS current_database,
-                SUSER_SNAME() AS login_name,
-                @@SERVERNAME AS server_name
-            """;
+        String sql =
+            "SELECT current_database() AS current_database, " +
+            "current_user AS login_name, " +
+            "inet_server_addr() AS server_address";
 
         try (
             Connection conn = getConnection();
@@ -112,11 +95,18 @@ public class Sqlserverdatabaseconnection {
                 );
                 System.out.println("Login name: " + rs.getString("login_name"));
                 System.out.println(
-                    "Server name: " + rs.getString("server_name")
+                    "Server address: " + rs.getString("server_address")
                 );
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    // Graceful shutdown - call this when your app exits
+    public static void closePool() {
+        if (dataSource != null && !dataSource.isClosed()) {
+            dataSource.close();
         }
     }
 }
