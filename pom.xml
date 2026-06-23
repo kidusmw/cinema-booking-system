@@ -22,6 +22,7 @@
         <testcontainers.version>1.20.4</testcontainers.version>
         <assertj.version>3.26.3</assertj.version>
         <flyway.version>10.18.2</flyway.version>
+        <jbcrypt.version>0.4</jbcrypt.version>
     </properties>
 
     <dependencies>
@@ -100,6 +101,13 @@
             <artifactId>assertj-core</artifactId>
             <version>${assertj.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- BCrypt password hashing -->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>${jbcrypt.version}</version>
         </dependency>
 
         <!-- Flyway: schema migration -->
