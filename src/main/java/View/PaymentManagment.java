@@ -8,6 +8,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import Model.Payment;
+import static ui.common.Theme.*;
 public class PaymentManagment {
     public TableView<Payment> paymentTable;
     public Label lblTotalPayments;
@@ -18,9 +19,7 @@ public class PaymentManagment {
 
     private VBox root;
 
-    private static final String ACCENT = "#DB2777";
-    private static final String TEXT_DARK = "#1E293B";
-    private static final String BORDER = "#E2E8F0";
+
 
     public PaymentManagment() {
         createUI();

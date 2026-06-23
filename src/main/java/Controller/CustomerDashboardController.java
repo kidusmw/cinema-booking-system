@@ -12,16 +12,13 @@ import javafx.geometry.*;
 import DAO.BookingDAO;
 
 import java.util.List;
+import static ui.common.Theme.*;
 
 public class CustomerDashboardController {
     private CustomerDashboardPage view;
     private Stage stage;
     private Customer currentUser;
-    private static final String ACCENT = "#DB2777";
     private static final String HOVER = "#EC4899";
-    private static final String TEXT_DARK = "#1E293B";
-    private static final String TEXT_MUTED = "#64748B";
-    private static final String BORDER = "#E2E8F0";
     private static final String WHITE = "#FFFFFF";
     private static final String BG = "#FAFAFA";
 

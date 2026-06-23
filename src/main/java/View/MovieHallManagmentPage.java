@@ -11,6 +11,7 @@ import javafx.scene.text.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.util.List;
+import static ui.common.Theme.*;
 
 public class MovieHallManagmentPage {
 
@@ -27,17 +28,10 @@ public class MovieHallManagmentPage {
 
     private VBox root;
 
-    private static final String ACCENT = "#DB2777";
     private static final String HOVER = "#EC4899";
-    private static final String TEXT_DARK = "#1E293B";
-    private static final String TEXT_MUTED = "#64748B";
-    private static final String BORDER = "#E2E8F0";
     private static final String WHITE = "#FFFFFF";
     private static final String BG = "#FAFAFA";
-    private static final String DANGER = "#DC2626";
-    private static final String SUCCESS = "#10B981";
     private static final String INFO = "#3B82F6";
-    private static final String WARNING = "#F59E0B";
 
     public MovieHallManagmentPage() {
         try {

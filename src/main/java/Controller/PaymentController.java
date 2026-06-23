@@ -24,8 +24,10 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import static ui.common.Theme.*;
 
 public class PaymentController {
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(PaymentController.class);
     private PaymentPage view;
     private Stage stage;
     private Customer currentUser;
@@ -44,11 +46,7 @@ public class PaymentController {
     Booking booking = new Booking();
     Payment payment = new Payment();
 
-    private static final String ACCENT = "#DB2777";
-    private static final String TEXT_DARK = "#1E293B";
-    private static final String TEXT_MUTED = "#64748B";
-    private static final String DANGER = "#DC2626";
-    private static final String WARNING = "#F59E0B";
+
 
     public PaymentController(Stage stage, Customer currentUser, Movie selectedMovie, Show selectedShow, Moviehall selectedHall, List<String> selectedSeatIds, double seatPrice) {
         this.stage = stage;
@@ -181,10 +179,10 @@ public class PaymentController {
             if (paymentSuccess) {
                 showSuccessAndTicket();
             } else {
-                System.out.println("❌ Error: Payment record failed to save.");
+                log.error("Payment record failed to save");
             }
         } else {
-            System.out.println("❌ Error: Booking failed to save.");
+            log.error("Booking failed to save");
         }
     }
 

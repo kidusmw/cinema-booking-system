@@ -15,6 +15,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import static ui.common.Theme.*;
 
 public class WelcomePage {
 
@@ -24,10 +25,7 @@ public class WelcomePage {
     private static final String WHITE = "#FFFFFF";
     private static final String PRIMARY = "#F472B6";
     private static final String HOVER = "#EC4899";
-    private static final String ACCENT = "#DB2777";
-    private static final String TEXT_DARK = "#1E293B";
-    private static final String TEXT_MUTED = "#64748B";
-    private static final String BORDER = "#E2E8F0";
+
 
     public BorderPane getView() {
 

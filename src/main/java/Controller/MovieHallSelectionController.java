@@ -21,6 +21,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import java.util.List;
+import static ui.common.Theme.*;
 public class MovieHallSelectionController {
     private MovieHallSelectionPage view;
     private Stage stage;
@@ -29,11 +30,7 @@ public class MovieHallSelectionController {
     private Show selectedShow;
     private final MovieHallDAO hallDAO = new MovieHallDAO();
     private final SeatDAO seatDAO = new SeatDAOimp();
-    private static final String ACCENT = "#DB2777";
     private static final String HOVER = "#EC4899";
-    private static final String TEXT_DARK = "#1E293B";
-    private static final String TEXT_MUTED = "#64748B";
-    private static final String BORDER = "#E2E8F0";
     private static final String WHITE = "#FFFFFF";
 
     public MovieHallSelectionController(Stage stage, Customer currentUser, Movie selectedMovie, Show selectedShow) {

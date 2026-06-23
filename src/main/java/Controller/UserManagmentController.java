@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserManagmentController {
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(UserManagmentController.class);
     private final UserManagmentPage view;
     private final Stage stage;
     private final AdminDashboardController dashboard;
@@ -51,12 +52,12 @@ public class UserManagmentController {
         try {
             List<User> users = userDAO.getAllUsers();
             if (users == null || users.isEmpty()) {
-                System.out.println("WARNING: Database query executed but returned 0 records.");
+                log.warn("Database query executed but returned 0 records.");
             }
             userList = FXCollections.observableArrayList(users);
             view.userTable.setItems(userList);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to load users", e);
             showAlert("Database Connection Error", "Could not read users from SQL: " + e.getMessage());
         }
     }

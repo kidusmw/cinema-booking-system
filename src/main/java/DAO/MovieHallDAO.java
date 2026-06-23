@@ -104,25 +104,4 @@ public class MovieHallDAO {
         }
         return list;
     }
-
-    // Not yet implemented - stubs carried over from the original interface
-    public List<Moviehall> searchMovieHallByName(String hallName) {
-        return List.of();
-    }
-
-    public List<Moviehall> getMovieHallsByCapacity(int capacity) {
-        return List.of();
-    }
-
-    public List<Moviehall> getMovieHallsByMinCapacity(int min, int max) {
-        return List.of();
-    }
-
-    public boolean isHallAvailable(String id) {
-        return false;
-    }
-
-    public int getTotalHalls() {
-        return 0;
-    }
 }

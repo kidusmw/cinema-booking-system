@@ -9,6 +9,8 @@ import java.util.List;
 
 public class ShowDAOimp implements ShowDAO {
 
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ShowDAOimp.class);
+
     @Override
     public boolean addShow(Show show) {
         String sql =
@@ -29,7 +31,7 @@ public class ShowDAOimp implements ShowDAO {
 
             return ps.executeUpdate() > 0;
         } catch (SQLException | NumberFormatException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return false;
     }
@@ -55,7 +57,7 @@ public class ShowDAOimp implements ShowDAO {
 
             return ps.executeUpdate() > 0;
         } catch (SQLException | NumberFormatException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return false;
     }
@@ -71,7 +73,7 @@ public class ShowDAOimp implements ShowDAO {
             ps.setInt(1, Integer.parseInt(showID));
             return ps.executeUpdate() > 0;
         } catch (SQLException | NumberFormatException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return false;
     }
@@ -91,7 +93,7 @@ public class ShowDAOimp implements ShowDAO {
                 }
             }
         } catch (SQLException | NumberFormatException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return null;
     }
@@ -110,7 +112,7 @@ public class ShowDAOimp implements ShowDAO {
                 list.add(mapResultSetToShow(rs));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return list;
     }
@@ -132,7 +134,7 @@ public class ShowDAOimp implements ShowDAO {
                 }
             }
         } catch (SQLException | NumberFormatException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return list;
     }
@@ -154,7 +156,7 @@ public class ShowDAOimp implements ShowDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return list;
     }
@@ -177,7 +179,7 @@ public class ShowDAOimp implements ShowDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return list;
     }
@@ -200,7 +202,7 @@ public class ShowDAOimp implements ShowDAO {
                 }
             }
         } catch (SQLException | NumberFormatException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return list;
     }
@@ -222,7 +224,7 @@ public class ShowDAOimp implements ShowDAO {
                 }
             }
         } catch (SQLException | NumberFormatException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return list;
     }
@@ -248,7 +250,7 @@ public class ShowDAOimp implements ShowDAO {
                 }
             }
         } catch (SQLException | NumberFormatException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return false;
     }

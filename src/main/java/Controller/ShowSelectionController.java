@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 public class ShowSelectionController {
 
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ShowSelectionController.class);
     private ShowSelectionPage view;
     private Stage stage;
     private Customer currentUser;
@@ -85,7 +86,7 @@ public class ShowSelectionController {
                 try {
                     uniqueDates.add(sdf.parse(dateStr));
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error("Failed to parse date", e);
                 }
             }
         }

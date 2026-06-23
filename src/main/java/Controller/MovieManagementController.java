@@ -18,14 +18,14 @@ import Model.Movie;
 import DAO.MovieDAO;
 import java.util.List;
 import java.util.Optional;
-public class MovieManagmentContrller {
+public class MovieManagementController {
     private MovieManagemnetPage view;
     private Stage stage;
     private AdminDashboardController dashboard; // Kept to navigate back
     private final MovieDAO movieDAO = new MovieDAO();
     private ObservableList<Movie> movieList;
 
-    public MovieManagmentContrller(Stage stage, AdminDashboardController dashboard) {
+    public MovieManagementController(Stage stage, AdminDashboardController dashboard) {
         this.stage = stage;
         this.dashboard = dashboard;
         view = new MovieManagemnetPage();

@@ -12,6 +12,7 @@ import java.util.Properties;
 
 public class DatabaseConnection {
 
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(DatabaseConnection.class);
     private static final HikariDataSource dataSource;
 
     // Runs once, the first time anything calls getConnection() or
@@ -57,15 +58,10 @@ public class DatabaseConnection {
             if (in != null) {
                 props.load(in);
             } else {
-                System.out.println(
-                    "No db.properties found on classpath; using built-in defaults."
-                );
+                log.info("No db.properties found on classpath; using built-in defaults.");
             }
         } catch (IOException e) {
-            System.out.println(
-                "Failed to read db.properties, using defaults: " +
-                    e.getMessage()
-            );
+            log.warn("Failed to read db.properties, using defaults: {}", e.getMessage());
         }
         return props;
     }
@@ -99,7 +95,7 @@ public class DatabaseConnection {
                 );
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database info query failed", e);
         }
     }
 

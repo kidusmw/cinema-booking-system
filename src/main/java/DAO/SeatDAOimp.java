@@ -8,6 +8,8 @@ import java.util.List;
 
 public class SeatDAOimp implements SeatDAO {
 
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(SeatDAOimp.class);
+
     @Override
     public boolean addSeat(Seat seat) {
         // Note: We do NOT insert Seat_ID because it is IDENTITY (auto-increment)
@@ -26,8 +28,7 @@ public class SeatDAOimp implements SeatDAO {
             int rowsAffected = pstmt.executeUpdate();
             return rowsAffected > 0;
         } catch (Exception e) {
-            System.err.println("DB ERROR in addSeat: " + e.getMessage());
-            e.printStackTrace();
+            log.error("DB ERROR in addSeat: {}", e.getMessage(), e);
             return false;
         }
     }
@@ -48,7 +49,7 @@ public class SeatDAOimp implements SeatDAO {
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return false;
     }
@@ -63,7 +64,7 @@ public class SeatDAOimp implements SeatDAO {
             ps.setInt(1, Integer.parseInt(seatID));
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return false;
     }
@@ -82,7 +83,7 @@ public class SeatDAOimp implements SeatDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return null;
     }
@@ -109,7 +110,7 @@ public class SeatDAOimp implements SeatDAO {
                 list.add(s);
             }
         } catch (Exception e) {
-            System.err.println("DB ERROR in getSeatsByHall: " + e.getMessage());
+            log.error("DB ERROR in getSeatsByHall: {}", e.getMessage(), e);
         }
         return list;
     }
@@ -125,7 +126,7 @@ public class SeatDAOimp implements SeatDAO {
             ps.setInt(2, Integer.parseInt(seatID));
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return false;
     }
@@ -134,11 +135,6 @@ public class SeatDAOimp implements SeatDAO {
     public boolean isSeatAvailable(String seatID) {
         Seat seat = searchSeatById(seatID);
         return seat != null && "AVAILABLE".equalsIgnoreCase(seat.getStatus());
-    }
-
-    @Override
-    public List<Seat> getSeatsByShow(String showID) {
-        return new ArrayList<>();
     }
 
     @Override
@@ -157,7 +153,7 @@ public class SeatDAOimp implements SeatDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return list;
     }
@@ -178,7 +174,7 @@ public class SeatDAOimp implements SeatDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return false;
     }
@@ -204,8 +200,7 @@ public class SeatDAOimp implements SeatDAO {
                 seats.add(seat);
             }
         } catch (Exception e) {
-            System.err.println("DB ERROR in getAllSeats: " + e.getMessage());
-            e.printStackTrace();
+            log.error("DB ERROR in getAllSeats: {}", e.getMessage(), e);
         }
         return seats;
     }

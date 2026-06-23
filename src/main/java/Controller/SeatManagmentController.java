@@ -17,6 +17,7 @@ import java.util.Optional;
 
 public class SeatManagmentController {
 
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(SeatManagmentController.class);
     private SeatManagmentPage view;
     private Stage stage;
     private final AdminDashboardController dashboard;
@@ -50,7 +51,7 @@ public class SeatManagmentController {
         try {
             List<Moviehall> halls = hallDAO.getAllMovieHalls();
             if (halls != null) view.hallDropdown.setItems(FXCollections.observableArrayList(halls));
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) { log.error("Operation failed", e); }
     }
     private void updateHallInfo() {
         if (selectedHall != null) {
@@ -63,7 +64,7 @@ public class SeatManagmentController {
             List<Seat> seats = seatDAO.getSeatsByHall((selectedHall.getId()));
             view.seatTable.setItems(FXCollections.observableArrayList(seats));
             view.statsLabel.setText("📊 Total Seats: " + seats.size());
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) { log.error("Operation failed", e); }
     }
     private void handleGenerateSeats() {
         if (selectedHall == null) return;
@@ -85,14 +86,14 @@ public class SeatManagmentController {
                 // CRITICAL: Call the DAO and verify success
                 boolean success = seatDAO.addSeat(seat);
                 if (!success) {
-                    System.out.println("ERROR: DAO failed to add seat index " + i);
+                    log.error("DAO failed to add seat index {}", i);
                 }
             }
             System.out.println("DEBUG: Generation loop finished.");
             loadSeatsForSelectedHall();
             showAlert("Success", "Seats generated.");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Operation failed", e);
         }
     }
 
@@ -102,7 +103,7 @@ public class SeatManagmentController {
             List<Seat> seats = seatDAO.getSeatsByHall((selectedHall.getId()));
             for (Seat s : seats) seatDAO.deleteSeat(s.getSeatID());
             loadSeatsForSelectedHall();
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) { log.error("Operation failed", e); }
     }
 
     private void handleBack() {
