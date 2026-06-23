@@ -2,8 +2,6 @@ package ui.controller;
 
 import application.AppContext;
 import application.ModelConverter;
-import ui.model.Show;
-import ui.view.ShowManagementPage;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +15,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ui.model.Show;
+import ui.view.ShowManagementPage;
 
 public class ShowManagmentController {
 
@@ -32,11 +32,10 @@ public class ShowManagmentController {
     private final Map<String, String> hallMapById = new HashMap<>();
 
     public ShowManagmentController(
-        Stage stage,
-        AppContext ctx,
-        NavigationManager nav,
-        AdminDashboardController dashboard
-    ) {
+            Stage stage,
+            AppContext ctx,
+            NavigationManager nav,
+            AdminDashboardController dashboard) {
         this.stage = stage;
         this.ctx = ctx;
         this.nav = nav;
@@ -47,19 +46,19 @@ public class ShowManagmentController {
         view.btnAddShow.setOnAction(e -> handleAddShow());
         view.btnEdit.setOnAction(e -> handleEditShow());
         view.btnDelete.setOnAction(e -> handleDeleteShow());
-        view.btnRefresh.setOnAction(e -> {
-            loadLiveDatabaseDropdownMaps();
-            loadShows();
-        });
+        view.btnRefresh.setOnAction(
+                e -> {
+                    loadLiveDatabaseDropdownMaps();
+                    loadShows();
+                });
         view.btnBack.setOnAction(e -> handleBack());
 
-        view.searchField
-            .textProperty()
-            .addListener((obs, oldVal, newVal) -> filterShows(newVal));
+        view.searchField.textProperty().addListener((obs, oldVal, newVal) -> filterShows(newVal));
 
-        view.showTable.setOnMouseClicked(e -> {
-            if (e.getClickCount() == 2) handleEditShow();
-        });
+        view.showTable.setOnMouseClicked(
+                e -> {
+                    if (e.getClickCount() == 2) handleEditShow();
+                });
     }
 
     public VBox getRootView() {
@@ -90,18 +89,15 @@ public class ShowManagmentController {
     }
 
     private void loadShows() {
-        List<Show> shows = ctx.showtimeRepo.findAll().stream().map(ModelConverter::toOldShowtime).collect(Collectors.toList());
+        List<Show> shows =
+                ctx.showtimeRepo.findAll().stream()
+                        .map(ModelConverter::toOldShowtime)
+                        .collect(Collectors.toList());
         for (Show show : shows) {
-            if (
-                show.getMovieID() != null &&
-                movieMapById.containsKey(show.getMovieID())
-            ) {
+            if (show.getMovieID() != null && movieMapById.containsKey(show.getMovieID())) {
                 show.setMovieName(movieMapById.get(show.getMovieID()));
             }
-            if (
-                show.getMovieHallID() != null &&
-                hallMapById.containsKey(show.getMovieHallID())
-            ) {
+            if (show.getMovieHallID() != null && hallMapById.containsKey(show.getMovieHallID())) {
                 show.setHallName(hallMapById.get(show.getMovieHallID()));
             }
         }
@@ -118,14 +114,12 @@ public class ShowManagmentController {
         ObservableList<Show> filtered = FXCollections.observableArrayList();
         String lower = searchText.toLowerCase();
         for (Show show : showList) {
-            if (
-                show.getShowID().toLowerCase().contains(lower) ||
-                (show.getMovieName() != null &&
-                    show.getMovieName().toLowerCase().contains(lower)) ||
-                (show.getHallName() != null &&
-                    show.getHallName().toLowerCase().contains(lower)) ||
-                show.getShowTime().toLowerCase().contains(lower)
-            ) {
+            if (show.getShowID().toLowerCase().contains(lower)
+                    || (show.getMovieName() != null
+                            && show.getMovieName().toLowerCase().contains(lower))
+                    || (show.getHallName() != null
+                            && show.getHallName().toLowerCase().contains(lower))
+                    || show.getShowTime().toLowerCase().contains(lower)) {
                 filtered.add(show);
             }
         }
@@ -136,10 +130,11 @@ public class ShowManagmentController {
         Dialog<Show> dialog = createShowDialog(null);
         Optional<Show> result = dialog.showAndWait();
 
-        result.ifPresent(show -> {
-            ctx.showtimeRepo.save(ModelConverter.toDomainShowtime(show));
-            loadShows();
-        });
+        result.ifPresent(
+                show -> {
+                    ctx.showtimeRepo.save(ModelConverter.toDomainShowtime(show));
+                    loadShows();
+                });
     }
 
     private void handleEditShow() {
@@ -149,11 +144,12 @@ public class ShowManagmentController {
         Dialog<Show> dialog = createShowDialog(selected);
         Optional<Show> result = dialog.showAndWait();
 
-        result.ifPresent(show -> {
-            show.setShowID(selected.getShowID());
-            ctx.showtimeRepo.save(ModelConverter.toDomainShowtime(show));
-            loadShows();
-        });
+        result.ifPresent(
+                show -> {
+                    show.setShowID(selected.getShowID());
+                    ctx.showtimeRepo.save(ModelConverter.toDomainShowtime(show));
+                    loadShows();
+                });
     }
 
     private void handleDeleteShow() {
@@ -161,9 +157,7 @@ public class ShowManagmentController {
         if (selected == null) return;
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setContentText(
-            "Delete show ID: \"" + selected.getShowID() + "\"?"
-        );
+        confirm.setContentText("Delete show ID: \"" + selected.getShowID() + "\"?");
 
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -176,29 +170,18 @@ public class ShowManagmentController {
         if (dashboard != null) {
             dashboard.showDashboard();
         } else {
-            showAlert(
-                "Routing Error",
-                "Cannot go back: Dashboard connection lost."
-            );
+            showAlert("Routing Error", "Cannot go back: Dashboard connection lost.");
         }
     }
 
     private Dialog<Show> createShowDialog(Show existing) {
         Dialog<Show> dialog = new Dialog<>();
         dialog.setTitle(
-            existing == null
-                ? "Schedule New Screening"
-                : "Modify Screening Properties"
-        );
+                existing == null ? "Schedule New Screening" : "Modify Screening Properties");
 
         ButtonType saveButtonType = ButtonType.OK;
-        dialog
-            .getDialogPane()
-            .getButtonTypes()
-            .addAll(saveButtonType, ButtonType.CANCEL);
-        Button btnSave = (Button) dialog
-            .getDialogPane()
-            .lookupButton(saveButtonType);
+        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+        Button btnSave = (Button) dialog.getDialogPane().lookupButton(saveButtonType);
         if (btnSave != null) btnSave.setText("Save Configurations");
 
         GridPane grid = new GridPane();
@@ -220,11 +203,7 @@ public class ShowManagmentController {
 
         DatePicker datePicker = new DatePicker();
         if (existing != null && existing.getShowDate() != null) {
-            datePicker.setValue(
-                new java.sql.Date(
-                    existing.getShowDate().getTime()
-                ).toLocalDate()
-            );
+            datePicker.setValue(new java.sql.Date(existing.getShowDate().getTime()).toLocalDate());
         }
 
         TextField timeField = new TextField();
@@ -244,44 +223,43 @@ public class ShowManagmentController {
         dialog.getDialogPane().setContent(grid);
 
         if (btnSave != null) {
-            btnSave.addEventFilter(ActionEvent.ACTION, event -> {
-                if (
-                    showIDField.getText().trim().isEmpty() ||
-                    movieComboBox.getValue() == null ||
-                    hallComboBox.getValue() == null ||
-                    datePicker.getValue() == null ||
-                    timeField.getText().trim().isEmpty()
-                ) {
-                    showAlert("Validation", "All fields are required!");
-                    event.consume();
-                }
-            });
+            btnSave.addEventFilter(
+                    ActionEvent.ACTION,
+                    event -> {
+                        if (showIDField.getText().trim().isEmpty()
+                                || movieComboBox.getValue() == null
+                                || hallComboBox.getValue() == null
+                                || datePicker.getValue() == null
+                                || timeField.getText().trim().isEmpty()) {
+                            showAlert("Validation", "All fields are required!");
+                            event.consume();
+                        }
+                    });
         }
 
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == saveButtonType) {
-                Show show = new Show();
-                show.setShowID(showIDField.getText().trim());
+        dialog.setResultConverter(
+                dialogButton -> {
+                    if (dialogButton == saveButtonType) {
+                        Show show = new Show();
+                        show.setShowID(showIDField.getText().trim());
 
-                String selectedTitle = movieComboBox.getValue();
-                String selectedHallName = hallComboBox.getValue();
+                        String selectedTitle = movieComboBox.getValue();
+                        String selectedHallName = hallComboBox.getValue();
 
-                show.setMovieName(selectedTitle);
-                show.setHallName(selectedHallName);
+                        show.setMovieName(selectedTitle);
+                        show.setHallName(selectedHallName);
 
-                show.setMovieID(movieMap.get(selectedTitle));
-                show.setMovieHallID(hallMap.get(selectedHallName));
+                        show.setMovieID(movieMap.get(selectedTitle));
+                        show.setMovieHallID(hallMap.get(selectedHallName));
 
-                if (datePicker.getValue() != null) {
-                    show.setShowDate(
-                        java.sql.Date.valueOf(datePicker.getValue())
-                    );
-                }
-                show.setShowTime(timeField.getText().trim());
-                return show;
-            }
-            return null;
-        });
+                        if (datePicker.getValue() != null) {
+                            show.setShowDate(java.sql.Date.valueOf(datePicker.getValue()));
+                        }
+                        show.setShowTime(timeField.getText().trim());
+                        return show;
+                    }
+                    return null;
+                });
 
         return dialog;
     }

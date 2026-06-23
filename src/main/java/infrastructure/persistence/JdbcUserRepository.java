@@ -18,7 +18,7 @@ public class JdbcUserRepository implements UserRepository {
     public Optional<User> findByUsername(String username) {
         String sql = "SELECT * FROM \"user\" WHERE username = ?";
         try (Connection conn = connectionProvider.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, username);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) return Optional.of(mapRow(rs));
@@ -33,7 +33,7 @@ public class JdbcUserRepository implements UserRepository {
     public Optional<User> findById(Long id) {
         String sql = "SELECT * FROM \"user\" WHERE user_id = ?";
         try (Connection conn = connectionProvider.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) return Optional.of(mapRow(rs));
@@ -49,8 +49,8 @@ public class JdbcUserRepository implements UserRepository {
         String sql = "SELECT * FROM \"user\" ORDER BY user_id";
         List<User> users = new ArrayList<>();
         try (Connection conn = connectionProvider.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
             while (rs.next()) users.add(mapRow(rs));
         } catch (SQLException e) {
             throw new RuntimeException("Failed to find all users", e);
@@ -68,9 +68,11 @@ public class JdbcUserRepository implements UserRepository {
     }
 
     private User insert(User user) {
-        String sql = "INSERT INTO \"user\" (first_name, last_name, email, phone, username, password, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql =
+                "INSERT INTO \"user\" (first_name, last_name, email, phone, username, password, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = connectionProvider.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                PreparedStatement ps =
+                        conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, user.getFirstName());
             ps.setString(2, user.getLastName());
             ps.setString(3, user.getEmail());
@@ -89,9 +91,10 @@ public class JdbcUserRepository implements UserRepository {
     }
 
     private User update(User user) {
-        String sql = "UPDATE \"user\" SET first_name=?, last_name=?, email=?, phone=?, username=?, password=?, role=? WHERE user_id=?";
+        String sql =
+                "UPDATE \"user\" SET first_name=?, last_name=?, email=?, phone=?, username=?, password=?, role=? WHERE user_id=?";
         try (Connection conn = connectionProvider.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getFirstName());
             ps.setString(2, user.getLastName());
             ps.setString(3, user.getEmail());
@@ -111,7 +114,7 @@ public class JdbcUserRepository implements UserRepository {
     public void delete(Long id) {
         String sql = "DELETE FROM \"user\" WHERE user_id=?";
         try (Connection conn = connectionProvider.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, id);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -128,7 +131,6 @@ public class JdbcUserRepository implements UserRepository {
                 rs.getString("password"),
                 rs.getString("role"),
                 rs.getString("phone"),
-                rs.getString("email")
-        );
+                rs.getString("email"));
     }
 }

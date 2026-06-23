@@ -1,12 +1,11 @@
 package ui.controller;
-import ui.model.Customer;
-import ui.model.Movie;
-import ui.model.Show;
-import ui.model.Moviehall;
-import ui.view.MovieHallSelectionPage;
-import application.ModelConverter;
-import java.util.stream.Collectors;
+
+import static ui.common.Theme.*;
+
 import application.AppContext;
+import application.ModelConverter;
+import java.util.List;
+import java.util.stream.Collectors;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -20,8 +19,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import java.util.List;
-import static ui.common.Theme.*;
+import ui.model.Customer;
+import ui.model.Movie;
+import ui.model.Moviehall;
+import ui.model.Show;
+import ui.view.MovieHallSelectionPage;
+
 public class MovieHallSelectionController {
     private MovieHallSelectionPage view;
     private Stage stage;
@@ -32,7 +35,13 @@ public class MovieHallSelectionController {
     private NavigationManager nav;
     private static final String WHITE = "#FFFFFF";
 
-    public MovieHallSelectionController(Stage stage, AppContext ctx, NavigationManager nav, Customer currentUser, Movie selectedMovie, Show selectedShow) {
+    public MovieHallSelectionController(
+            Stage stage,
+            AppContext ctx,
+            NavigationManager nav,
+            Customer currentUser,
+            Movie selectedMovie,
+            Show selectedShow) {
         this.stage = stage;
         this.ctx = ctx;
         this.nav = nav;
@@ -44,13 +53,18 @@ public class MovieHallSelectionController {
         stage.setTitle("Select Hall - " + selectedMovie.getTitle());
         stage.setScene(scene);
         stage.show();
-        view.showInfoLabel.setText("🕐 " + selectedShow.getShowTime() + "  |  📅 " + selectedShow.getShowDate());
+        view.showInfoLabel.setText(
+                "🕐 " + selectedShow.getShowTime() + "  |  📅 " + selectedShow.getShowDate());
         loadHalls();
         view.btnBack.setOnAction(e -> nav.back());
     }
+
     private void loadHalls() {
         view.hallsContainer.getChildren().clear();
-        List<Moviehall> halls = ctx.hallRepo.findAll().stream().map(ModelConverter::toOldHall).collect(Collectors.toList());
+        List<Moviehall> halls =
+                ctx.hallRepo.findAll().stream()
+                        .map(ModelConverter::toOldHall)
+                        .collect(Collectors.toList());
         if (halls.isEmpty()) {
             Label noHalls = new Label("🏛️ No halls available");
             noHalls.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 14));
@@ -63,35 +77,49 @@ public class MovieHallSelectionController {
             view.hallsContainer.getChildren().add(createHallCard(hall));
         }
     }
+
     private VBox createHallCard(Moviehall hall) {
         VBox card = new VBox(15);
         card.setPadding(new Insets(20, 25, 20, 25));
         card.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 12;" +
-                        "-fx-background-radius: 12;" +
-                        "-fx-cursor: hand;"
-        );
+                "-fx-background-color: "
+                        + WHITE
+                        + ";"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 12;"
+                        + "-fx-background-radius: 12;"
+                        + "-fx-cursor: hand;");
         boolean isVIP = isVIPHall(hall);
         String hallType = isVIP ? "VIP" : "Regular";
         String typeColor = isVIP ? "#F59E0B" : "#3B82F6";
         String typeIcon = isVIP ? "👑" : "🎬";
-        card.setOnMouseEntered(e -> card.setStyle(
-                "-fx-background-color: " + (isVIP ? "#FEF3C7" : "#DBEAFE") + ";" +
-                        "-fx-border-color: " + typeColor + ";" +
-                        "-fx-border-radius: 12;" +
-                        "-fx-background-radius: 12;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 3);"
-        ));
-        card.setOnMouseExited(e -> card.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 12;" +
-                        "-fx-background-radius: 12;" +
-                        "-fx-cursor: hand;"
-        ));
+        card.setOnMouseEntered(
+                e ->
+                        card.setStyle(
+                                "-fx-background-color: "
+                                        + (isVIP ? "#FEF3C7" : "#DBEAFE")
+                                        + ";"
+                                        + "-fx-border-color: "
+                                        + typeColor
+                                        + ";"
+                                        + "-fx-border-radius: 12;"
+                                        + "-fx-background-radius: 12;"
+                                        + "-fx-cursor: hand;"
+                                        + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 10, 0, 0, 3);"));
+        card.setOnMouseExited(
+                e ->
+                        card.setStyle(
+                                "-fx-background-color: "
+                                        + WHITE
+                                        + ";"
+                                        + "-fx-border-color: "
+                                        + BORDER
+                                        + ";"
+                                        + "-fx-border-radius: 12;"
+                                        + "-fx-background-radius: 12;"
+                                        + "-fx-cursor: hand;"));
         HBox topRow = new HBox(15);
         topRow.setAlignment(Pos.CENTER_LEFT);
 
@@ -114,10 +142,11 @@ public class MovieHallSelectionController {
         badge.setFont(Font.font("Segoe UI", FontWeight.BOLD, 11));
         badge.setTextFill(Color.WHITE);
         badge.setStyle(
-                "-fx-background-color: " + typeColor + ";" +
-                        "-fx-background-radius: 12;" +
-                        "-fx-padding: 4 12;"
-        );
+                "-fx-background-color: "
+                        + typeColor
+                        + ";"
+                        + "-fx-background-radius: 12;"
+                        + "-fx-padding: 4 12;");
 
         topRow.getChildren().addAll(icon, nameBox, spacer, badge);
         HBox detailsRow = new HBox(20);
@@ -145,7 +174,8 @@ public class MovieHallSelectionController {
         priceBox.getChildren().addAll(priceValue, priceLabel);
 
         VBox featuresBox = new VBox(2);
-        Label featuresValue = new Label(isVIP ? "Recliner, Dolby Atmos" : "Standard Seats, Stereo Sound");
+        Label featuresValue =
+                new Label(isVIP ? "Recliner, Dolby Atmos" : "Standard Seats, Stereo Sound");
         featuresValue.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 12));
         featuresValue.setTextFill(Color.web(TEXT_DARK));
         Label featuresLabel = new Label("Features");
@@ -159,25 +189,59 @@ public class MovieHallSelectionController {
         selectBtn.setPrefHeight(38);
         selectBtn.setTextFill(Color.WHITE);
         selectBtn.setStyle(
-                "-fx-background-color: " + (isVIP ? "#F59E0B" : ACCENT) + ";" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-cursor: hand;"
-        );
-        selectBtn.setOnAction(e -> nav.go(
-            () -> new MovieHallSelectionController(stage, ctx, nav, currentUser, selectedMovie, selectedShow),
-            () -> new SeatSelectionController(stage, ctx, nav, currentUser, selectedMovie, selectedShow, hall, isVIP)
-        ));
+                "-fx-background-color: "
+                        + (isVIP ? "#F59E0B" : ACCENT)
+                        + ";"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-cursor: hand;");
+        selectBtn.setOnAction(
+                e ->
+                        nav.go(
+                                () ->
+                                        new MovieHallSelectionController(
+                                                stage,
+                                                ctx,
+                                                nav,
+                                                currentUser,
+                                                selectedMovie,
+                                                selectedShow),
+                                () ->
+                                        new SeatSelectionController(
+                                                stage,
+                                                ctx,
+                                                nav,
+                                                currentUser,
+                                                selectedMovie,
+                                                selectedShow,
+                                                hall,
+                                                isVIP)));
 
         card.getChildren().addAll(topRow, detailsRow, selectBtn);
 
-        card.setOnMouseClicked(e -> {
-            if (e.getClickCount() == 1) {
-                nav.go(
-                    () -> new MovieHallSelectionController(stage, ctx, nav, currentUser, selectedMovie, selectedShow),
-                    () -> new SeatSelectionController(stage, ctx, nav, currentUser, selectedMovie, selectedShow, hall, isVIP)
-                );
-            }
-        });
+        card.setOnMouseClicked(
+                e -> {
+                    if (e.getClickCount() == 1) {
+                        nav.go(
+                                () ->
+                                        new MovieHallSelectionController(
+                                                stage,
+                                                ctx,
+                                                nav,
+                                                currentUser,
+                                                selectedMovie,
+                                                selectedShow),
+                                () ->
+                                        new SeatSelectionController(
+                                                stage,
+                                                ctx,
+                                                nav,
+                                                currentUser,
+                                                selectedMovie,
+                                                selectedShow,
+                                                hall,
+                                                isVIP));
+                    }
+                });
 
         return card;
     }

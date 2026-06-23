@@ -1,11 +1,11 @@
 package domain.model;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class DomainModelTest {
 
@@ -47,25 +47,29 @@ class DomainModelTest {
 
     @Test
     void showtimeIsPastWhenDateBeforeToday() {
-        Showtime show = new Showtime(1L, 1L, 1L, LocalDate.of(2020, 1, 1), LocalTime.of(10, 0), 10.0);
+        Showtime show =
+                new Showtime(1L, 1L, 1L, LocalDate.of(2020, 1, 1), LocalTime.of(10, 0), 10.0);
         assertTrue(show.isPast());
     }
 
     @Test
     void showtimeIsNotPastWhenDateInFuture() {
-        Showtime show = new Showtime(1L, 1L, 1L, LocalDate.now().plusDays(1), LocalTime.of(10, 0), 10.0);
+        Showtime show =
+                new Showtime(1L, 1L, 1L, LocalDate.now().plusDays(1), LocalTime.of(10, 0), 10.0);
         assertFalse(show.isPast());
     }
 
     @Test
     void showtimeHasStartedWhenTimePassedToday() {
-        Showtime show = new Showtime(1L, 1L, 1L, LocalDate.now(), LocalTime.now().minusHours(1), 10.0);
+        Showtime show =
+                new Showtime(1L, 1L, 1L, LocalDate.now(), LocalTime.now().minusHours(1), 10.0);
         assertTrue(show.hasStarted());
     }
 
     @Test
     void showtimeHasNotStartedWhenTimeStillFuture() {
-        Showtime show = new Showtime(1L, 1L, 1L, LocalDate.now(), LocalTime.now().plusHours(1), 10.0);
+        Showtime show =
+                new Showtime(1L, 1L, 1L, LocalDate.now(), LocalTime.now().plusHours(1), 10.0);
         assertFalse(show.hasStarted());
     }
 

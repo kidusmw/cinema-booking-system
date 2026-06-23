@@ -19,11 +19,14 @@ public class Seat {
         this.status = status;
     }
 
-    public boolean isAvailable() { return "available".equals(status); }
+    public boolean isAvailable() {
+        return "available".equals(status);
+    }
 
     public void book() {
         if (!"available".equals(status)) {
-            throw new IllegalStateException("Seat " + seatId + " is not available (status: " + status + ")");
+            throw new IllegalStateException(
+                    "Seat " + seatId + " is not available (status: " + status + ")");
         }
         this.status = "booked";
     }
@@ -32,20 +35,45 @@ public class Seat {
         this.status = "available";
     }
 
-    public Long getSeatId() { return seatId; }
-    public void setSeatId(Long seatId) { this.seatId = seatId; }
+    public Long getSeatId() {
+        return seatId;
+    }
 
-    public Long getHallId() { return hallId; }
-    public void setHallId(Long hallId) { this.hallId = hallId; }
+    public void setSeatId(Long seatId) {
+        this.seatId = seatId;
+    }
 
-    public String getSeatNumber() { return seatNumber; }
-    public void setSeatNumber(String seatNumber) { this.seatNumber = seatNumber; }
+    public Long getHallId() {
+        return hallId;
+    }
 
-    public String getSeatType() { return seatType; }
-    public void setSeatType(String seatType) { this.seatType = seatType; }
+    public void setHallId(Long hallId) {
+        this.hallId = hallId;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public String getSeatNumber() {
+        return seatNumber;
+    }
+
+    public void setSeatNumber(String seatNumber) {
+        this.seatNumber = seatNumber;
+    }
+
+    public String getSeatType() {
+        return seatType;
+    }
+
+    public void setSeatType(String seatType) {
+        this.seatType = seatType;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -55,5 +83,7 @@ public class Seat {
     }
 
     @Override
-    public int hashCode() { return Objects.hashCode(seatId); }
+    public int hashCode() {
+        return Objects.hashCode(seatId);
+    }
 }

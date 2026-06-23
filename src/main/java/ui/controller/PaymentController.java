@@ -1,9 +1,12 @@
 package ui.controller;
 
-import java.util.stream.Collectors;
-import ui.model.*;
-import ui.view.PaymentPage;
+import static ui.common.Theme.*;
+
 import application.AppContext;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
@@ -20,13 +23,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import static ui.common.Theme.*;
+import ui.model.*;
+import ui.view.PaymentPage;
 
 public class PaymentController {
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(PaymentController.class);
+    private static final org.slf4j.Logger log =
+            org.slf4j.LoggerFactory.getLogger(PaymentController.class);
     private PaymentPage view;
     private Stage stage;
     private Customer currentUser;
@@ -43,9 +45,16 @@ public class PaymentController {
     private String generatedOTP;
     private int failedAttempts = 0;
 
-
-
-    public PaymentController(Stage stage, AppContext ctx, NavigationManager nav, Customer currentUser, Movie selectedMovie, Show selectedShow, Moviehall selectedHall, List<String> selectedSeatIds, double seatPrice) {
+    public PaymentController(
+            Stage stage,
+            AppContext ctx,
+            NavigationManager nav,
+            Customer currentUser,
+            Movie selectedMovie,
+            Show selectedShow,
+            Moviehall selectedHall,
+            List<String> selectedSeatIds,
+            double seatPrice) {
         this.stage = stage;
         this.ctx = ctx;
         this.nav = nav;
@@ -119,14 +128,17 @@ public class PaymentController {
         countdownTimer = new Timeline();
         countdownTimer.setCycleCount(Timeline.INDEFINITE);
 
-        KeyFrame keyFrame = new KeyFrame(Duration.seconds(1), event -> {
-            secondsRemaining--;
-            updateCountdownDisplay();
-            if (secondsRemaining <= 0) {
-                countdownTimer.stop();
-                otpExpired();
-            }
-        });
+        KeyFrame keyFrame =
+                new KeyFrame(
+                        Duration.seconds(1),
+                        event -> {
+                            secondsRemaining--;
+                            updateCountdownDisplay();
+                            if (secondsRemaining <= 0) {
+                                countdownTimer.stop();
+                                otpExpired();
+                            }
+                        });
 
         countdownTimer.getKeyFrames().add(keyFrame);
         countdownTimer.play();
@@ -165,7 +177,8 @@ public class PaymentController {
 
     private void processSuccessfulPayment() {
         try {
-            List<Long> domainSeatIds = selectedSeatIds.stream().map(Long::parseLong).collect(Collectors.toList());
+            List<Long> domainSeatIds =
+                    selectedSeatIds.stream().map(Long::parseLong).collect(Collectors.toList());
             Long userId = (long) currentUser.getUserID();
             Long showId = Long.parseLong(selectedShow.getShowID());
             ctx.bookingFacade.bookAndPay(userId, showId, domainSeatIds, totalAmount, "CARD");
@@ -175,15 +188,25 @@ public class PaymentController {
         }
     }
 
-
     private void showSuccessAndTicket() {
-        nav.goFresh(() -> new TicketController(stage, ctx, nav, currentUser, selectedMovie, selectedShow, selectedHall,
-                selectedSeatIds, totalAmount, new ArrayList<>()));
+        nav.goFresh(
+                () ->
+                        new TicketController(
+                                stage,
+                                ctx,
+                                nav,
+                                currentUser,
+                                selectedMovie,
+                                selectedShow,
+                                selectedHall,
+                                selectedSeatIds,
+                                totalAmount,
+                                new ArrayList<>()));
     }
+
+    private static final Random OTP_RANDOM = new Random();
 
     private String generateOTP() {
-        return String.format("%06d", new Random().nextInt(1000000));
+        return String.format("%06d", OTP_RANDOM.nextInt(1000000));
     }
-
-
 }

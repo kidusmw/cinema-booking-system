@@ -1,34 +1,30 @@
 package domain.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
 import domain.model.Booking;
 import domain.model.BookingSeat;
 import domain.model.Seat;
 import domain.port.BookingRepository;
 import domain.port.SeatRepository;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 class BookingServiceTest {
 
-    @Mock
-    BookingRepository bookingRepo;
+    @Mock BookingRepository bookingRepo;
 
-    @Mock
-    SeatRepository seatRepo;
+    @Mock SeatRepository seatRepo;
 
-    @InjectMocks
-    BookingService bookingService;
+    @InjectMocks BookingService bookingService;
 
     @Test
     void createBookingSucceedsWhenSeatsAvailable() {
@@ -47,7 +43,8 @@ class BookingServiceTest {
     @Test
     void createBookingThrowsWhenSeatNotFound() {
         when(seatRepo.findById(999L)).thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(
+                IllegalArgumentException.class,
                 () -> bookingService.createBooking(1L, 1L, List.of(999L), 50.0));
     }
 
@@ -55,7 +52,8 @@ class BookingServiceTest {
     void createBookingThrowsWhenSeatNotAvailable() {
         Seat seat = new Seat(1L, 1L, "A1", "regular", "booked");
         when(seatRepo.findById(1L)).thenReturn(Optional.of(seat));
-        assertThrows(IllegalStateException.class,
+        assertThrows(
+                IllegalStateException.class,
                 () -> bookingService.createBooking(1L, 1L, List.of(1L), 50.0));
     }
 
@@ -76,7 +74,6 @@ class BookingServiceTest {
     @Test
     void cancelBookingThrowsWhenNotFound() {
         when(bookingRepo.findById(999L)).thenReturn(Optional.empty());
-        assertThrows(IllegalArgumentException.class,
-                () -> bookingService.cancelBooking(999L));
+        assertThrows(IllegalArgumentException.class, () -> bookingService.cancelBooking(999L));
     }
 }

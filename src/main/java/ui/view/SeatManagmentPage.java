@@ -1,14 +1,11 @@
 package ui.view;
 
-import ui.model.Moviehall;
-import ui.model.Seat;
-import javafx.collections.FXCollections;
 import javafx.geometry.*;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.*;
+import ui.model.Moviehall;
+import ui.model.Seat;
 
 public class SeatManagmentPage {
     public TableView<Seat> seatTable;
@@ -44,7 +41,8 @@ public class SeatManagmentPage {
 
         VBox selectorCard = new VBox(15);
         selectorCard.setPadding(new Insets(20));
-        selectorCard.setStyle("-fx-background-color: white; -fx-border-color: #E2E8F0; -fx-border-radius: 8;");
+        selectorCard.setStyle(
+                "-fx-background-color: white; -fx-border-color: #E2E8F0; -fx-border-radius: 8;");
 
         hallDropdown = new ComboBox<>();
         hallDropdown.setPromptText("-- Choose a hall --");
@@ -55,10 +53,13 @@ public class SeatManagmentPage {
 
         hallInfoLabel = new Label("Select a hall from the dropdown.");
         statsLabel = new Label("");
-        selectorCard.getChildren().addAll(new Label("Select Hall:"), hallDropdown, hallInfoLabel, statsLabel);
+        selectorCard
+                .getChildren()
+                .addAll(new Label("Select Hall:"), hallDropdown, hallInfoLabel, statsLabel);
         VBox generateCard = new VBox(15);
         generateCard.setPadding(new Insets(20));
-        generateCard.setStyle("-fx-background-color: #F0FDF4; -fx-border-color: #10B981; -fx-border-radius: 8;");
+        generateCard.setStyle(
+                "-fx-background-color: #F0FDF4; -fx-border-color: #10B981; -fx-border-radius: 8;");
 
         seatCountField = new TextField();
         seatCountField.setPromptText("e.g., 50");
@@ -75,7 +76,12 @@ public class SeatManagmentPage {
         HBox toolbar = new HBox(10, btnRefresh, btnDelete);
         seatTable = new TableView<>();
         VBox.setVgrow(seatTable, Priority.ALWAYS);
-        seatTable.getColumns().addAll(new TableColumn<>("Seat ID"), new TableColumn<>("Number"), new TableColumn<>("Type"));
+        seatTable
+                .getColumns()
+                .addAll(
+                        new TableColumn<>("Seat ID"),
+                        new TableColumn<>("Number"),
+                        new TableColumn<>("Type"));
 
         root.getChildren().addAll(header, selectorCard, generateCard, toolbar, seatTable);
     }

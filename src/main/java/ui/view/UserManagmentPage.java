@@ -1,4 +1,7 @@
 package ui.view;
+
+import static ui.common.Theme.*;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -8,7 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import ui.model.User;
-import static ui.common.Theme.*;
+
 public class UserManagmentPage {
     public TableView<User> userTable;
     public ComboBox<String> roleDropdown;
@@ -61,10 +64,7 @@ public class UserManagmentPage {
         btnBack.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
         btnBack.setTextFill(Color.web(TEXT_MUTED));
         btnBack.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-padding: 8 16;"
-        );
+                "-fx-background-color: transparent;" + "-fx-cursor: hand;" + "-fx-padding: 8 16;");
 
         header.getChildren().addAll(titleBox, headerSpacer, btnBack);
         HBox toolbar = new HBox(10);
@@ -76,14 +76,21 @@ public class UserManagmentPage {
         searchField.setPrefWidth(400);
         searchField.setFont(Font.font("Segoe UI", 13));
         searchField.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 8;" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-padding: 8 14;" +
-                        "-fx-text-fill: " + TEXT_DARK + ";" +
-                        "-fx-prompt-text-fill: " + TEXT_MUTED + ";"
-        );
+                "-fx-background-color: "
+                        + WHITE
+                        + ";"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 8;"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-padding: 8 14;"
+                        + "-fx-text-fill: "
+                        + TEXT_DARK
+                        + ";"
+                        + "-fx-prompt-text-fill: "
+                        + TEXT_MUTED
+                        + ";");
 
         toolbar.getChildren().add(searchField);
         HBox body = new HBox(20);
@@ -92,11 +99,14 @@ public class UserManagmentPage {
         actionPanel.setPrefWidth(280);
         actionPanel.setPadding(new Insets(20));
         actionPanel.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 12;" +
-                        "-fx-background-radius: 12;"
-        );
+                "-fx-background-color: "
+                        + WHITE
+                        + ";"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 12;"
+                        + "-fx-background-radius: 12;");
 
         Label actionTitle = new Label("Modify User");
         actionTitle.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
@@ -107,89 +117,104 @@ public class UserManagmentPage {
         roleDropdown.setPrefWidth(240);
         roleDropdown.setPrefHeight(38);
         roleDropdown.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 8;" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-text-fill: " + TEXT_DARK + ";"
-        );
-        roleDropdown.setCellFactory(param -> new ListCell<String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                    setGraphic(null);
-                } else {
-                    setText(item);
-                    setTextFill(Color.web(TEXT_DARK));
-                    setGraphic(null);
-                }
-            }
-        });
-        roleDropdown.setButtonCell(new ListCell<String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(roleDropdown.getPromptText());
-                    setTextFill(Color.web(TEXT_MUTED));
-                } else {
-                    setText(item);
-                    setTextFill(Color.web(TEXT_DARK));
-                }
-                setGraphic(null);
-            }
-        });
+                "-fx-background-color: "
+                        + WHITE
+                        + ";"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 8;"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-text-fill: "
+                        + TEXT_DARK
+                        + ";");
+        roleDropdown.setCellFactory(
+                param ->
+                        new ListCell<String>() {
+                            @Override
+                            protected void updateItem(String item, boolean empty) {
+                                super.updateItem(item, empty);
+                                if (empty || item == null) {
+                                    setText(null);
+                                    setGraphic(null);
+                                } else {
+                                    setText(item);
+                                    setTextFill(Color.web(TEXT_DARK));
+                                    setGraphic(null);
+                                }
+                            }
+                        });
+        roleDropdown.setButtonCell(
+                new ListCell<String>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setText(roleDropdown.getPromptText());
+                            setTextFill(Color.web(TEXT_MUTED));
+                        } else {
+                            setText(item);
+                            setTextFill(Color.web(TEXT_DARK));
+                        }
+                        setGraphic(null);
+                    }
+                });
 
         btnUpdateRole = new Button("✏️  Update Role");
         btnUpdateRole.setPrefWidth(240);
         btnUpdateRole.setPrefHeight(38);
         btnUpdateRole.setTextFill(Color.WHITE);
         btnUpdateRole.setStyle(
-                "-fx-background-color: " + ACCENT + ";" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-font-weight: bold;"
-        );
+                "-fx-background-color: "
+                        + ACCENT
+                        + ";"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-cursor: hand;"
+                        + "-fx-font-weight: bold;");
 
         btnDelete = new Button("🗑️  Delete User");
         btnDelete.setPrefWidth(240);
         btnDelete.setPrefHeight(38);
         btnDelete.setTextFill(Color.WHITE);
         btnDelete.setStyle(
-                "-fx-background-color: " + DANGER + ";" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-font-weight: bold;"
-        );
+                "-fx-background-color: "
+                        + DANGER
+                        + ";"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-cursor: hand;"
+                        + "-fx-font-weight: bold;");
 
         btnRefresh = new Button("🔄  Refresh");
         btnRefresh.setPrefWidth(240);
         btnRefresh.setPrefHeight(38);
         btnRefresh.setTextFill(Color.web(TEXT_MUTED));
         btnRefresh.setStyle(
-                "-fx-background-color: " + BG_LIGHT + ";" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-cursor: hand;"
-        );
+                "-fx-background-color: "
+                        + BG_LIGHT
+                        + ";"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-cursor: hand;");
 
-        actionPanel.getChildren().addAll(
-                actionTitle,
-                new Separator(),
-                new Label("Change Role:"),
-                roleDropdown,
-                btnUpdateRole,
-                new Separator(),
-                btnDelete,
-                btnRefresh
-        );
+        actionPanel
+                .getChildren()
+                .addAll(
+                        actionTitle,
+                        new Separator(),
+                        new Label("Change Role:"),
+                        roleDropdown,
+                        btnUpdateRole,
+                        new Separator(),
+                        btnDelete,
+                        btnRefresh);
         userTable = new TableView<>();
         userTable.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 8;"
-        );
+                "-fx-background-color: "
+                        + WHITE
+                        + ";"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 8;");
         userTable.setPlaceholder(new Label("No users found."));
         HBox.setHgrow(userTable, Priority.ALWAYS);
         VBox.setVgrow(userTable, Priority.ALWAYS);
@@ -225,10 +250,17 @@ public class UserManagmentPage {
         statusCol.setCellValueFactory(new PropertyValueFactory<>("loginStatus"));
         statusCol.setPrefWidth(70);
 
-        userTable.getColumns().addAll(
-                idCol, firstNameCol, lastNameCol, usernameCol,
-                emailCol, phoneCol, roleCol, statusCol
-        );
+        userTable
+                .getColumns()
+                .addAll(
+                        idCol,
+                        firstNameCol,
+                        lastNameCol,
+                        usernameCol,
+                        emailCol,
+                        phoneCol,
+                        roleCol,
+                        statusCol);
         userTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         body.getChildren().addAll(actionPanel, userTable);
@@ -238,4 +270,4 @@ public class UserManagmentPage {
     public VBox getView() {
         return root;
     }
-   }
+}

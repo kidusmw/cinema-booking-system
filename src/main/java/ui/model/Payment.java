@@ -12,6 +12,7 @@ public class Payment {
     private Date paymentDate;
 
     public Payment() {}
+
     public Payment(String paymentID, String status, double totalAmount, String otp, int bookingID) {
         this.paymentID = paymentID;
         this.status = status;
@@ -20,30 +21,73 @@ public class Payment {
         this.bookingID = bookingID;
         this.paymentDate = new Date();
     }
-    public String getPaymentID() { return paymentID; }
-    public void setPaymentID(String paymentID) { this.paymentID = paymentID; }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public String getPaymentID() {
+        return paymentID;
+    }
 
-    public double getTotalAmount() { return totalAmount; }
-    public void setTotalAmount(double totalAmount) { this.totalAmount = totalAmount; }
+    public void setPaymentID(String paymentID) {
+        this.paymentID = paymentID;
+    }
 
-    public String getOtp() { return otp; }
-    public void setOtp(String otp) { this.otp = otp; }
+    public String getStatus() {
+        return status;
+    }
 
-    public int getBookingID() { return bookingID; }
-    public void setBookingID(int bookingID) { this.bookingID = bookingID; }
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-    public String getPaymentMethod() { return paymentMethod; }
-    public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
+    public double getTotalAmount() {
+        return totalAmount;
+    }
 
-    public Date getPaymentDate() { return paymentDate; }
-    public void setPaymentDate(Date paymentDate) { this.paymentDate = paymentDate; }
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+    }
+
+    public int getBookingID() {
+        return bookingID;
+    }
+
+    public void setBookingID(int bookingID) {
+        this.bookingID = bookingID;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public Date getPaymentDate() {
+        return paymentDate;
+    }
+
+    public void setPaymentDate(Date paymentDate) {
+        this.paymentDate = paymentDate;
+    }
 
     @Override
     public String toString() {
-        return "Payment{paymentID='" + paymentID + "', status='" + status +
-                "', totalAmount=" + totalAmount + ", bookingID='" + bookingID + "'}";
+        return "Payment{paymentID='"
+                + paymentID
+                + "', status='"
+                + status
+                + "', totalAmount="
+                + totalAmount
+                + ", bookingID='"
+                + bookingID
+                + "'}";
     }
 }

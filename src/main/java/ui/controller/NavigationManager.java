@@ -1,9 +1,9 @@
 package ui.controller;
 
 import application.AppContext;
-import javafx.stage.Stage;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import javafx.stage.Stage;
 
 public class NavigationManager {
     private final Stage stage;
@@ -15,8 +15,13 @@ public class NavigationManager {
         this.ctx = ctx;
     }
 
-    public AppContext getCtx() { return ctx; }
-    public Stage getStage() { return stage; }
+    public AppContext getCtx() {
+        return ctx;
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
 
     public void go(Runnable restoreCurrent, Runnable showNext) {
         backStack.push(restoreCurrent);

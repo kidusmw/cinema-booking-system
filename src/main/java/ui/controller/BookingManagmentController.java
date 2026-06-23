@@ -2,14 +2,14 @@ package ui.controller;
 
 import application.AppContext;
 import application.ModelConverter;
-import ui.model.Booking;
-import ui.view.BookingManagmentPage;
+import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import java.util.stream.Collectors;
+import ui.model.Booking;
+import ui.view.BookingManagmentPage;
 
 public class BookingManagmentController {
 
@@ -20,7 +20,11 @@ public class BookingManagmentController {
     private final AdminDashboardController dashboard;
     private ObservableList<Booking> masterList;
 
-    public BookingManagmentController(Stage stage, AppContext ctx, NavigationManager nav, AdminDashboardController dashboard) {
+    public BookingManagmentController(
+            Stage stage,
+            AppContext ctx,
+            NavigationManager nav,
+            AdminDashboardController dashboard) {
         this.stage = stage;
         this.ctx = ctx;
         this.nav = nav;
@@ -38,7 +42,11 @@ public class BookingManagmentController {
     }
 
     private void loadTableData() {
-        this.masterList = FXCollections.observableArrayList(ctx.bookingRepo.findAll().stream().map(ModelConverter::toOldBooking).collect(Collectors.toList()));
+        this.masterList =
+                FXCollections.observableArrayList(
+                        ctx.bookingRepo.findAll().stream()
+                                .map(ModelConverter::toOldBooking)
+                                .collect(Collectors.toList()));
         view.bookingTable.setItems(masterList);
         System.out.println("✅ Data Loaded: " + masterList.size() + " bookings.");
     }
@@ -50,7 +58,8 @@ public class BookingManagmentController {
         }
         ObservableList<Booking> filtered = FXCollections.observableArrayList();
         for (Booking b : masterList) {
-            if (b.getCustomerName() != null && b.getCustomerName().toLowerCase().contains(searchText.toLowerCase())) {
+            if (b.getCustomerName() != null
+                    && b.getCustomerName().toLowerCase().contains(searchText.toLowerCase())) {
                 filtered.add(b);
             }
         }

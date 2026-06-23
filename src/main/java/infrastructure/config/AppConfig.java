@@ -19,7 +19,8 @@ public class AppConfig {
                 props.load(in);
             }
         } catch (IOException e) {
-            System.out.println("Failed to load config from " + resourcePath + ": " + e.getMessage());
+            System.out.println(
+                    "Failed to load config from " + resourcePath + ": " + e.getMessage());
         }
         return new AppConfig(props);
     }

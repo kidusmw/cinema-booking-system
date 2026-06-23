@@ -32,9 +32,14 @@ public class AuthService {
         return Optional.empty();
     }
 
-    public User register(String username, String plainPassword,
-                         String firstName, String lastName,
-                         String role, String phone, String email) {
+    public User register(
+            String username,
+            String plainPassword,
+            String firstName,
+            String lastName,
+            String role,
+            String phone,
+            String email) {
         String hashed = hasher.hash(plainPassword);
         User user = new User(null, firstName, lastName, username, hashed, role, phone, email);
         return userRepo.save(user);

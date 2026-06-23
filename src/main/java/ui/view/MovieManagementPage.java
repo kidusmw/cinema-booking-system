@@ -1,4 +1,9 @@
 package ui.view;
+
+import static ui.common.Theme.*;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -7,9 +12,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import static ui.common.Theme.*;
 
 public class MovieManagementPage {
     public TableView<ui.model.Movie> movieTable;
@@ -23,6 +25,7 @@ public class MovieManagementPage {
     private static final String WHITE = "#FFFFFF";
     private static final String BG = "#FAFAFA";
     private static final String BG_LIGHT = "#F8FAFC";
+
     public VBox getView() {
         VBox root = new VBox();
         root.setStyle("-fx-background-color: " + BG + ";");
@@ -59,14 +62,19 @@ public class MovieManagementPage {
         searchField.setPrefWidth(350);
         searchField.setFont(Font.font("Segoe UI", 13));
         searchField.setStyle(
-                "-fx-background-color: white;" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 8;" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-padding: 8 14;" +
-                        "-fx-text-fill: " + TEXT_DARK + ";" +
-                        "-fx-prompt-text-fill: " + TEXT_MUTED + ";"
-        );
+                "-fx-background-color: white;"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 8;"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-padding: 8 14;"
+                        + "-fx-text-fill: "
+                        + TEXT_DARK
+                        + ";"
+                        + "-fx-prompt-text-fill: "
+                        + TEXT_MUTED
+                        + ";");
 
         Region toolbarSpacer = new Region();
         HBox.setHgrow(toolbarSpacer, Priority.ALWAYS);
@@ -77,7 +85,10 @@ public class MovieManagementPage {
 
         toolbar.getChildren().addAll(searchField, toolbarSpacer, btnEdit, btnDelete, btnRefresh);
         movieTable = new TableView<>();
-        movieTable.setStyle("-fx-background-color: white; -fx-border-color: " + BORDER + "; -fx-border-radius: 8;");
+        movieTable.setStyle(
+                "-fx-background-color: white; -fx-border-color: "
+                        + BORDER
+                        + "; -fx-border-radius: 8;");
         movieTable.setPlaceholder(new Label("No movies found. Click 'Add Movie' to create one."));
 
         VBox.setVgrow(movieTable, Priority.ALWAYS);
@@ -108,48 +119,68 @@ public class MovieManagementPage {
         TableColumn<ui.model.Movie, String> descCol = new TableColumn<>("Description");
         descCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         descCol.setPrefWidth(200);
-        ratingCol.setCellFactory(col -> new TableCell<ui.model.Movie, Double>() {
-            @Override
-            protected void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(String.format("%.1f", item));
-                }
-            }
-        });
-        durationCol.setCellFactory(col -> new TableCell<ui.model.Movie, Integer>() {
-            @Override
-            protected void updateItem(Integer item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    int hours = item / 60;
-                    int mins = item % 60;
-                    setText(hours + "h " + mins + "m");
-                }
-            }
-        });
-        dateCol.setCellFactory(col -> new TableCell<ui.model.Movie, Date>() {
-            private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            @Override
-            protected void updateItem(Date item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(format.format(item));
-                }
-            }
-        });
-        movieTable.getColumns().addAll(idCol, titleCol, genreCol, durationCol, ratingCol, langCol, dateCol, posterCol, descCol);
+        ratingCol.setCellFactory(
+                col ->
+                        new TableCell<ui.model.Movie, Double>() {
+                            @Override
+                            protected void updateItem(Double item, boolean empty) {
+                                super.updateItem(item, empty);
+                                if (empty || item == null) {
+                                    setText(null);
+                                } else {
+                                    setText(String.format("%.1f", item));
+                                }
+                            }
+                        });
+        durationCol.setCellFactory(
+                col ->
+                        new TableCell<ui.model.Movie, Integer>() {
+                            @Override
+                            protected void updateItem(Integer item, boolean empty) {
+                                super.updateItem(item, empty);
+                                if (empty || item == null) {
+                                    setText(null);
+                                } else {
+                                    int hours = item / 60;
+                                    int mins = item % 60;
+                                    setText(hours + "h " + mins + "m");
+                                }
+                            }
+                        });
+        dateCol.setCellFactory(
+                col ->
+                        new TableCell<ui.model.Movie, Date>() {
+                            private final SimpleDateFormat format =
+                                    new SimpleDateFormat("yyyy-MM-dd");
+
+                            @Override
+                            protected void updateItem(Date item, boolean empty) {
+                                super.updateItem(item, empty);
+                                if (empty || item == null) {
+                                    setText(null);
+                                } else {
+                                    setText(format.format(item));
+                                }
+                            }
+                        });
+        movieTable
+                .getColumns()
+                .addAll(
+                        idCol,
+                        titleCol,
+                        genreCol,
+                        durationCol,
+                        ratingCol,
+                        langCol,
+                        dateCol,
+                        posterCol,
+                        descCol);
         movieTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
         root.getChildren().addAll(header, toolbar, movieTable);
 
         return root;
     }
+
     private Button createPrimaryButton(String text) {
         Button btn = new Button(text);
         btn.setFont(Font.font("Segoe UI", FontWeight.BOLD, 13));
@@ -163,23 +194,27 @@ public class MovieManagementPage {
         btn.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
         btn.setPrefHeight(38);
         btn.setStyle(
-                "-fx-background-color: white;" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 8;" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-text-fill: " + TEXT_DARK + ";"
-        );
+                "-fx-background-color: white;"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 8;"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-cursor: hand;"
+                        + "-fx-text-fill: "
+                        + TEXT_DARK
+                        + ";");
         return btn;
     }
 
     private String getPrimaryStyle(boolean hovered) {
         String bg = hovered ? HOVER : ACCENT;
-        return
-                "-fx-background-color: " + bg + ";" +
-                        "-fx-text-fill: white;" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-padding: 8 16;";
+        return "-fx-background-color: "
+                + bg
+                + ";"
+                + "-fx-text-fill: white;"
+                + "-fx-background-radius: 8;"
+                + "-fx-cursor: hand;"
+                + "-fx-padding: 8 16;";
     }
 }

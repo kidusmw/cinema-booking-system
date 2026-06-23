@@ -1,4 +1,7 @@
 package ui.view;
+
+import static ui.common.Theme.*;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -8,18 +11,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import ui.model.Payment;
-import static ui.common.Theme.*;
+
 public class PaymentManagment {
     public TableView<Payment> paymentTable;
-    public Label lblTotalPayments;
-    public Label lblPendingPayments;
     public Button btnRefresh;
     public Button btnBack;
     public Label lblTotalRevenue;
 
     private VBox root;
-
-
 
     public PaymentManagment() {
         createUI();
@@ -33,14 +32,17 @@ public class PaymentManagment {
         btnBack.setFont(Font.font("Segoe UI", 13));
         btnBack.setPrefHeight(38);
         btnBack.setStyle(
-                "-fx-background-color: white;" +
-                        "-fx-text-fill: " + TEXT_DARK + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 8;" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-padding: 8 16;"
-        );
+                "-fx-background-color: white;"
+                        + "-fx-text-fill: "
+                        + TEXT_DARK
+                        + ";"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 8;"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-cursor: hand;"
+                        + "-fx-padding: 8 16;");
         lblTotalRevenue = new Label("0.00 Birr");
         lblTotalRevenue.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
         lblTotalRevenue.setTextFill(Color.web("#DB2777"));
@@ -48,15 +50,19 @@ public class PaymentManagment {
         btnRefresh = new Button("🔄  Refresh");
         btnRefresh.setPrefHeight(38);
         btnRefresh.setStyle(
-                "-fx-background-color: white;" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 8;" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-cursor: hand;"
-        );
+                "-fx-background-color: white;"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 8;"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-cursor: hand;");
 
         paymentTable = new TableView<>();
-        paymentTable.setStyle("-fx-background-color: white; -fx-border-color: " + BORDER + "; -fx-border-radius: 8;");
+        paymentTable.setStyle(
+                "-fx-background-color: white; -fx-border-color: "
+                        + BORDER
+                        + "; -fx-border-radius: 8;");
         paymentTable.setPlaceholder(new Label("No system payment logs detected."));
         VBox.setVgrow(paymentTable, Priority.ALWAYS);
         HBox header = new HBox(15);
@@ -72,7 +78,8 @@ public class PaymentManagment {
         HBox.setHgrow(spacer, Priority.ALWAYS);
         VBox revCard = new VBox(2);
         revCard.setPadding(new Insets(10, 20, 10, 20));
-        revCard.setStyle("-fx-background-color: white; -fx-border-color: #DB2777; -fx-border-radius: 8; -fx-background-radius: 8;");
+        revCard.setStyle(
+                "-fx-background-color: white; -fx-border-color: #DB2777; -fx-border-radius: 8; -fx-background-radius: 8;");
 
         Label cardTitle = new Label("TOTAL REVENUE");
         cardTitle.setFont(Font.font("Segoe UI", FontWeight.BOLD, 10));
@@ -108,7 +115,9 @@ public class PaymentManagment {
         timestampCol.setCellValueFactory(new PropertyValueFactory<>("paymentDate"));
         timestampCol.setPrefWidth(160);
 
-        paymentTable.getColumns().addAll(pIdCol, statusCol, amtCol, verifyCol, bIdCol, methodCol, timestampCol);
+        paymentTable
+                .getColumns()
+                .addAll(pIdCol, statusCol, amtCol, verifyCol, bIdCol, methodCol, timestampCol);
         paymentTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         root.getChildren().addAll(header, paymentTable);

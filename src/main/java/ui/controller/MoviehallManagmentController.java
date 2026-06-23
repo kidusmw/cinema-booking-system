@@ -2,25 +2,24 @@ package ui.controller;
 
 import application.AppContext;
 import application.ModelConverter;
-import ui.model.Moviehall;
-import ui.view.MovieHallManagmentPage;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import ui.model.Moviehall;
+import ui.view.MovieHallManagmentPage;
 
 public class MoviehallManagmentController {
 
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(MoviehallManagmentController.class);
+    private static final org.slf4j.Logger log =
+            org.slf4j.LoggerFactory.getLogger(MoviehallManagmentController.class);
     private MovieHallManagmentPage view;
     private Stage stage;
     private final AppContext ctx;
@@ -28,7 +27,11 @@ public class MoviehallManagmentController {
     private final AdminDashboardController dashboard;
     private ObservableList<Moviehall> hallList;
 
-    public MoviehallManagmentController(Stage stage, AppContext ctx, NavigationManager nav, AdminDashboardController dashboard) {
+    public MoviehallManagmentController(
+            Stage stage,
+            AppContext ctx,
+            NavigationManager nav,
+            AdminDashboardController dashboard) {
         this.stage = stage;
         this.ctx = ctx;
         this.nav = nav;
@@ -55,7 +58,10 @@ public class MoviehallManagmentController {
 
     private void loadHalls() {
         try {
-            List<Moviehall> halls = ctx.hallRepo.findAll().stream().map(ModelConverter::toOldHall).collect(Collectors.toList());
+            List<Moviehall> halls =
+                    ctx.hallRepo.findAll().stream()
+                            .map(ModelConverter::toOldHall)
+                            .collect(Collectors.toList());
             hallList = FXCollections.observableArrayList(halls);
             view.hallTable.setItems(hallList);
             System.out.println("✅ Loaded " + halls.size() + " halls into table");
@@ -73,8 +79,8 @@ public class MoviehallManagmentController {
         ObservableList<Moviehall> filtered = FXCollections.observableArrayList();
         String lower = searchText.toLowerCase();
         for (Moviehall hall : hallList) {
-            if (hall.getName().toLowerCase().contains(lower) ||
-                    hall.getId().toLowerCase().contains(lower)) {
+            if (hall.getName().toLowerCase().contains(lower)
+                    || hall.getId().toLowerCase().contains(lower)) {
                 filtered.add(hall);
             }
         }
@@ -85,11 +91,12 @@ public class MoviehallManagmentController {
         Dialog<Moviehall> dialog = createHallDialog(null);
         Optional<Moviehall> result = dialog.showAndWait();
 
-        result.ifPresent(hall -> {
-            ctx.hallRepo.save(ModelConverter.toDomainHall(hall));
-            showAlert("Success", "Hall added successfully!");
-            loadHalls();
-        });
+        result.ifPresent(
+                hall -> {
+                    ctx.hallRepo.save(ModelConverter.toDomainHall(hall));
+                    showAlert("Success", "Hall added successfully!");
+                    loadHalls();
+                });
     }
 
     private void handleEditHall() {
@@ -102,15 +109,17 @@ public class MoviehallManagmentController {
         Dialog<Moviehall> dialog = createHallDialog(selected);
         Optional<Moviehall> result = dialog.showAndWait();
 
-        result.ifPresent(hall -> {
-            // FIXED: Changed .getId(...) to .setId(...)
-            hall.setId(selected.getId());
+        result.ifPresent(
+                hall -> {
+                    // FIXED: Changed .getId(...) to .setId(...)
+                    hall.setId(selected.getId());
 
-            ctx.hallRepo.save(ModelConverter.toDomainHall(hall));
-            showAlert("Success", "Hall updated successfully!");
-            loadHalls();
-        });
+                    ctx.hallRepo.save(ModelConverter.toDomainHall(hall));
+                    showAlert("Success", "Hall updated successfully!");
+                    loadHalls();
+                });
     }
+
     private void handleDeleteHall() {
         Moviehall selected = view.hallTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
@@ -130,6 +139,7 @@ public class MoviehallManagmentController {
             loadHalls();
         }
     }
+
     private void handleBack() {
         System.out.println("Going back to admin dashboard...");
         nav.back();
@@ -158,37 +168,39 @@ public class MoviehallManagmentController {
         TextField priceField = new TextField();
         priceField.setPromptText("e.g., 150 (Birr)");
         if (existing != null) {
-            priceField.setText(String.valueOf(existing.getCapacity() * 3));  // Example: 3 Birr per seat
+            priceField.setText(
+                    String.valueOf(existing.getCapacity() * 3)); // Example: 3 Birr per seat
         }
         grid.add(new Label("Hall Name:"), 0, 0);
         grid.add(nameField, 1, 0);
         grid.add(new Label("Capacity:"), 0, 1);
         grid.add(capacityField, 1, 1);
-        grid.add(new Label("Price per Seat (Br):"), 0, 2);  // ✅ Changed to Birr
+        grid.add(new Label("Price per Seat (Br):"), 0, 2); // ✅ Changed to Birr
         grid.add(priceField, 1, 2);
 
         dialog.getDialogPane().setContent(grid);
 
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == saveButton) {
-                if (nameField.getText().trim().isEmpty() ||
-                        capacityField.getText().trim().isEmpty() ||
-                        priceField.getText().trim().isEmpty()) {
-                    showAlert("Invalid Input", "Please fill in all fields.");
+        dialog.setResultConverter(
+                dialogButton -> {
+                    if (dialogButton == saveButton) {
+                        if (nameField.getText().trim().isEmpty()
+                                || capacityField.getText().trim().isEmpty()
+                                || priceField.getText().trim().isEmpty()) {
+                            showAlert("Invalid Input", "Please fill in all fields.");
+                            return null;
+                        }
+                        try {
+                            Moviehall hall = new Moviehall();
+                            hall.setName(nameField.getText().trim());
+                            hall.setCapacity(Integer.parseInt(capacityField.getText().trim()));
+                            return hall;
+                        } catch (NumberFormatException e) {
+                            showAlert("Invalid Input", "Capacity and Price must be numbers.");
+                            return null;
+                        }
+                    }
                     return null;
-                }
-                try {
-                    Moviehall hall = new Moviehall();
-                    hall.setName(nameField.getText().trim());
-                    hall.setCapacity(Integer.parseInt(capacityField.getText().trim()));
-                    return hall;
-                } catch (NumberFormatException e) {
-                    showAlert("Invalid Input", "Capacity and Price must be numbers.");
-                    return null;
-                }
-            }
-            return null;
-        });
+                });
 
         return dialog;
     }
@@ -201,5 +213,3 @@ public class MoviehallManagmentController {
         alert.showAndWait();
     }
 }
-
-

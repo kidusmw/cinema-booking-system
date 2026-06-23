@@ -1,11 +1,10 @@
 package ui.controller;
 
-import ui.model.User;
-import ui.view.SignUpPage;
 import application.AppContext;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import ui.view.SignUpPage;
 
 public class SignUpController {
     private final AppContext ctx;
@@ -30,10 +29,11 @@ public class SignUpController {
 
         view.backBtn.setOnAction(e -> nav.back());
 
-        view.loginLink.setOnAction(e -> nav.go(
-            () -> new SignUpController(stage, ctx, nav, role),
-            () -> new LoginController(stage, ctx, nav, role)
-        ));
+        view.loginLink.setOnAction(
+                e ->
+                        nav.go(
+                                () -> new SignUpController(stage, ctx, nav, role),
+                                () -> new LoginController(stage, ctx, nav, role)));
     }
 
     private void handleSignUp() {
@@ -44,8 +44,12 @@ public class SignUpController {
         String email = view.emailField.getText().trim();
         String phone = view.phoneField.getText().trim();
 
-        if (firstName.isEmpty() || lastName.isEmpty() || username.isEmpty() ||
-                password.isEmpty() || email.isEmpty() || phone.isEmpty()) {
+        if (firstName.isEmpty()
+                || lastName.isEmpty()
+                || username.isEmpty()
+                || password.isEmpty()
+                || email.isEmpty()
+                || phone.isEmpty()) {
             showError("Please fill in all fields");
             return;
         }
@@ -68,7 +72,11 @@ public class SignUpController {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
-    private void showError(String message) { view.errorLabel.setText(message); view.errorLabel.setVisible(true); }
+    private void showError(String message) {
+        view.errorLabel.setText(message);
+        view.errorLabel.setVisible(true);
+    }
+
     private void showInfo(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);

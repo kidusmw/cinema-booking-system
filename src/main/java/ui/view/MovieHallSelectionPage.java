@@ -1,5 +1,7 @@
 package ui.view;
 
+import static ui.common.Theme.*;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -7,7 +9,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import static ui.common.Theme.*;
 
 public class MovieHallSelectionPage {
 
@@ -17,7 +18,6 @@ public class MovieHallSelectionPage {
     public VBox hallsContainer;
 
     private VBox root;
-
 
     private static final String WHITE = "#FFFFFF";
     private static final String BG = "#FAFAFA";
@@ -44,10 +44,7 @@ public class MovieHallSelectionPage {
         btnBack.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
         btnBack.setTextFill(Color.web(TEXT_MUTED));
         btnBack.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-padding: 8 16;"
-        );
+                "-fx-background-color: transparent;" + "-fx-cursor: hand;" + "-fx-padding: 8 16;");
 
         topBar.getChildren().add(btnBack);
         VBox header = new VBox(8);
@@ -66,10 +63,7 @@ public class MovieHallSelectionPage {
         HBox legend = new HBox(20);
         legend.setAlignment(Pos.CENTER_LEFT);
         legend.setPadding(new Insets(10, 15, 10, 15));
-        legend.setStyle(
-                "-fx-background-color: " + BG_LIGHT + ";" +
-                        "-fx-background-radius: 8;"
-        );
+        legend.setStyle("-fx-background-color: " + BG_LIGHT + ";" + "-fx-background-radius: 8;");
 
         Label legendTitle = new Label("💡 Hall Types (Prices in ETB):");
         legendTitle.setFont(Font.font("Segoe UI", FontWeight.BOLD, 12));

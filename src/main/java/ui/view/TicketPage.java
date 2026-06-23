@@ -1,5 +1,7 @@
 package ui.view;
 
+import static ui.common.Theme.*;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -13,7 +15,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import static ui.common.Theme.*;
 
 public class TicketPage {
 
@@ -67,10 +68,7 @@ public class TicketPage {
         VBox ticket = new VBox(0);
         ticket.setMaxWidth(600);
         ticket.setEffect(new DropShadow(20, Color.rgb(0, 0, 0, 0.15)));
-        ticket.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-background-radius: 15;"
-        );
+        ticket.setStyle("-fx-background-color: " + WHITE + ";" + "-fx-background-radius: 15;");
 
         // Top colored section
         VBox topSection = new VBox(10);
@@ -114,10 +112,11 @@ public class TicketPage {
         movieGenre.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 12));
         movieGenre.setTextFill(Color.WHITE);
         movieGenre.setStyle(
-                "-fx-background-color: " + ACCENT + ";" +
-                        "-fx-background-radius: 12;" +
-                        "-fx-padding: 4 12;"
-        );
+                "-fx-background-color: "
+                        + ACCENT
+                        + ";"
+                        + "-fx-background-radius: 12;"
+                        + "-fx-padding: 4 12;");
 
         // Date & Time row
         HBox dateTimeRow = new HBox(30);
@@ -158,7 +157,8 @@ public class TicketPage {
 
         VBox totalBox = createDetailBox("💰 TOTAL", "total");
         totalLabel = (Label) totalBox.getChildren().get(1);
-        totalLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: " + ACCENT + ";");
+        totalLabel.setStyle(
+                "-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: " + ACCENT + ";");
         bottomInfo.getChildren().add(totalBox);
 
         // Booked on
@@ -167,15 +167,20 @@ public class TicketPage {
         bookedOnLabel.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 11));
         bookedOnLabel.setTextFill(Color.web(TEXT_MUTED));
 
-        middleSection.getChildren().addAll(
-                movieTitle,
-                movieGenre,
-                new Region() {{ setPrefHeight(10); }},
-                dateTimeRow,
-                divider,
-                bottomInfo,
-                bookedOnBox
-        );
+        middleSection
+                .getChildren()
+                .addAll(
+                        movieTitle,
+                        movieGenre,
+                        new Region() {
+                            {
+                                setPrefHeight(10);
+                            }
+                        },
+                        dateTimeRow,
+                        divider,
+                        bottomInfo,
+                        bookedOnBox);
 
         // Bottom barcode section
         VBox barcodeSection = new VBox(10);
@@ -233,22 +238,29 @@ public class TicketPage {
         btn.setPrefWidth(180);
         btn.setTextFill(Color.WHITE);
         btn.setStyle(
-                "-fx-background-color: " + normalColor + ";" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-cursor: hand;"
-        );
-        btn.setOnMouseEntered(e -> btn.setStyle(
-                "-fx-background-color: " + hoverColor + ";" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-text-fill: white;"
-        ));
-        btn.setOnMouseExited(e -> btn.setStyle(
-                "-fx-background-color: " + normalColor + ";" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-text-fill: white;"
-        ));
+                "-fx-background-color: "
+                        + normalColor
+                        + ";"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-cursor: hand;");
+        btn.setOnMouseEntered(
+                e ->
+                        btn.setStyle(
+                                "-fx-background-color: "
+                                        + hoverColor
+                                        + ";"
+                                        + "-fx-background-radius: 8;"
+                                        + "-fx-cursor: hand;"
+                                        + "-fx-text-fill: white;"));
+        btn.setOnMouseExited(
+                e ->
+                        btn.setStyle(
+                                "-fx-background-color: "
+                                        + normalColor
+                                        + ";"
+                                        + "-fx-background-radius: 8;"
+                                        + "-fx-cursor: hand;"
+                                        + "-fx-text-fill: white;"));
         return btn;
     }
 

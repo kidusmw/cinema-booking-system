@@ -1,13 +1,10 @@
 package ui.controller;
 
-import application.ModelConverter;
-import ui.model.Show;
-import ui.model.Movie;
-import ui.model.Customer;
-import ui.view.ShowSelectionPage;
 import application.AppContext;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import application.ModelConverter;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 import javafx.geometry.Insets;
 // ✅ FIXED: Missing geometric alignment package import added to resolve variable Pos crash
 import javafx.geometry.Pos;
@@ -17,14 +14,15 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
-
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.stream.Collectors;
+import ui.model.Customer;
+import ui.model.Movie;
+import ui.model.Show;
+import ui.view.ShowSelectionPage;
 
 public class ShowSelectionController {
 
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(ShowSelectionController.class);
+    private static final org.slf4j.Logger log =
+            org.slf4j.LoggerFactory.getLogger(ShowSelectionController.class);
     private ShowSelectionPage view;
     private Stage stage;
     private Customer currentUser;
@@ -39,7 +37,12 @@ public class ShowSelectionController {
     private static final String BORDER = "#E2E8F0";
     private static final String WHITE = "#FFFFFF";
 
-    public ShowSelectionController(Stage stage, AppContext ctx, NavigationManager nav, Customer currentUser, Movie selectedMovie) {
+    public ShowSelectionController(
+            Stage stage,
+            AppContext ctx,
+            NavigationManager nav,
+            Customer currentUser,
+            Movie selectedMovie) {
         this.stage = stage;
         this.ctx = ctx;
         this.nav = nav;
@@ -66,7 +69,10 @@ public class ShowSelectionController {
     private void loadShows() {
         view.showCardsContainer.getChildren().clear();
         view.dateButtonsContainer.getChildren().clear();
-        movieShows = ctx.showtimeRepo.findByMovieId(Long.parseLong(selectedMovie.getMovieID())).stream().map(ModelConverter::toOldShowtime).collect(Collectors.toList());
+        movieShows =
+                ctx.showtimeRepo.findByMovieId(Long.parseLong(selectedMovie.getMovieID())).stream()
+                        .map(ModelConverter::toOldShowtime)
+                        .collect(Collectors.toList());
 
         if (movieShows.isEmpty()) {
             Label noShows = new Label("🎬 No shows available for this movie yet.");
@@ -110,17 +116,18 @@ public class ShowSelectionController {
         btn.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 12));
         btn.setPrefHeight(36);
         btn.setStyle(getDateButtonStyle(false));
-        btn.setOnAction(e -> {
-            // Reset all buttons
-            for (javafx.scene.Node node : view.dateButtonsContainer.getChildren()) {
-                if (node instanceof Button) {
-                    ((Button) node).setStyle(getDateButtonStyle(false));
-                }
-            }
-            btn.setStyle(getDateButtonStyle(true));
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            displayShowsForDate(dateValue, sdf);
-        });
+        btn.setOnAction(
+                e -> {
+                    // Reset all buttons
+                    for (javafx.scene.Node node : view.dateButtonsContainer.getChildren()) {
+                        if (node instanceof Button) {
+                            ((Button) node).setStyle(getDateButtonStyle(false));
+                        }
+                    }
+                    btn.setStyle(getDateButtonStyle(true));
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    displayShowsForDate(dateValue, sdf);
+                });
         return btn;
     }
 
@@ -128,9 +135,14 @@ public class ShowSelectionController {
         view.showCardsContainer.getChildren().clear();
         List<Show> filteredShows = movieShows;
         if (dateFilter != null) {
-            filteredShows = movieShows.stream()
-                    .filter(s -> s.getShowDate() != null && sdf.format(s.getShowDate()).equals(dateFilter))
-                    .collect(Collectors.toList());
+            filteredShows =
+                    movieShows.stream()
+                            .filter(
+                                    s ->
+                                            s.getShowDate() != null
+                                                    && sdf.format(s.getShowDate())
+                                                            .equals(dateFilter))
+                            .collect(Collectors.toList());
         }
 
         if (filteredShows.isEmpty()) {
@@ -149,26 +161,37 @@ public class ShowSelectionController {
         VBox card = new VBox(10);
         card.setPadding(new Insets(15, 20, 15, 20));
         card.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 10;" +
-                        "-fx-background-radius: 10;" +
-                        "-fx-cursor: hand;"
-        );
-        card.setOnMouseEntered(e -> card.setStyle(
-                "-fx-background-color: #FCE7F3;" +
-                        "-fx-border-color: " + ACCENT + ";" +
-                        "-fx-border-radius: 10;" +
-                        "-fx-background-radius: 10;" +
-                        "-fx-cursor: hand;"
-        ));
-        card.setOnMouseExited(e -> card.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 10;" +
-                        "-fx-background-radius: 10;" +
-                        "-fx-cursor: hand;"
-        ));
+                "-fx-background-color: "
+                        + WHITE
+                        + ";"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 10;"
+                        + "-fx-background-radius: 10;"
+                        + "-fx-cursor: hand;");
+        card.setOnMouseEntered(
+                e ->
+                        card.setStyle(
+                                "-fx-background-color: #FCE7F3;"
+                                        + "-fx-border-color: "
+                                        + ACCENT
+                                        + ";"
+                                        + "-fx-border-radius: 10;"
+                                        + "-fx-background-radius: 10;"
+                                        + "-fx-cursor: hand;"));
+        card.setOnMouseExited(
+                e ->
+                        card.setStyle(
+                                "-fx-background-color: "
+                                        + WHITE
+                                        + ";"
+                                        + "-fx-border-color: "
+                                        + BORDER
+                                        + ";"
+                                        + "-fx-border-radius: 10;"
+                                        + "-fx-background-radius: 10;"
+                                        + "-fx-cursor: hand;"));
         HBox topRow = new HBox(15);
         topRow.setAlignment(Pos.CENTER_LEFT);
 
@@ -189,14 +212,25 @@ public class ShowSelectionController {
         bookBtn.setPrefHeight(32);
         bookBtn.setTextFill(Color.WHITE);
         bookBtn.setStyle(
-                "-fx-background-color: " + ACCENT + ";" +
-                        "-fx-background-radius: 6;" +
-                        "-fx-cursor: hand;"
-        );
-        bookBtn.setOnAction(e -> nav.go(
-            () -> new ShowSelectionController(stage, ctx, nav, currentUser, selectedMovie),
-            () -> new MovieHallSelectionController(stage, ctx, nav, currentUser, selectedMovie, show)
-        ));
+                "-fx-background-color: "
+                        + ACCENT
+                        + ";"
+                        + "-fx-background-radius: 6;"
+                        + "-fx-cursor: hand;");
+        bookBtn.setOnAction(
+                e ->
+                        nav.go(
+                                () ->
+                                        new ShowSelectionController(
+                                                stage, ctx, nav, currentUser, selectedMovie),
+                                () ->
+                                        new MovieHallSelectionController(
+                                                stage,
+                                                ctx,
+                                                nav,
+                                                currentUser,
+                                                selectedMovie,
+                                                show)));
 
         HBox bottomRow = new HBox();
         Region spacer = new Region();
@@ -209,22 +243,28 @@ public class ShowSelectionController {
 
     private String getDateButtonStyle(boolean active) {
         if (active) {
-            return
-                    "-fx-background-color: " + ACCENT + ";" +
-                            "-fx-text-fill: white;" +
-                            "-fx-background-radius: 18;" +
-                            "-fx-cursor: hand;" +
-                            "-fx-padding: 8 16;" +
-                            "-fx-font-weight: bold;";
+            return "-fx-background-color: "
+                    + ACCENT
+                    + ";"
+                    + "-fx-text-fill: white;"
+                    + "-fx-background-radius: 18;"
+                    + "-fx-cursor: hand;"
+                    + "-fx-padding: 8 16;"
+                    + "-fx-font-weight: bold;";
         } else {
-            return
-                    "-fx-background-color: " + WHITE + ";" +
-                            "-fx-text-fill: " + TEXT_DARK + ";" +
-                            "-fx-border-color: " + BORDER + ";" +
-                            "-fx-border-radius: 18;" +
-                            "-fx-background-radius: 18;" +
-                            "-fx-cursor: hand;" +
-                            "-fx-padding: 8 16;";
+            return "-fx-background-color: "
+                    + WHITE
+                    + ";"
+                    + "-fx-text-fill: "
+                    + TEXT_DARK
+                    + ";"
+                    + "-fx-border-color: "
+                    + BORDER
+                    + ";"
+                    + "-fx-border-radius: 18;"
+                    + "-fx-background-radius: 18;"
+                    + "-fx-cursor: hand;"
+                    + "-fx-padding: 8 16;";
         }
     }
 
@@ -235,11 +275,11 @@ public class ShowSelectionController {
         cal.setTime(date);
         Calendar today = Calendar.getInstance();
 
-        if (cal.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
-                cal.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+        if (cal.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+                && cal.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
             return "Today";
-        } else if (cal.get(Calendar.YEAR) == today.get(Calendar.YEAR) &&
-                cal.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR) + 1) {
+        } else if (cal.get(Calendar.YEAR) == today.get(Calendar.YEAR)
+                && cal.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR) + 1) {
             return "Tomorrow";
         } else {
             return dayFormat.format(date) + " " + dateFormat.format(date);

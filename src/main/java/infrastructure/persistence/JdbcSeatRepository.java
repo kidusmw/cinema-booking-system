@@ -19,7 +19,7 @@ public class JdbcSeatRepository implements SeatRepository {
         String sql = "SELECT * FROM seat WHERE hall_id = ? ORDER BY seat_number";
         List<Seat> seats = new ArrayList<>();
         try (Connection conn = connectionProvider.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, hallId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) seats.add(mapRow(rs));
@@ -34,7 +34,7 @@ public class JdbcSeatRepository implements SeatRepository {
     public Optional<Seat> findById(Long id) {
         String sql = "SELECT * FROM seat WHERE seat_id = ?";
         try (Connection conn = connectionProvider.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) return Optional.of(mapRow(rs));
@@ -49,7 +49,7 @@ public class JdbcSeatRepository implements SeatRepository {
     public void updateStatus(Long seatId, String status) {
         String sql = "UPDATE seat SET status = ? WHERE seat_id = ?";
         try (Connection conn = connectionProvider.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, status);
             ps.setLong(2, seatId);
             ps.executeUpdate();
@@ -68,9 +68,11 @@ public class JdbcSeatRepository implements SeatRepository {
     }
 
     private Seat insert(Seat seat) {
-        String sql = "INSERT INTO seat (hall_id, seat_number, seat_type, status) VALUES (?, ?, ?, ?)";
+        String sql =
+                "INSERT INTO seat (hall_id, seat_number, seat_type, status) VALUES (?, ?, ?, ?)";
         try (Connection conn = connectionProvider.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                PreparedStatement ps =
+                        conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setLong(1, seat.getHallId());
             ps.setString(2, seat.getSeatNumber());
             ps.setString(3, seat.getSeatType());
@@ -86,9 +88,10 @@ public class JdbcSeatRepository implements SeatRepository {
     }
 
     private Seat update(Seat seat) {
-        String sql = "UPDATE seat SET hall_id=?, seat_number=?, seat_type=?, status=? WHERE seat_id=?";
+        String sql =
+                "UPDATE seat SET hall_id=?, seat_number=?, seat_type=?, status=? WHERE seat_id=?";
         try (Connection conn = connectionProvider.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, seat.getHallId());
             ps.setString(2, seat.getSeatNumber());
             ps.setString(3, seat.getSeatType());
@@ -107,7 +110,6 @@ public class JdbcSeatRepository implements SeatRepository {
                 rs.getLong("hall_id"),
                 rs.getString("seat_number"),
                 rs.getString("seat_type"),
-                rs.getString("status")
-        );
+                rs.getString("status"));
     }
 }

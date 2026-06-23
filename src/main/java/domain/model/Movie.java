@@ -15,8 +15,16 @@ public class Movie {
 
     public Movie() {}
 
-    public Movie(Long movieId, String title, String genre, int duration, double rating,
-                 String description, Date releaseDate, String language, String posterPath) {
+    public Movie(
+            Long movieId,
+            String title,
+            String genre,
+            int duration,
+            double rating,
+            String description,
+            Date releaseDate,
+            String language,
+            String posterPath) {
         this.movieId = movieId;
         this.title = title;
         this.genre = genre;
@@ -34,30 +42,75 @@ public class Movie {
         return hours + "h " + mins + "m";
     }
 
-    public Long getMovieId() { return movieId; }
-    public void setMovieId(Long movieId) { this.movieId = movieId; }
+    public Long getMovieId() {
+        return movieId;
+    }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public void setMovieId(Long movieId) {
+        this.movieId = movieId;
+    }
 
-    public String getGenre() { return genre; }
-    public void setGenre(String genre) { this.genre = genre; }
+    public String getTitle() {
+        return title;
+    }
 
-    public int getDuration() { return duration; }
-    public void setDuration(int duration) { this.duration = duration; }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public double getRating() { return rating; }
-    public void setRating(double rating) { this.rating = rating; }
+    public String getGenre() {
+        return genre;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
 
-    public Date getReleaseDate() { return releaseDate; }
-    public void setReleaseDate(Date releaseDate) { this.releaseDate = releaseDate; }
+    public int getDuration() {
+        return duration;
+    }
 
-    public String getLanguage() { return language; }
-    public void setLanguage(String language) { this.language = language; }
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
 
-    public String getPosterPath() { return posterPath; }
-    public void setPosterPath(String posterPath) { this.posterPath = posterPath; }
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Date getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getPosterPath() {
+        return posterPath;
+    }
+
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
+    }
 }

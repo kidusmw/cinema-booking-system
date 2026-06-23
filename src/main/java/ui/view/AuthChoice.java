@@ -1,5 +1,7 @@
 package ui.view;
 
+import static ui.common.Theme.*;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -9,13 +11,12 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import static ui.common.Theme.*;
 
 public class AuthChoice {
 
     public Button btnLogin;
     public Button btnSignUp;
-    public Button btnBack;  // ✅ ADDED
+    public Button btnBack; // ✅ ADDED
 
     private static final String BG = "#FAFAFA";
     private static final String WHITE = "#FFFFFF";
@@ -30,26 +31,26 @@ public class AuthChoice {
         HBox topBar = new HBox();
         topBar.setPadding(new Insets(20, 30, 20, 30));
 
-        btnBack = new Button("← Back");  // ✅ Back button
+        btnBack = new Button("← Back"); // ✅ Back button
         btnBack.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
         btnBack.setTextFill(Color.web(TEXT_MUTED));
         btnBack.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-padding: 6 12;"
-        );
+                "-fx-background-color: transparent;" + "-fx-cursor: hand;" + "-fx-padding: 6 12;");
         topBar.getChildren().add(btnBack);
         VBox card = new VBox(25);
         card.setAlignment(Pos.CENTER);
         card.setPadding(new Insets(50, 60, 50, 60));
         card.setMaxWidth(450);
         card.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-background-radius: 12;" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 12;" +
-                        "-fx-border-width: 1;"
-        );
+                "-fx-background-color: "
+                        + WHITE
+                        + ";"
+                        + "-fx-background-radius: 12;"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 12;"
+                        + "-fx-border-width: 1;");
         card.setEffect(new DropShadow(10, Color.rgb(0, 0, 0, 0.06)));
         Label title = new Label("How would you like to continue?");
         title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 22));
@@ -66,24 +67,29 @@ public class AuthChoice {
         btnLogin.setPrefHeight(48);
         btnLogin.setTextFill(Color.web(WHITE));
         btnLogin.setStyle(
-                "-fx-background-color: " + ACCENT + ";" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-cursor: hand;"
-        );
-        btnLogin.setOnMouseEntered(e -> {
-            btnLogin.setStyle(
-                    "-fx-background-color: " + HOVER + ";" +
-                            "-fx-background-radius: 8;" +
-                            "-fx-cursor: hand;"
-            );
-        });
-        btnLogin.setOnMouseExited(e -> {
-            btnLogin.setStyle(
-                    "-fx-background-color: " + ACCENT + ";" +
-                            "-fx-background-radius: 8;" +
-                            "-fx-cursor: hand;"
-            );
-        });
+                "-fx-background-color: "
+                        + ACCENT
+                        + ";"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-cursor: hand;");
+        btnLogin.setOnMouseEntered(
+                e -> {
+                    btnLogin.setStyle(
+                            "-fx-background-color: "
+                                    + HOVER
+                                    + ";"
+                                    + "-fx-background-radius: 8;"
+                                    + "-fx-cursor: hand;");
+                });
+        btnLogin.setOnMouseExited(
+                e -> {
+                    btnLogin.setStyle(
+                            "-fx-background-color: "
+                                    + ACCENT
+                                    + ";"
+                                    + "-fx-background-radius: 8;"
+                                    + "-fx-cursor: hand;");
+                });
         HBox dividerBox = new HBox(10);
         dividerBox.setAlignment(Pos.CENTER);
         Region line1 = new Region();
@@ -106,33 +112,44 @@ public class AuthChoice {
         btnSignUp.setPrefHeight(48);
         btnSignUp.setTextFill(Color.web(ACCENT));
         btnSignUp.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-border-color: " + ACCENT + ";" +
-                        "-fx-border-radius: 8;" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-border-width: 1.5;" +
-                        "-fx-cursor: hand;"
-        );
-        btnSignUp.setOnMouseEntered(e -> {
-            btnSignUp.setStyle(
-                    "-fx-background-color: " + SOFT_PINK + ";" +
-                            "-fx-border-color: " + HOVER + ";" +
-                            "-fx-border-radius: 8;" +
-                            "-fx-background-radius: 8;" +
-                            "-fx-border-width: 1.5;" +
-                            "-fx-cursor: hand;"
-            );
-        });
-        btnSignUp.setOnMouseExited(e -> {
-            btnSignUp.setStyle(
-                    "-fx-background-color: " + WHITE + ";" +
-                            "-fx-border-color: " + ACCENT + ";" +
-                            "-fx-border-radius: 8;" +
-                            "-fx-background-radius: 8;" +
-                            "-fx-border-width: 1.5;" +
-                            "-fx-cursor: hand;"
-            );
-        });
+                "-fx-background-color: "
+                        + WHITE
+                        + ";"
+                        + "-fx-border-color: "
+                        + ACCENT
+                        + ";"
+                        + "-fx-border-radius: 8;"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-border-width: 1.5;"
+                        + "-fx-cursor: hand;");
+        btnSignUp.setOnMouseEntered(
+                e -> {
+                    btnSignUp.setStyle(
+                            "-fx-background-color: "
+                                    + SOFT_PINK
+                                    + ";"
+                                    + "-fx-border-color: "
+                                    + HOVER
+                                    + ";"
+                                    + "-fx-border-radius: 8;"
+                                    + "-fx-background-radius: 8;"
+                                    + "-fx-border-width: 1.5;"
+                                    + "-fx-cursor: hand;");
+                });
+        btnSignUp.setOnMouseExited(
+                e -> {
+                    btnSignUp.setStyle(
+                            "-fx-background-color: "
+                                    + WHITE
+                                    + ";"
+                                    + "-fx-border-color: "
+                                    + ACCENT
+                                    + ";"
+                                    + "-fx-border-radius: 8;"
+                                    + "-fx-background-radius: 8;"
+                                    + "-fx-border-width: 1.5;"
+                                    + "-fx-cursor: hand;");
+                });
 
         card.getChildren().addAll(title, subtitle, btnLogin, dividerBox, btnSignUp);
 

@@ -6,6 +6,7 @@ public class Moviehall {
     private String name;
     private int capacity;
     private double pricePerSeat;
+
     public Moviehall() {}
 
     public Moviehall(String id, String name, int capacity) {
@@ -50,6 +51,4 @@ public class Moviehall {
     public String toString() {
         return "MovieHall{id='" + id + "', name='" + name + "', capacity=" + capacity + "}";
     }
-
-
 }

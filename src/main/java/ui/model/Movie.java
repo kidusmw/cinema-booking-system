@@ -7,15 +7,25 @@ public class Movie {
     private String movieID;
     private String title;
     private String genre;
-    private int duration;        // in minutes
-    private double rating;       // 0.0 - 10.0
+    private int duration; // in minutes
+    private double rating; // 0.0 - 10.0
     private String description;
     private Date releaseDate;
     private String language;
-    private String posterPath;   // ✅ ONLY ONE POSTER FIELD
+    private String posterPath; // ✅ ONLY ONE POSTER FIELD
 
     public Movie() {}
-    public Movie(String movieID, String title, String genre, int duration, double rating, String description, Date releaseDate, String language, String posterPath) {
+
+    public Movie(
+            String movieID,
+            String title,
+            String genre,
+            int duration,
+            double rating,
+            String description,
+            Date releaseDate,
+            String language,
+            String posterPath) {
         this.movieID = movieID;
         this.title = title;
         this.genre = genre;
@@ -107,8 +117,16 @@ public class Movie {
 
     @Override
     public String toString() {
-        return "Movie{movieID='" + movieID + "', title='" + title +
-                "', genre='" + genre + "', duration=" + duration +
-                "min, rating=" + rating + "}";
+        return "Movie{movieID='"
+                + movieID
+                + "', title='"
+                + title
+                + "', genre='"
+                + genre
+                + "', duration="
+                + duration
+                + "min, rating="
+                + rating
+                + "}";
     }
 }

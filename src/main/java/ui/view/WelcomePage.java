@@ -1,5 +1,7 @@
 package ui.view;
 
+import static ui.common.Theme.*;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
@@ -9,13 +11,10 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import static ui.common.Theme.*;
 
 public class WelcomePage {
 
@@ -26,7 +25,6 @@ public class WelcomePage {
     private static final String PRIMARY = "#F472B6";
     private static final String HOVER = "#EC4899";
 
-
     public BorderPane getView() {
 
         BorderPane root = new BorderPane();
@@ -35,19 +33,19 @@ public class WelcomePage {
         topBar.setAlignment(Pos.CENTER_LEFT);
         topBar.setPadding(new Insets(20, 40, 20, 40));
         topBar.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-width: 0 0 1 0;"
-        );
+                "-fx-background-color: "
+                        + WHITE
+                        + ";"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-width: 0 0 1 0;");
         HBox brandBox = new HBox(8);
         brandBox.setAlignment(Pos.CENTER_LEFT);
 
         StackPane logo = new StackPane();
         logo.setPrefSize(32, 32);
-        logo.setStyle(
-                "-fx-background-color: " + PRIMARY + ";" +
-                        "-fx-background-radius: 8;"
-        );
+        logo.setStyle("-fx-background-color: " + PRIMARY + ";" + "-fx-background-radius: 8;");
         Label logoIcon = new Label("🎬");
         logoIcon.setFont(Font.font(16));
         logo.getChildren().add(logoIcon);
@@ -63,11 +61,12 @@ public class WelcomePage {
         menu = new MenuButton("☰");
         menu.setFont(Font.font(16));
         menu.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-text-fill: " + TEXT_MUTED + ";" +
-                        "-fx-cursor: hand;" +
-                        "-fx-padding: 6 12;"
-        );
+                "-fx-background-color: transparent;"
+                        + "-fx-text-fill: "
+                        + TEXT_MUTED
+                        + ";"
+                        + "-fx-cursor: hand;"
+                        + "-fx-padding: 6 12;");
         MenuItem about = new MenuItem("About");
         MenuItem complaint = new MenuItem("Send Feedback");
         MenuItem rate = new MenuItem("Rate Us");
@@ -82,17 +81,16 @@ public class WelcomePage {
         eyebrow.setFont(Font.font("Segoe UI", FontWeight.BOLD, 12));
         eyebrow.setTextFill(Color.web(ACCENT));
         eyebrow.setPadding(new Insets(4, 12, 4, 12));
-        eyebrow.setStyle(
-                "-fx-background-color: #FCE7F3;" +
-                        "-fx-background-radius: 12;"
-        );
+        eyebrow.setStyle("-fx-background-color: #FCE7F3;" + "-fx-background-radius: 12;");
 
         Label title = new Label("Book your perfect\nmovie experience");
         title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 42));
         title.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         title.setTextFill(Color.web(TEXT_DARK));
 
-        Label subtitle = new Label("Browse movies, choose your seats, and enjoy the show.\nSimple, fast, and hassle-free booking.");
+        Label subtitle =
+                new Label(
+                        "Browse movies, choose your seats, and enjoy the show.\nSimple, fast, and hassle-free booking.");
         subtitle.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 16));
         subtitle.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         subtitle.setTextFill(Color.web(TEXT_MUTED));
@@ -102,32 +100,37 @@ public class WelcomePage {
         enterBtn.setPrefHeight(48);
         enterBtn.setTextFill(Color.web(WHITE));
         enterBtn.setStyle(
-                "-fx-background-color: " + ACCENT + ";" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-cursor: hand;"
-        );
+                "-fx-background-color: "
+                        + ACCENT
+                        + ";"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-cursor: hand;");
         enterBtn.setEffect(new DropShadow(8, Color.web(ACCENT, 0.3)));
 
-        enterBtn.setOnMouseEntered(e -> {
-            enterBtn.setStyle(
-                    "-fx-background-color: " + HOVER + ";" +
-                            "-fx-background-radius: 8;" +
-                            "-fx-cursor: hand;"
-            );
-        });
-        enterBtn.setOnMouseExited(e -> {
-            enterBtn.setStyle(
-                    "-fx-background-color: " + ACCENT + ";" +
-                            "-fx-background-radius: 8;" +
-                            "-fx-cursor: hand;"
-            );
-        });
+        enterBtn.setOnMouseEntered(
+                e -> {
+                    enterBtn.setStyle(
+                            "-fx-background-color: "
+                                    + HOVER
+                                    + ";"
+                                    + "-fx-background-radius: 8;"
+                                    + "-fx-cursor: hand;");
+                });
+        enterBtn.setOnMouseExited(
+                e -> {
+                    enterBtn.setStyle(
+                            "-fx-background-color: "
+                                    + ACCENT
+                                    + ";"
+                                    + "-fx-background-radius: 8;"
+                                    + "-fx-cursor: hand;");
+                });
         HBox trustBox = new HBox(20);
         trustBox.setAlignment(Pos.CENTER);
         Label trust1 = new Label("✓ Secure booking");
         Label trust2 = new Label("✓ Instant confirmation");
         Label trust3 = new Label("✓ Easy refunds");
-        for (Label l : new Label[]{trust1, trust2, trust3}) {
+        for (Label l : new Label[] {trust1, trust2, trust3}) {
             l.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 12));
             l.setTextFill(Color.web(TEXT_MUTED));
         }
@@ -138,40 +141,45 @@ public class WelcomePage {
         featuresBox.setAlignment(Pos.CENTER);
         featuresBox.setPadding(new Insets(0, 40, 60, 40));
 
-        featuresBox.getChildren().addAll(
-                createFeatureCard("🎬", "Latest Movies", "Browse current releases"),
-                createFeatureCard("💺", "Choose Seats", "Pick your perfect spot"),
-                createFeatureCard("🎫", "Instant Booking", "Get tickets in seconds")
-        );
+        featuresBox
+                .getChildren()
+                .addAll(
+                        createFeatureCard("🎬", "Latest Movies", "Browse current releases"),
+                        createFeatureCard("💺", "Choose Seats", "Pick your perfect spot"),
+                        createFeatureCard("🎫", "Instant Booking", "Get tickets in seconds"));
 
         VBox mainContent = new VBox(20, heroBox, featuresBox);
         mainContent.setAlignment(Pos.CENTER);
 
         root.setTop(topBar);
         root.setCenter(mainContent);
-        about.setOnAction(e -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("About");
-            alert.setHeaderText("CinemaBook");
-            alert.setContentText("A modern cinema booking system built with JavaFX and SQL Server.\nVersion 1.0");
-            alert.showAndWait();
-        });
+        about.setOnAction(
+                e -> {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("About");
+                    alert.setHeaderText("CinemaBook");
+                    alert.setContentText(
+                            "A modern cinema booking system built with JavaFX and SQL Server.\nVersion 1.0");
+                    alert.showAndWait();
+                });
 
-        complaint.setOnAction(e -> {
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Feedback");
-            dialog.setHeaderText("We'd love to hear from you");
-            dialog.setContentText("Your message:");
-            dialog.showAndWait();
-        });
+        complaint.setOnAction(
+                e -> {
+                    TextInputDialog dialog = new TextInputDialog();
+                    dialog.setTitle("Feedback");
+                    dialog.setHeaderText("We'd love to hear from you");
+                    dialog.setContentText("Your message:");
+                    dialog.showAndWait();
+                });
 
-        rate.setOnAction(e -> {
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Rate Us");
-            dialog.setHeaderText("Rate your experience");
-            dialog.setContentText("Rating (1-5):");
-            dialog.showAndWait();
-        });
+        rate.setOnAction(
+                e -> {
+                    TextInputDialog dialog = new TextInputDialog();
+                    dialog.setTitle("Rate Us");
+                    dialog.setHeaderText("Rate your experience");
+                    dialog.setContentText("Rating (1-5):");
+                    dialog.showAndWait();
+                });
 
         return root;
     }
@@ -182,12 +190,15 @@ public class WelcomePage {
         card.setPadding(new Insets(24, 20, 24, 20));
         card.setPrefWidth(180);
         card.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-background-radius: 12;" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 12;" +
-                        "-fx-border-width: 1;"
-        );
+                "-fx-background-color: "
+                        + WHITE
+                        + ";"
+                        + "-fx-background-radius: 12;"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 12;"
+                        + "-fx-border-width: 1;");
         card.setEffect(new DropShadow(5, Color.rgb(0, 0, 0, 0.04)));
 
         Label iconLabel = new Label(icon);
@@ -204,25 +215,33 @@ public class WelcomePage {
         descLabel.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
 
         card.getChildren().addAll(iconLabel, titleLabel, descLabel);
-        card.setOnMouseEntered(e -> {
-            card.setStyle(
-                    "-fx-background-color: " + WHITE + ";" +
-                            "-fx-background-radius: 12;" +
-                            "-fx-border-color: " + PRIMARY + ";" +
-                            "-fx-border-radius: 12;" +
-                            "-fx-border-width: 1;" +
-                            "-fx-cursor: hand;"
-            );
-        });
-        card.setOnMouseExited(e -> {
-            card.setStyle(
-                    "-fx-background-color: " + WHITE + ";" +
-                            "-fx-background-radius: 12;" +
-                            "-fx-border-color: " + BORDER + ";" +
-                            "-fx-border-radius: 12;" +
-                            "-fx-border-width: 1;"
-            );
-        });
+        card.setOnMouseEntered(
+                e -> {
+                    card.setStyle(
+                            "-fx-background-color: "
+                                    + WHITE
+                                    + ";"
+                                    + "-fx-background-radius: 12;"
+                                    + "-fx-border-color: "
+                                    + PRIMARY
+                                    + ";"
+                                    + "-fx-border-radius: 12;"
+                                    + "-fx-border-width: 1;"
+                                    + "-fx-cursor: hand;");
+                });
+        card.setOnMouseExited(
+                e -> {
+                    card.setStyle(
+                            "-fx-background-color: "
+                                    + WHITE
+                                    + ";"
+                                    + "-fx-background-radius: 12;"
+                                    + "-fx-border-color: "
+                                    + BORDER
+                                    + ";"
+                                    + "-fx-border-radius: 12;"
+                                    + "-fx-border-width: 1;");
+                });
 
         return card;
     }

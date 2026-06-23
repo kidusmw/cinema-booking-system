@@ -1,27 +1,24 @@
 package domain.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
 import domain.model.Payment;
 import domain.port.PaymentRepository;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 class PaymentServiceTest {
 
-    @Mock
-    PaymentRepository paymentRepo;
+    @Mock PaymentRepository paymentRepo;
 
-    @InjectMocks
-    PaymentService paymentService;
+    @InjectMocks PaymentService paymentService;
 
     @Test
     void processPaymentCreatesPendingPaymentWithOtp() {

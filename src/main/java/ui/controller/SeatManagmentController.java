@@ -2,22 +2,20 @@ package ui.controller;
 
 import application.AppContext;
 import application.ModelConverter;
+import java.util.List;
+import java.util.stream.Collectors;
+import javafx.collections.FXCollections;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
 import ui.model.Moviehall;
 import ui.model.Seat;
 import ui.view.SeatManagmentPage;
-import javafx.collections.FXCollections;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.scene.Parent;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class SeatManagmentController {
 
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(SeatManagmentController.class);
+    private static final org.slf4j.Logger log =
+            org.slf4j.LoggerFactory.getLogger(SeatManagmentController.class);
     private SeatManagmentPage view;
     private Stage stage;
     private final AppContext ctx;
@@ -25,7 +23,11 @@ public class SeatManagmentController {
     private final AdminDashboardController dashboard;
     private Moviehall selectedHall;
 
-    public SeatManagmentController(Stage stage, AppContext ctx, NavigationManager nav, AdminDashboardController dashboard) {
+    public SeatManagmentController(
+            Stage stage,
+            AppContext ctx,
+            NavigationManager nav,
+            AdminDashboardController dashboard) {
         this.stage = stage;
         this.ctx = ctx;
         this.nav = nav;
@@ -36,43 +38,66 @@ public class SeatManagmentController {
         view.btnGenerate.setOnAction(e -> handleGenerateSeats());
         view.btnRefresh.setOnAction(e -> loadSeatsForSelectedHall());
         view.btnDelete.setOnAction(e -> handleDeleteAllSeats());
-        view.hallDropdown.setOnAction(e -> {
-            selectedHall = view.hallDropdown.getValue();
-            if (selectedHall != null) {
-                view.seatCountField.setText(String.valueOf(selectedHall.getCapacity()));
-                updateHallInfo();
-                loadSeatsForSelectedHall();
-            }
-        });
+        view.hallDropdown.setOnAction(
+                e -> {
+                    selectedHall = view.hallDropdown.getValue();
+                    if (selectedHall != null) {
+                        view.seatCountField.setText(String.valueOf(selectedHall.getCapacity()));
+                        updateHallInfo();
+                        loadSeatsForSelectedHall();
+                    }
+                });
     }
+
     public Parent getRootView() {
         return view.getView();
     }
 
     private void loadHalls() {
         try {
-            List<Moviehall> halls = ctx.hallRepo.findAll().stream().map(ModelConverter::toOldHall).collect(Collectors.toList());
+            List<Moviehall> halls =
+                    ctx.hallRepo.findAll().stream()
+                            .map(ModelConverter::toOldHall)
+                            .collect(Collectors.toList());
             if (halls != null) view.hallDropdown.setItems(FXCollections.observableArrayList(halls));
-        } catch (Exception e) { log.error("Operation failed", e); }
-    }
-    private void updateHallInfo() {
-        if (selectedHall != null) {
-            view.hallInfoLabel.setText("🏛️ Active: " + selectedHall.getName() + " | Capacity: " + selectedHall.getCapacity());
+        } catch (Exception e) {
+            log.error("Operation failed", e);
         }
     }
+
+    private void updateHallInfo() {
+        if (selectedHall != null) {
+            view.hallInfoLabel.setText(
+                    "🏛️ Active: "
+                            + selectedHall.getName()
+                            + " | Capacity: "
+                            + selectedHall.getCapacity());
+        }
+    }
+
     private void loadSeatsForSelectedHall() {
         if (selectedHall == null) return;
         try {
-            List<Seat> seats = ctx.seatRepo.findByHallId(Long.parseLong(selectedHall.getId())).stream().map(ModelConverter::toOldSeat).collect(Collectors.toList());
+            List<Seat> seats =
+                    ctx.seatRepo.findByHallId(Long.parseLong(selectedHall.getId())).stream()
+                            .map(ModelConverter::toOldSeat)
+                            .collect(Collectors.toList());
             view.seatTable.setItems(FXCollections.observableArrayList(seats));
             view.statsLabel.setText("📊 Total Seats: " + seats.size());
-        } catch (Exception e) { log.error("Operation failed", e); }
+        } catch (Exception e) {
+            log.error("Operation failed", e);
+        }
     }
+
     private void handleGenerateSeats() {
         if (selectedHall == null) return;
 
         String countText = view.seatCountField.getText().trim();
-        System.out.println("DEBUG: Attempting to generate " + countText + " seats for Hall ID: " + selectedHall.getId());
+        System.out.println(
+                "DEBUG: Attempting to generate "
+                        + countText
+                        + " seats for Hall ID: "
+                        + selectedHall.getId());
 
         try {
             int seatCount = Integer.parseInt(countText);
@@ -98,13 +123,16 @@ public class SeatManagmentController {
     private void handleDeleteAllSeats() {
         if (selectedHall == null) return;
         try {
-            List<domain.model.Seat> seats = ctx.seatRepo.findByHallId(Long.parseLong(selectedHall.getId()));
+            List<domain.model.Seat> seats =
+                    ctx.seatRepo.findByHallId(Long.parseLong(selectedHall.getId()));
             for (domain.model.Seat s : seats) {
                 s.setStatus("deleted");
                 ctx.seatRepo.save(s);
             }
             loadSeatsForSelectedHall();
-        } catch (Exception e) { log.error("Operation failed", e); }
+        } catch (Exception e) {
+            log.error("Operation failed", e);
+        }
     }
 
     private void handleBack() {

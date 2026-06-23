@@ -21,8 +21,10 @@ public class BookingFacade {
         this.connectionProvider = connectionProvider;
     }
 
-    public void bookAndPay(Long userId, Long showId, List<Long> seatIds, double amount, String paymentMethod) {
-        TransactionalConnectionProvider txProvider = new TransactionalConnectionProvider(connectionProvider);
+    public void bookAndPay(
+            Long userId, Long showId, List<Long> seatIds, double amount, String paymentMethod) {
+        TransactionalConnectionProvider txProvider =
+                new TransactionalConnectionProvider(connectionProvider);
         Connection conn = null;
         try {
             conn = txProvider.getConnection();
@@ -35,18 +37,26 @@ public class BookingFacade {
             BookingService txBookingService = new BookingService(txBookingRepo, txSeatRepo);
             PaymentService txPaymentService = new PaymentService(txPaymentRepo);
 
-            domain.model.Booking booking = txBookingService.createBooking(userId, showId, seatIds, amount);
+            domain.model.Booking booking =
+                    txBookingService.createBooking(userId, showId, seatIds, amount);
             txPaymentService.processPayment(booking.getBookingId(), amount, paymentMethod);
 
             conn.commit();
         } catch (Exception e) {
             if (conn != null) {
-                try { conn.rollback(); } catch (SQLException ignored) {}
+                try {
+                    conn.rollback();
+                } catch (SQLException ignored) {
+                }
             }
             throw new RuntimeException("Booking+Payment transaction failed", e);
         } finally {
             if (conn != null) {
-                try { conn.setAutoCommit(true); conn.close(); } catch (SQLException ignored) {}
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (SQLException ignored) {
+                }
             }
         }
     }

@@ -1,5 +1,7 @@
 package ui.view;
 
+import static ui.common.Theme.*;
+
 import javafx.animation.FadeTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -9,7 +11,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
-import static ui.common.Theme.*;
 
 public class PaymentPage {
 
@@ -29,6 +30,7 @@ public class PaymentPage {
     private static final String WHITE = "#FFFFFF";
     private static final String BG = "#FAFAFA";
     private static final String BG_LIGHT = "#F8FAFC";
+
     public PaymentPage() {
         try {
             createUI();
@@ -65,11 +67,14 @@ public class PaymentPage {
         VBox formCard = new VBox(15);
         formCard.setPadding(new Insets(25));
         formCard.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 12;" +
-                        "-fx-background-radius: 12;"
-        );
+                "-fx-background-color: "
+                        + WHITE
+                        + ";"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 12;"
+                        + "-fx-background-radius: 12;");
         HBox.setHgrow(formCard, Priority.ALWAYS);
 
         Label formTitle = new Label("Account Information");
@@ -80,17 +85,17 @@ public class PaymentPage {
         emailField = createReadOnlyField("Email");
         fullNameField = createReadOnlyField("Full Name");
 
-        formCard.getChildren().addAll(
-                formTitle,
-                new Separator(),
-                addLabel("👤 Username"),
-                usernameField,
-                addLabel("📧 Email"),
-                emailField,
-                addLabel("✍️ Full Name"),
-                fullNameField,
-                new Separator()
-        );
+        formCard.getChildren()
+                .addAll(
+                        formTitle,
+                        new Separator(),
+                        addLabel("👤 Username"),
+                        usernameField,
+                        addLabel("📧 Email"),
+                        emailField,
+                        addLabel("✍️ Full Name"),
+                        fullNameField,
+                        new Separator());
 
         VBox otpSection = new VBox(10);
         HBox otpHeader = new HBox(10);
@@ -119,10 +124,9 @@ public class PaymentPage {
         otpInfoLabel.setTextFill(Color.web(WARNING_ORANGE));
         otpInfoLabel.setWrapText(true);
         otpInfoLabel.setStyle(
-                "-fx-background-color: #FEF3C7;" +
-                        "-fx-padding: 10;" +
-                        "-fx-background-radius: 8;"
-        );
+                "-fx-background-color: #FEF3C7;"
+                        + "-fx-padding: 10;"
+                        + "-fx-background-radius: 8;");
         otpInfoLabel.setVisible(false);
 
         Label otpInputLabel = new Label("Enter 6-digit OTP sent to your email:");
@@ -135,13 +139,18 @@ public class PaymentPage {
         otpField.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
         otpField.setAlignment(Pos.CENTER);
         otpField.setStyle(
-                "-fx-background-color: " + BG_LIGHT + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 8;" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-padding: 8 14;" +
-                        "-fx-text-fill: " + TEXT_DARK + ";"
-        );
+                "-fx-background-color: "
+                        + BG_LIGHT
+                        + ";"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 8;"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-padding: 8 14;"
+                        + "-fx-text-fill: "
+                        + TEXT_DARK
+                        + ";");
 
         errorLabel = new Label();
         errorLabel.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 12));
@@ -153,25 +162,29 @@ public class PaymentPage {
         btnVerify.setPrefHeight(50);
         btnVerify.setTextFill(Color.WHITE);
         btnVerify.setStyle(
-                "-fx-background-color: " + ACCENT + ";" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-cursor: hand;"
-        );
+                "-fx-background-color: "
+                        + ACCENT
+                        + ";"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-cursor: hand;");
 
-        otpSection.getChildren().addAll(
-                otpHeader, otpInfoLabel, otpInputLabel, otpField, errorLabel, btnVerify
-        );
+        otpSection
+                .getChildren()
+                .addAll(otpHeader, otpInfoLabel, otpInputLabel, otpField, errorLabel, btnVerify);
 
         formCard.getChildren().add(otpSection);
         VBox summaryCard = new VBox(15);
         summaryCard.setPadding(new Insets(25));
         summaryCard.setPrefWidth(320);
         summaryCard.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 12;" +
-                        "-fx-background-radius: 12;"
-        );
+                "-fx-background-color: "
+                        + WHITE
+                        + ";"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 12;"
+                        + "-fx-background-radius: 12;");
 
         Label summaryTitle = new Label("📋 Booking Summary");
         summaryTitle.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
@@ -195,13 +208,18 @@ public class PaymentPage {
         field.setEditable(false);
         field.setFont(Font.font("Segoe UI", 13));
         field.setStyle(
-                "-fx-background-color: " + BG_LIGHT + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 8;" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-padding: 8 14;" +
-                        "-fx-text-fill: " + TEXT_DARK + ";"
-        );
+                "-fx-background-color: "
+                        + BG_LIGHT
+                        + ";"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 8;"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-padding: 8 14;"
+                        + "-fx-text-fill: "
+                        + TEXT_DARK
+                        + ";");
         return field;
     }
 

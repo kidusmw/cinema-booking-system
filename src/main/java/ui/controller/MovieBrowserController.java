@@ -1,11 +1,10 @@
 package ui.controller;
 
-import application.ModelConverter;
-import java.util.stream.Collectors;
-import ui.model.Customer;
-import ui.model.Movie;
 import application.AppContext;
-import ui.view.MovieBrowserPage;
+import application.ModelConverter;
+import java.io.File;
+import java.util.List;
+import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -19,11 +18,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
+import ui.model.Customer;
+import ui.model.Movie;
+import ui.view.MovieBrowserPage;
 
-import java.io.File;
-import java.util.List;
-
-public class MovieBrowserController{
+public class MovieBrowserController {
     private MovieBrowserPage view;
     private Stage stage;
     private Customer currentUser;
@@ -31,7 +30,8 @@ public class MovieBrowserController{
     private NavigationManager nav;
     private ObservableList<Movie> movies;
 
-    public MovieBrowserController(Stage stage, AppContext ctx, NavigationManager nav, Customer currentUser) {
+    public MovieBrowserController(
+            Stage stage, AppContext ctx, NavigationManager nav, Customer currentUser) {
         this.stage = stage;
         this.ctx = ctx;
         this.nav = nav;
@@ -47,7 +47,10 @@ public class MovieBrowserController{
     }
 
     private void loadMovies() {
-        List<Movie> movieList = ctx.movieRepo.findAll().stream().map(ModelConverter::toOldMovie).collect(Collectors.toList());
+        List<Movie> movieList =
+                ctx.movieRepo.findAll().stream()
+                        .map(ModelConverter::toOldMovie)
+                        .collect(Collectors.toList());
         movies = FXCollections.observableArrayList(movieList);
         view.movieContainer.getChildren().clear();
 
@@ -64,8 +67,8 @@ public class MovieBrowserController{
         view.movieContainer.getChildren().clear();
         String lower = searchText.toLowerCase();
         for (Movie movie : movies) {
-            if (movie.getTitle().toLowerCase().contains(lower) ||
-                    movie.getGenre().toLowerCase().contains(lower)) {
+            if (movie.getTitle().toLowerCase().contains(lower)
+                    || movie.getGenre().toLowerCase().contains(lower)) {
                 view.movieContainer.getChildren().add(createMovieCard(movie));
             }
         }
@@ -75,29 +78,30 @@ public class MovieBrowserController{
         VBox card = new VBox(0);
         card.setPrefWidth(280);
         card.setStyle(
-                "-fx-background-color: white;" +
-                        "-fx-background-radius: 12;" +
-                        "-fx-border-color: #E2E8F0;" +
-                        "-fx-border-radius: 12;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 2);"
-        );
-        card.setOnMouseEntered(e -> card.setStyle(
-                "-fx-background-color: white;" +
-                        "-fx-background-radius: 12;" +
-                        "-fx-border-color: #DB2777;" +
-                        "-fx-border-radius: 12;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-effect: dropshadow(gaussian, rgba(219,39,119,0.2), 15, 0, 0, 4);"
-        ));
-        card.setOnMouseExited(e -> card.setStyle(
-                "-fx-background-color: white;" +
-                        "-fx-background-radius: 12;" +
-                        "-fx-border-color: #E2E8F0;" +
-                        "-fx-border-radius: 12;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 2);"
-        ));
+                "-fx-background-color: white;"
+                        + "-fx-background-radius: 12;"
+                        + "-fx-border-color: #E2E8F0;"
+                        + "-fx-border-radius: 12;"
+                        + "-fx-cursor: hand;"
+                        + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 2);");
+        card.setOnMouseEntered(
+                e ->
+                        card.setStyle(
+                                "-fx-background-color: white;"
+                                        + "-fx-background-radius: 12;"
+                                        + "-fx-border-color: #DB2777;"
+                                        + "-fx-border-radius: 12;"
+                                        + "-fx-cursor: hand;"
+                                        + "-fx-effect: dropshadow(gaussian, rgba(219,39,119,0.2), 15, 0, 0, 4);"));
+        card.setOnMouseExited(
+                e ->
+                        card.setStyle(
+                                "-fx-background-color: white;"
+                                        + "-fx-background-radius: 12;"
+                                        + "-fx-border-color: #E2E8F0;"
+                                        + "-fx-border-radius: 12;"
+                                        + "-fx-cursor: hand;"
+                                        + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 2);"));
         ImageView poster = new ImageView();
         poster.setFitWidth(280);
         poster.setFitHeight(350);
@@ -127,7 +131,8 @@ public class MovieBrowserController{
         Label genre = new Label(movie.getGenre());
         genre.setFont(Font.font("Segoe UI", 11));
         genre.setTextFill(Color.WHITE);
-        genre.setStyle("-fx-background-color: #DB2777; -fx-background-radius: 12; -fx-padding: 3 10;");
+        genre.setStyle(
+                "-fx-background-color: #DB2777; -fx-background-radius: 12; -fx-padding: 3 10;");
 
         int hours = movie.getDuration() / 60;
         int mins = movie.getDuration() % 60;
@@ -143,10 +148,13 @@ public class MovieBrowserController{
         info.getChildren().addAll(title, meta);
 
         card.getChildren().addAll(poster, info);
-        card.setOnMouseClicked(e -> nav.go(
-            () -> new MovieBrowserController(stage, ctx, nav, currentUser),
-            () -> new ShowSelectionController(stage, ctx, nav, currentUser, movie)
-        ));
+        card.setOnMouseClicked(
+                e ->
+                        nav.go(
+                                () -> new MovieBrowserController(stage, ctx, nav, currentUser),
+                                () ->
+                                        new ShowSelectionController(
+                                                stage, ctx, nav, currentUser, movie)));
 
         return card;
     }
@@ -159,7 +167,10 @@ public class MovieBrowserController{
         gc.setFill(javafx.scene.paint.Color.WHITE);
         gc.setFont(javafx.scene.text.Font.font("Arial", javafx.scene.text.FontWeight.BOLD, 20));
         gc.setTextAlign(javafx.scene.text.TextAlignment.CENTER);
-        gc.fillText(title != null && title.length() > 20 ? title.substring(0, 20) + "..." : title, 140, 175);
+        gc.fillText(
+                title != null && title.length() > 20 ? title.substring(0, 20) + "..." : title,
+                140,
+                175);
         gc.setFont(javafx.scene.text.Font.font(60));
         gc.fillText("🎬", 140, 100);
 

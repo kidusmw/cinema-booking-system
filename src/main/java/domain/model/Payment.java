@@ -13,8 +13,13 @@ public class Payment {
 
     public Payment() {}
 
-    public Payment(Long paymentId, Long bookingId, double totalAmount,
-                   String status, String otp, String paymentMethod) {
+    public Payment(
+            Long paymentId,
+            Long bookingId,
+            double totalAmount,
+            String status,
+            String otp,
+            String paymentMethod) {
         this.paymentId = paymentId;
         this.bookingId = bookingId;
         this.totalAmount = totalAmount;
@@ -25,8 +30,8 @@ public class Payment {
 
     public void markPaid() {
         if (!"pending".equals(status)) {
-            throw new IllegalStateException("Cannot mark payment " + paymentId
-                    + " as paid — current status: " + status);
+            throw new IllegalStateException(
+                    "Cannot mark payment " + paymentId + " as paid — current status: " + status);
         }
         this.status = "paid";
     }
@@ -39,24 +44,59 @@ public class Payment {
         return otp != null && otp.equals(inputOtp);
     }
 
-    public Long getPaymentId() { return paymentId; }
-    public void setPaymentId(Long paymentId) { this.paymentId = paymentId; }
+    public Long getPaymentId() {
+        return paymentId;
+    }
 
-    public Long getBookingId() { return bookingId; }
-    public void setBookingId(Long bookingId) { this.bookingId = bookingId; }
+    public void setPaymentId(Long paymentId) {
+        this.paymentId = paymentId;
+    }
 
-    public double getTotalAmount() { return totalAmount; }
-    public void setTotalAmount(double totalAmount) { this.totalAmount = totalAmount; }
+    public Long getBookingId() {
+        return bookingId;
+    }
 
-    public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public void setBookingId(Long bookingId) {
+        this.bookingId = bookingId;
+    }
 
-    public String getOtp() { return otp; }
-    public void setOtp(String otp) { this.otp = otp; }
+    public double getTotalAmount() {
+        return totalAmount;
+    }
 
-    public String getPaymentMethod() { return paymentMethod; }
-    public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
 
-    public LocalDateTime getPaymentDate() { return paymentDate; }
-    public void setPaymentDate(LocalDateTime paymentDate) { this.paymentDate = paymentDate; }
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public LocalDateTime getPaymentDate() {
+        return paymentDate;
+    }
+
+    public void setPaymentDate(LocalDateTime paymentDate) {
+        this.paymentDate = paymentDate;
+    }
 }

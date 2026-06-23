@@ -1,5 +1,7 @@
 package ui.view;
 
+import static ui.common.Theme.*;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -7,7 +9,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import static ui.common.Theme.*;
 
 public class ShowSelectionPage {
 
@@ -20,7 +21,6 @@ public class ShowSelectionPage {
     public VBox showCardsContainer;
 
     private VBox root;
-
 
     private static final String WHITE = "#FFFFFF";
     private static final String BG = "#FAFAFA";
@@ -47,20 +47,20 @@ public class ShowSelectionPage {
         btnBack.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
         btnBack.setTextFill(Color.web(TEXT_MUTED));
         btnBack.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-padding: 8 16;"
-        );
+                "-fx-background-color: transparent;" + "-fx-cursor: hand;" + "-fx-padding: 8 16;");
 
         topBar.getChildren().add(btnBack);
         VBox movieInfoCard = new VBox(10);
         movieInfoCard.setPadding(new Insets(20, 25, 20, 25));
         movieInfoCard.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 12;" +
-                        "-fx-background-radius: 12;"
-        );
+                "-fx-background-color: "
+                        + WHITE
+                        + ";"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 12;"
+                        + "-fx-background-radius: 12;");
 
         movieTitle = new Label("Movie Title");
         movieTitle.setFont(Font.font("Segoe UI", FontWeight.BOLD, 24));
@@ -73,10 +73,11 @@ public class ShowSelectionPage {
         movieGenre.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 12));
         movieGenre.setTextFill(Color.WHITE);
         movieGenre.setStyle(
-                "-fx-background-color: " + ACCENT + ";" +
-                        "-fx-background-radius: 12;" +
-                        "-fx-padding: 4 12;"
-        );
+                "-fx-background-color: "
+                        + ACCENT
+                        + ";"
+                        + "-fx-background-radius: 12;"
+                        + "-fx-padding: 4 12;");
 
         movieDuration = new Label("⏱ 2h 30m");
         movieDuration.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));

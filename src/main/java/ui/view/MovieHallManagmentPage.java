@@ -1,14 +1,14 @@
 package ui.view;
 
-import ui.model.Movie;
-import ui.model.Moviehall;
+import static ui.common.Theme.*;
+
 import javafx.geometry.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*;
-import static ui.common.Theme.*;
+import ui.model.Moviehall;
 
 public class MovieHallManagmentPage {
 
@@ -73,7 +73,12 @@ public class MovieHallManagmentPage {
         searchField.setPromptText("🔍  Search by name...");
         searchField.setPrefHeight(40);
         searchField.setPrefWidth(400);
-        searchField.setStyle("-fx-background-color: " + WHITE + "; -fx-border-color: " + BORDER + "; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 14;");
+        searchField.setStyle(
+                "-fx-background-color: "
+                        + WHITE
+                        + "; -fx-border-color: "
+                        + BORDER
+                        + "; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 14;");
 
         Region toolbarSpacer = new Region();
         HBox.setHgrow(toolbarSpacer, Priority.ALWAYS);
@@ -81,7 +86,12 @@ public class MovieHallManagmentPage {
         btnAddHall = createStyledButton("➕  Add Hall", ACCENT, HOVER);
         toolbar.getChildren().addAll(searchField, toolbarSpacer, btnAddHall);
         hallTable = new TableView<>();
-        hallTable.setStyle("-fx-background-color: " + WHITE + "; -fx-border-color: " + BORDER + "; -fx-background-radius: 8;");
+        hallTable.setStyle(
+                "-fx-background-color: "
+                        + WHITE
+                        + "; -fx-border-color: "
+                        + BORDER
+                        + "; -fx-background-radius: 8;");
         VBox.setVgrow(hallTable, Priority.ALWAYS);
         idCol = new TableColumn<>("Hall ID");
         idCol.setCellValueFactory(new PropertyValueFactory<>("MovieHallID"));
@@ -108,14 +118,19 @@ public class MovieHallManagmentPage {
         root.getChildren().addAll(header, toolbar, hallTable, actionRow);
     }
 
-    public VBox getView() { return root; }
+    public VBox getView() {
+        return root;
+    }
 
     private Button createStyledButton(String text, String normalColor, String hoverColor) {
         Button btn = new Button(text);
         btn.setFont(Font.font("Segoe UI", FontWeight.BOLD, 13));
         btn.setPrefHeight(38);
         btn.setTextFill(Color.WHITE);
-        btn.setStyle("-fx-background-color: " + normalColor + "; -fx-background-radius: 8; -fx-cursor: hand; -fx-padding: 8 16;");
+        btn.setStyle(
+                "-fx-background-color: "
+                        + normalColor
+                        + "; -fx-background-radius: 8; -fx-cursor: hand; -fx-padding: 8 16;");
         return btn;
     }
 }
