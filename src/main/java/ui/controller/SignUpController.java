@@ -1,6 +1,6 @@
 package ui.controller;
 
-import Model.User;
+import ui.model.User;
 import ui.view.SingUpPage;
 import application.AppContext;
 import javafx.scene.Scene;

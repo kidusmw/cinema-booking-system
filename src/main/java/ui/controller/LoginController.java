@@ -1,8 +1,8 @@
 package ui.controller;
 
-import Model.Admin;
-import Model.Customer;
-import Model.User;
+import ui.model.Admin;
+import ui.model.Customer;
+import ui.model.User;
 import ui.view.Loginpage;
 import application.AppContext;
 import application.ModelConverter;

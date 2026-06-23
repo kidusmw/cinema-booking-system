@@ -1,7 +1,7 @@
 package application;
 
-import Model.Admin;
-import Model.Customer;
+import ui.model.Admin;
+import ui.model.Customer;
 import domain.model.Booking;
 import domain.model.Hall;
 import domain.model.Movie;
@@ -17,7 +17,7 @@ import java.util.Date;
 
 public class ModelConverter {
 
-    public static Model.User toOldUser(User user) {
+    public static ui.model.User toOldUser(User user) {
         if (user == null) return null;
         if ("admin".equals(user.getRole())) {
             return new Admin(
@@ -37,7 +37,7 @@ public class ModelConverter {
         );
     }
 
-    public static User toDomainUser(Model.User old) {
+    public static User toDomainUser(ui.model.User old) {
         if (old == null) return null;
         User user = new User(
             (long) old.getUserID(),
@@ -48,9 +48,9 @@ public class ModelConverter {
         return user;
     }
 
-    public static Model.Movie toOldMovie(Movie m) {
+    public static ui.model.Movie toOldMovie(Movie m) {
         if (m == null) return null;
-        Model.Movie old = new Model.Movie();
+        ui.model.Movie old = new ui.model.Movie();
         old.setMovieID(m.getMovieId() != null ? String.valueOf(m.getMovieId()) : null);
         old.setTitle(m.getTitle());
         old.setGenre(m.getGenre());
@@ -63,7 +63,7 @@ public class ModelConverter {
         return old;
     }
 
-    public static Movie toDomainMovie(Model.Movie old) {
+    public static Movie toDomainMovie(ui.model.Movie old) {
         if (old == null) return null;
         Movie m = new Movie();
         if (old.getMovieID() != null && !old.getMovieID().isEmpty()) {
@@ -80,16 +80,16 @@ public class ModelConverter {
         return m;
     }
 
-    public static Model.Moviehall toOldHall(Hall h) {
+    public static ui.model.Moviehall toOldHall(Hall h) {
         if (h == null) return null;
-        Model.Moviehall old = new Model.Moviehall();
+        ui.model.Moviehall old = new ui.model.Moviehall();
         old.setId(h.getHallId() != null ? String.valueOf(h.getHallId()) : null);
         old.setName(h.getName());
         old.setCapacity(h.getCapacity());
         return old;
     }
 
-    public static Hall toDomainHall(Model.Moviehall old) {
+    public static Hall toDomainHall(ui.model.Moviehall old) {
         if (old == null) return null;
         Hall h = new Hall();
         if (old.getId() != null && !old.getId().isEmpty()) {
@@ -100,9 +100,9 @@ public class ModelConverter {
         return h;
     }
 
-    public static Model.Show toOldShowtime(Showtime s) {
+    public static ui.model.Show toOldShowtime(Showtime s) {
         if (s == null) return null;
-        Model.Show old = new Model.Show();
+        ui.model.Show old = new ui.model.Show();
         old.setShowID(s.getShowId() != null ? String.valueOf(s.getShowId()) : null);
         old.setMovieID(s.getMovieId() != null ? String.valueOf(s.getMovieId()) : null);
         old.setMovieHallID(s.getHallId() != null ? String.valueOf(s.getHallId()) : null);
@@ -115,7 +115,7 @@ public class ModelConverter {
         return old;
     }
 
-    public static Showtime toDomainShowtime(Model.Show old) {
+    public static Showtime toDomainShowtime(ui.model.Show old) {
         if (old == null) return null;
         Showtime s = new Showtime();
         if (old.getShowID() != null && !old.getShowID().isEmpty()) {
@@ -138,9 +138,9 @@ public class ModelConverter {
         return s;
     }
 
-    public static Model.Seat toOldSeat(Seat s) {
+    public static ui.model.Seat toOldSeat(Seat s) {
         if (s == null) return null;
-        Model.Seat old = new Model.Seat();
+        ui.model.Seat old = new ui.model.Seat();
         old.setSeatID(s.getSeatId() != null ? String.valueOf(s.getSeatId()) : null);
         old.setSeatNumber(s.getSeatNumber());
         old.setSeatType(s.getSeatType());
@@ -149,7 +149,7 @@ public class ModelConverter {
         return old;
     }
 
-    public static Seat toDomainSeat(Model.Seat old) {
+    public static Seat toDomainSeat(ui.model.Seat old) {
         if (old == null) return null;
         Seat s = new Seat();
         if (old.getSeatID() != null && !old.getSeatID().isEmpty()) {
@@ -162,9 +162,9 @@ public class ModelConverter {
         return s;
     }
 
-    public static Model.Booking toOldBooking(Booking b) {
+    public static ui.model.Booking toOldBooking(Booking b) {
         if (b == null) return null;
-        Model.Booking old = new Model.Booking();
+        ui.model.Booking old = new ui.model.Booking();
         old.setBookingID(b.getBookingId() != null ? b.getBookingId().intValue() : 0);
         old.setUserID(b.getUserId() != null ? b.getUserId().intValue() : 0);
         old.setShowID(b.getShowId() != null ? String.valueOf(b.getShowId()) : null);
@@ -177,7 +177,7 @@ public class ModelConverter {
         return old;
     }
 
-    public static Booking toDomainBooking(Model.Booking old) {
+    public static Booking toDomainBooking(ui.model.Booking old) {
         if (old == null) return null;
         Booking b = new Booking();
         b.setBookingId((long) old.getBookingID());
@@ -191,9 +191,9 @@ public class ModelConverter {
         return b;
     }
 
-    public static Model.Payment toOldPayment(Payment p) {
+    public static ui.model.Payment toOldPayment(Payment p) {
         if (p == null) return null;
-        Model.Payment old = new Model.Payment();
+        ui.model.Payment old = new ui.model.Payment();
         old.setPaymentID(p.getPaymentId() != null ? String.valueOf(p.getPaymentId()) : null);
         old.setBookingID(p.getBookingId() != null ? p.getBookingId().intValue() : 0);
         old.setTotalAmount(p.getTotalAmount());
@@ -206,7 +206,7 @@ public class ModelConverter {
         return old;
     }
 
-    public static Payment toDomainPayment(Model.Payment old) {
+    public static Payment toDomainPayment(ui.model.Payment old) {
         if (old == null) return null;
         Payment p = new Payment();
         if (old.getPaymentID() != null && !old.getPaymentID().isEmpty()) {

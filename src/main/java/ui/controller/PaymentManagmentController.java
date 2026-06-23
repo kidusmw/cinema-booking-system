@@ -1,7 +1,7 @@
 package ui.controller;
 import application.AppContext;
 import application.ModelConverter;
-import Model.Payment;
+import ui.model.Payment;
 import ui.view.PaymentManagment;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

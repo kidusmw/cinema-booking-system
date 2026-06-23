@@ -2,7 +2,7 @@ package ui.controller;
 
 import application.AppContext;
 import application.ModelConverter;
-import Model.Moviehall;
+import ui.model.Moviehall;
 import ui.view.MovieHallManagmentPage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

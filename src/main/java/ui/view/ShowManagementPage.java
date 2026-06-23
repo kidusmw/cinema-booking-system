@@ -1,6 +1,6 @@
 package ui.view;
 
-import Model.Show;
+import ui.model.Show;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;

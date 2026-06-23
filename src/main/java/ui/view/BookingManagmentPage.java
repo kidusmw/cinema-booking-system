@@ -1,6 +1,6 @@
 package ui.view;
 
-import Model.Booking;
+import ui.model.Booking;
 import javafx.geometry.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;

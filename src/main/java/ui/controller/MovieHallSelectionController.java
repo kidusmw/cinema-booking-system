@@ -1,8 +1,8 @@
 package ui.controller;
-import Model.Customer;
-import Model.Movie;
-import Model.Show;
-import Model.Moviehall;
+import ui.model.Customer;
+import ui.model.Movie;
+import ui.model.Show;
+import ui.model.Moviehall;
 import ui.view.MovieHallSelectionPage;
 import application.ModelConverter;
 import java.util.stream.Collectors;

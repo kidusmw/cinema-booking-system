@@ -1,16 +1,13 @@
 package ui.view;
 
-import Model.Movie;
-import Model.Moviehall;
+import ui.model.Movie;
+import ui.model.Moviehall;
 import javafx.geometry.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import java.util.List;
 import static ui.common.Theme.*;
 
 public class MovieHallManagmentPage {
@@ -36,7 +33,6 @@ public class MovieHallManagmentPage {
     public MovieHallManagmentPage() {
         try {
             createUI();
-            refreshTable();
         } catch (Exception e) {
             e.printStackTrace();
             root = new VBox();
@@ -110,17 +106,6 @@ public class MovieHallManagmentPage {
         actionRow.getChildren().addAll(btnEdit, btnDelete, btnRefresh);
 
         root.getChildren().addAll(header, toolbar, hallTable, actionRow);
-    }
-
-    public void refreshTable() {
-        try {
-            DAO.MovieHallDAO dao = new DAO.MovieHallDAO();
-            List<Moviehall> data = dao.getAllMovieHalls();
-            ObservableList<Moviehall> list = FXCollections.observableArrayList(data);
-            hallTable.setItems(list);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public VBox getView() { return root; }

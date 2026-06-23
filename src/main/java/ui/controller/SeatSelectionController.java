@@ -2,7 +2,7 @@ package ui.controller;
 
 import application.ModelConverter;
 import java.util.stream.Collectors;
-import Model.*;
+import ui.model.*;
 import ui.view.SeatSelectionPage;
 import application.AppContext;
 import javafx.geometry.Pos;

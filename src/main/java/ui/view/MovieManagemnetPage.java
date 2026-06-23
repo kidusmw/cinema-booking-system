@@ -12,7 +12,7 @@ import java.util.Date;
 import static ui.common.Theme.*;
 
 public class MovieManagemnetPage {
-    public TableView<Model.Movie> movieTable;
+    public TableView<ui.model.Movie> movieTable;
     public TextField searchField;
     public Button btnAddMovie;
     public Button btnEdit;
@@ -81,34 +81,34 @@ public class MovieManagemnetPage {
         movieTable.setPlaceholder(new Label("No movies found. Click 'Add Movie' to create one."));
 
         VBox.setVgrow(movieTable, Priority.ALWAYS);
-        TableColumn<Model.Movie, String> idCol = new TableColumn<>("Movie ID");
+        TableColumn<ui.model.Movie, String> idCol = new TableColumn<>("Movie ID");
         idCol.setCellValueFactory(new PropertyValueFactory<>("movieID"));
         idCol.setPrefWidth(80);
-        TableColumn<Model.Movie, String> titleCol = new TableColumn<>("Title");
+        TableColumn<ui.model.Movie, String> titleCol = new TableColumn<>("Title");
         titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         titleCol.setPrefWidth(180);
-        TableColumn<Model.Movie, String> genreCol = new TableColumn<>("Genre");
+        TableColumn<ui.model.Movie, String> genreCol = new TableColumn<>("Genre");
         genreCol.setCellValueFactory(new PropertyValueFactory<>("genre"));
         genreCol.setPrefWidth(110);
-        TableColumn<Model.Movie, Integer> durationCol = new TableColumn<>("Duration");
+        TableColumn<ui.model.Movie, Integer> durationCol = new TableColumn<>("Duration");
         durationCol.setCellValueFactory(new PropertyValueFactory<>("duration"));
         durationCol.setPrefWidth(100);
-        TableColumn<Model.Movie, Double> ratingCol = new TableColumn<>("Rating");
+        TableColumn<ui.model.Movie, Double> ratingCol = new TableColumn<>("Rating");
         ratingCol.setCellValueFactory(new PropertyValueFactory<>("rating"));
         ratingCol.setPrefWidth(80);
-        TableColumn<Model.Movie, String> langCol = new TableColumn<>("Language");
+        TableColumn<ui.model.Movie, String> langCol = new TableColumn<>("Language");
         langCol.setCellValueFactory(new PropertyValueFactory<>("language"));
         langCol.setPrefWidth(100);
-        TableColumn<Model.Movie, Date> dateCol = new TableColumn<>("Release Date");
+        TableColumn<ui.model.Movie, Date> dateCol = new TableColumn<>("Release Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<>("releaseDate"));
         dateCol.setPrefWidth(110);
-        TableColumn<Model.Movie, String> posterCol = new TableColumn<>("Poster Path");
+        TableColumn<ui.model.Movie, String> posterCol = new TableColumn<>("Poster Path");
         posterCol.setCellValueFactory(new PropertyValueFactory<>("posterPath"));
         posterCol.setPrefWidth(150);
-        TableColumn<Model.Movie, String> descCol = new TableColumn<>("Description");
+        TableColumn<ui.model.Movie, String> descCol = new TableColumn<>("Description");
         descCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         descCol.setPrefWidth(200);
-        ratingCol.setCellFactory(col -> new TableCell<Model.Movie, Double>() {
+        ratingCol.setCellFactory(col -> new TableCell<ui.model.Movie, Double>() {
             @Override
             protected void updateItem(Double item, boolean empty) {
                 super.updateItem(item, empty);
@@ -119,7 +119,7 @@ public class MovieManagemnetPage {
                 }
             }
         });
-        durationCol.setCellFactory(col -> new TableCell<Model.Movie, Integer>() {
+        durationCol.setCellFactory(col -> new TableCell<ui.model.Movie, Integer>() {
             @Override
             protected void updateItem(Integer item, boolean empty) {
                 super.updateItem(item, empty);
@@ -132,7 +132,7 @@ public class MovieManagemnetPage {
                 }
             }
         });
-        dateCol.setCellFactory(col -> new TableCell<Model.Movie, Date>() {
+        dateCol.setCellFactory(col -> new TableCell<ui.model.Movie, Date>() {
             private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             @Override
             protected void updateItem(Date item, boolean empty) {
