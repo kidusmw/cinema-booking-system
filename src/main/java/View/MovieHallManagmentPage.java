@@ -120,7 +120,7 @@ public class MovieHallManagmentPage {
 
     public void refreshTable() {
         try {
-            DAO.MoviehallDAOimp dao = new DAO.MoviehallDAOimp();
+            DAO.MovieHallDAO dao = new DAO.MovieHallDAO();
             List<Moviehall> data = dao.getAllMovieHalls();
             ObservableList<Moviehall> list = FXCollections.observableArrayList(data);
             hallTable.setItems(list);

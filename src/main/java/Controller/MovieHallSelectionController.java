@@ -5,7 +5,6 @@ import Model.Show;
 import Model.Moviehall;
 import View.MovieHallSelectionPage;
 import DAO.MovieHallDAO;
-import DAO.MoviehallDAOimp;
 import DAO.SeatDAO;
 import DAO.SeatDAOimp;
 import javafx.geometry.Insets;
@@ -28,7 +27,7 @@ public class MovieHallSelectionController {
     private Customer currentUser;
     private Movie selectedMovie;
     private Show selectedShow;
-    private final MovieHallDAO hallDAO = new MoviehallDAOimp();
+    private final MovieHallDAO hallDAO = new MovieHallDAO();
     private final SeatDAO seatDAO = new SeatDAOimp();
     private static final String ACCENT = "#DB2777";
     private static final String HOVER = "#EC4899";

@@ -1,7 +1,6 @@
 package Controller;
 
 import DAO.MovieHallDAO;
-import DAO.MoviehallDAOimp;
 import Model.Moviehall;
 import View.AdminDashboardPage;
 import Controller.WelcomeController;

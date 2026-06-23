@@ -9,7 +9,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 import javafx.geometry.*;
-import DAO.BookingDAOimp;
+import DAO.BookingDAO;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ public class CustomerDashboardController {
 
     private void showMyBookings() {
         int currentUserId = currentUser.getUserID();
-        BookingDAOimp bookingDAO = new BookingDAOimp();
+        BookingDAO bookingDAO = new BookingDAO();
         List<Booking> history = bookingDAO.getBookingsByUserId(currentUserId);
         if (history.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

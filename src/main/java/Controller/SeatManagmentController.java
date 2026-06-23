@@ -1,7 +1,6 @@
 package Controller;
 
 import DAO.MovieHallDAO;
-import DAO.MoviehallDAOimp;
 import DAO.SeatDAO;
 import DAO.SeatDAOimp;
 import Model.Moviehall;
@@ -21,7 +20,7 @@ public class SeatManagmentController {
     private SeatManagmentPage view;
     private Stage stage;
     private final AdminDashboardController dashboard;
-    private final MovieHallDAO hallDAO = new MoviehallDAOimp();
+    private final MovieHallDAO hallDAO = new MovieHallDAO();
     private final SeatDAO seatDAO = new SeatDAOimp();
     private Moviehall selectedHall;
 
