@@ -12,5 +12,5 @@ db-down:
 ci:
 	mvn clean verify spotless:check spotbugs:check
 
-run: db-up ci
-	mvn javafx:run
+run: ci
+	./run-app.sh
