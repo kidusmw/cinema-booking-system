@@ -24,18 +24,12 @@ public class MoviehallManagmentController {
     private Stage stage;
     private final AppContext ctx;
     private final NavigationManager nav;
-    private final AdminDashboardController dashboard;
     private ObservableList<Moviehall> hallList;
 
-    public MoviehallManagmentController(
-            Stage stage,
-            AppContext ctx,
-            NavigationManager nav,
-            AdminDashboardController dashboard) {
+    public MoviehallManagmentController(Stage stage, AppContext ctx, NavigationManager nav) {
         this.stage = stage;
         this.ctx = ctx;
         this.nav = nav;
-        this.dashboard = dashboard;
         this.view = new MovieHallManagmentPage();
 
         Scene scene = new Scene(view.getView(), 1100, 700);
@@ -64,7 +58,7 @@ public class MoviehallManagmentController {
                             .collect(Collectors.toList());
             hallList = FXCollections.observableArrayList(halls);
             view.hallTable.setItems(hallList);
-            System.out.println("✅ Loaded " + halls.size() + " halls into table");
+            log.info("Loaded {} halls into table", halls.size());
         } catch (Exception e) {
             log.error("Failed to load halls", e);
             showAlert("Error", "Failed to load halls: " + e.getMessage());
@@ -141,7 +135,7 @@ public class MoviehallManagmentController {
     }
 
     private void handleBack() {
-        System.out.println("Going back to admin dashboard...");
+        log.info("Going back to admin dashboard...");
         nav.back();
     }
 

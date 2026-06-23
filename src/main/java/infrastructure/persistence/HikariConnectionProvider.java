@@ -75,9 +75,9 @@ public class HikariConnectionProvider {
                 PreparedStatement ps = conn.prepareStatement(sql);
                 ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
-                System.out.println("Connected database: " + rs.getString("current_database"));
-                System.out.println("Login name: " + rs.getString("login_name"));
-                System.out.println("Server address: " + rs.getString("server_address"));
+                log.info("Connected database: {}", rs.getString("current_database"));
+                log.info("Login name: {}", rs.getString("login_name"));
+                log.info("Server address: {}", rs.getString("server_address"));
             }
         } catch (SQLException e) {
             log.error("Database info query failed", e);

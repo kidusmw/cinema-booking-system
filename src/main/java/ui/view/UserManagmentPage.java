@@ -20,8 +20,9 @@ public class UserManagmentPage {
     public Button btnBack;
     public Button btnDelete;
     public TextField searchField;
+    private static final org.slf4j.Logger log =
+            org.slf4j.LoggerFactory.getLogger(UserManagmentPage.class);
     private VBox root;
-    private static final String HOVER = "#EC4899";
     private static final String WHITE = "#FFFFFF";
     private static final String BG = "#FAFAFA";
     private static final String BG_LIGHT = "#F8FAFC";
@@ -30,7 +31,7 @@ public class UserManagmentPage {
         try {
             createUI();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to create UserManagmentPage UI", e);
             root = new VBox();
             Label error = new Label("Error loading User Management page: " + e.getMessage());
             error.setWrapText(true);

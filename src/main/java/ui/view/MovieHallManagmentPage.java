@@ -25,6 +25,8 @@ public class MovieHallManagmentPage {
 
     private VBox root;
 
+    private static final org.slf4j.Logger log =
+            org.slf4j.LoggerFactory.getLogger(MovieHallManagmentPage.class);
     private static final String HOVER = "#EC4899";
     private static final String WHITE = "#FFFFFF";
     private static final String BG = "#FAFAFA";
@@ -34,7 +36,7 @@ public class MovieHallManagmentPage {
         try {
             createUI();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to create MovieHallManagmentPage UI", e);
             root = new VBox();
             root.getChildren().add(new Label("Error: " + e.getMessage()));
         }
