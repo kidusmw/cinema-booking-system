@@ -15,14 +15,29 @@ public class BookingSeat {
         this.price = price;
     }
 
-    public Long getBookingId() { return bookingId; }
-    public void setBookingId(Long bookingId) { this.bookingId = bookingId; }
+    public Long getBookingId() {
+        return bookingId;
+    }
 
-    public Long getSeatId() { return seatId; }
-    public void setSeatId(Long seatId) { this.seatId = seatId; }
+    public void setBookingId(Long bookingId) {
+        this.bookingId = bookingId;
+    }
 
-    public double getPrice() { return price; }
-    public void setPrice(double price) { this.price = price; }
+    public Long getSeatId() {
+        return seatId;
+    }
+
+    public void setSeatId(Long seatId) {
+        this.seatId = seatId;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -32,5 +47,7 @@ public class BookingSeat {
     }
 
     @Override
-    public int hashCode() { return Objects.hash(bookingId, seatId); }
+    public int hashCode() {
+        return Objects.hash(bookingId, seatId);
+    }
 }

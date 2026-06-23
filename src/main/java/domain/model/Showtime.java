@@ -15,8 +15,13 @@ public class Showtime {
 
     public Showtime() {}
 
-    public Showtime(Long showId, Long movieId, Long hallId, LocalDate showDate,
-                    LocalTime showTime, double ticketPrice) {
+    public Showtime(
+            Long showId,
+            Long movieId,
+            Long hallId,
+            LocalDate showDate,
+            LocalTime showTime,
+            double ticketPrice) {
         this.showId = showId;
         this.movieId = movieId;
         this.hallId = hallId;
@@ -25,35 +30,79 @@ public class Showtime {
         this.ticketPrice = ticketPrice;
     }
 
-    public boolean isPast() { return showDate != null && showDate.isBefore(LocalDate.now()); }
+    public boolean isPast() {
+        return showDate != null && showDate.isBefore(LocalDate.now());
+    }
 
     public boolean hasStarted() {
         if (isPast()) return true;
-        return showDate != null && showDate.equals(LocalDate.now())
-                && showTime != null && showTime.isBefore(LocalTime.now());
+        return showDate != null
+                && showDate.equals(LocalDate.now())
+                && showTime != null
+                && showTime.isBefore(LocalTime.now());
     }
 
-    public Long getShowId() { return showId; }
-    public void setShowId(Long showId) { this.showId = showId; }
+    public Long getShowId() {
+        return showId;
+    }
 
-    public Long getMovieId() { return movieId; }
-    public void setMovieId(Long movieId) { this.movieId = movieId; }
+    public void setShowId(Long showId) {
+        this.showId = showId;
+    }
 
-    public Long getHallId() { return hallId; }
-    public void setHallId(Long hallId) { this.hallId = hallId; }
+    public Long getMovieId() {
+        return movieId;
+    }
 
-    public LocalDate getShowDate() { return showDate; }
-    public void setShowDate(LocalDate showDate) { this.showDate = showDate; }
+    public void setMovieId(Long movieId) {
+        this.movieId = movieId;
+    }
 
-    public LocalTime getShowTime() { return showTime; }
-    public void setShowTime(LocalTime showTime) { this.showTime = showTime; }
+    public Long getHallId() {
+        return hallId;
+    }
 
-    public double getTicketPrice() { return ticketPrice; }
-    public void setTicketPrice(double ticketPrice) { this.ticketPrice = ticketPrice; }
+    public void setHallId(Long hallId) {
+        this.hallId = hallId;
+    }
 
-    public String getMovieName() { return movieName; }
-    public void setMovieName(String movieName) { this.movieName = movieName; }
+    public LocalDate getShowDate() {
+        return showDate;
+    }
 
-    public String getHallName() { return hallName; }
-    public void setHallName(String hallName) { this.hallName = hallName; }
+    public void setShowDate(LocalDate showDate) {
+        this.showDate = showDate;
+    }
+
+    public LocalTime getShowTime() {
+        return showTime;
+    }
+
+    public void setShowTime(LocalTime showTime) {
+        this.showTime = showTime;
+    }
+
+    public double getTicketPrice() {
+        return ticketPrice;
+    }
+
+    public void setTicketPrice(double ticketPrice) {
+        this.ticketPrice = ticketPrice;
+    }
+
+    public String getMovieName() {
+        return movieName;
+    }
+
+    public void setMovieName(String movieName) {
+        this.movieName = movieName;
+    }
+
+    public String getHallName() {
+        return hallName;
+    }
+
+    public void setHallName(String hallName) {
+        this.hallName = hallName;
+    }
 }

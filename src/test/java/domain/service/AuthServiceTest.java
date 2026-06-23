@@ -1,35 +1,32 @@
 package domain.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import domain.model.User;
 import domain.port.UserRepository;
 import infrastructure.security.PasswordHasher;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
 
-    @Mock
-    UserRepository userRepo;
+    @Mock UserRepository userRepo;
 
-    @Mock
-    PasswordHasher hasher;
+    @Mock PasswordHasher hasher;
 
-    @InjectMocks
-    AuthService authService;
+    @InjectMocks AuthService authService;
 
     @Test
     void loginSucceedsWithHashedPassword() {
-        User user = new User(1L, "A", "B", "testuser", "$2a$10$hashed", "customer", "123", "a@b.com");
+        User user =
+                new User(1L, "A", "B", "testuser", "$2a$10$hashed", "customer", "123", "a@b.com");
         when(userRepo.findByUsername("testuser")).thenReturn(Optional.of(user));
         when(hasher.verify("plainpass", "$2a$10$hashed")).thenReturn(true);
 
@@ -41,7 +38,8 @@ class AuthServiceTest {
 
     @Test
     void loginFailsWithWrongPassword() {
-        User user = new User(1L, "A", "B", "testuser", "$2a$10$hashed", "customer", "123", "a@b.com");
+        User user =
+                new User(1L, "A", "B", "testuser", "$2a$10$hashed", "customer", "123", "a@b.com");
         when(userRepo.findByUsername("testuser")).thenReturn(Optional.of(user));
         when(hasher.verify("wrong", "$2a$10$hashed")).thenReturn(false);
 
@@ -77,7 +75,9 @@ class AuthServiceTest {
         when(hasher.hash("mypassword")).thenReturn("$2a$10$salted");
         when(userRepo.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
-        User result = authService.register("newuser", "mypassword", "New", "User", "customer", "555", "n@b.com");
+        User result =
+                authService.register(
+                        "newuser", "mypassword", "New", "User", "customer", "555", "n@b.com");
 
         assertEquals("newuser", result.getUsername());
         assertEquals("$2a$10$salted", result.getPassword());

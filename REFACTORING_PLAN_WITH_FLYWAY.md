@@ -142,15 +142,9 @@ Runtime uses the new architecture:
 
 | Item | Priority | Notes |
 |---|---|---|
-| Transaction boundary (BookingFacade) | P0 | Last critical data-integrity hole |
-| Navigation refactor (replace `new NextController()`) | P1 | Tangled graph, hard to test |
-| Typo filename fix | P2 | `MovieManagmentContrller.java` |
-| Hardcoded DB credentials | P0 | `docker-compose.yml`, `script.sql` |
-| script.sql UTF-16LE cleanup | P2 | Convert to UTF-8 or delete |
-| Remove dead DAO/ package | P2 | Tests still reference it |
-| Remove dead Database/ package | P2 | `DatabaseConnection.java` unused by main |
-| Remove old Model/ types (views updated) | P3 | Views must adopt new domain models first |
-| Package reorganization | P3 | Move Controller/ → ui/controller/, View/ → ui/view/, Main → ui/ |
+| Push `dev` to remote `master` | P0 | Final deployment step |
+| Update Views to use `domain.model` types | P3 | Delete `ui/model/` after migration |
+| Typo filename: remaining `Managment` → `Management` (6 files) | P2 | Cosmetic — 20+ file changes |
 
 ---
 
@@ -240,8 +234,8 @@ src/main/java/
 ## 5. REFACTORING STRATEGY — Execution Phases
 
 ```
-Phase 0 ──► Phase 1 ──► Phase 2 ──► Phase 3 ──► Phase 4 ──► Phase 5 ──► Phase 6 ──► Phase 7
-(tests)    (schema)     (domain)    (services)  (cleanup)   (reorg)    (txn)      (nav)
+Phase 0 ──► Phase 1 ──► Phase 2 ──► Phase 3 ──► Phase 4 ──► Phase 5 ──► Phase 6 ──► Phase 7 ──► Phase 8
+(tests)    (schema)     (domain)    (services)  (cleanup)   (linting)  (reorg)    (txn)      (nav)
 ```
 
 ### Phase 0: Testing Foundation ✅ DONE
@@ -303,7 +297,7 @@ Delivered:
 
 ---
 
-### Phase 4: Infrastructure + UI Polish ✅ DONE (partial)
+### Phase 4: Infrastructure + UI Polish ✅ DONE
 
 **Goal:** Cleanup — Theme, dead stubs, System.out → SLF4J.
 
@@ -317,15 +311,53 @@ SLF4J loggers present in several controllers. Some `System.out.println()` remain
 Old DAO package is dead code in main sources (zero imports). Not yet deleted (tests reference it).
 
 **Remaining:**
-- Remove old DAO/ package from main sources
-- Remove old Database/ package
-- Fix typo filename `MovieManagmentContrller.java`
-- Convert/delete `script.sql`
-- Remove old Model/types after views update
+- Remove old Model/types after views update (deferred — views still reference old types)
 
 ---
 
-### Phase 5: Package Reorganization 🔜 NEXT
+### Phase 5: Linting & Formatting ✅ DONE
+
+**Goal:** Enforce code consistency and catch bugs/security issues using Spotless, SpotBugs, and PMD.
+
+#### Tools Added
+
+| Tool | Purpose | Config |
+|---|---|---|
+| **Spotless** | Automatic code formatting | Google AOSP style (4-space indent), removes unused imports, trims whitespace |
+| **SpotBugs** | Bug and security vulnerability detection | Max effort, medium threshold, excludes known JavaFX false positives |
+| **PMD** | Code quality and maintainability checks | bestpractices + errorprone + design rulesets |
+
+#### Commands
+
+```bash
+mvn spotless:check    # Check formatting violations
+mvn spotless:apply    # Auto-fix all formatting violations
+mvn spotbugs:check    # Run bug analysis
+mvn pmd:check         # Run code quality analysis
+```
+
+#### What Was Fixed
+
+- **Spotless:** Auto-formatted 86 files (import ordering, whitespace, line wrapping)
+- **SpotBugs:**
+  - Fixed: `NP_ALWAYS_NULL` — removed dead null-check branch in `PaymentManagmentController.handleBack()` that would NPE
+  - Fixed: `DMI_RANDOM_USED_ONLY_ONCE` — promoted `Random` to a static field in `PaymentController`
+  - Fixed: `UUF_UNUSED_PUBLIC_OR_PROTECTED_FIELD` — removed unused `lblTotalPayments`/`lblPendingPayments` in view
+  - Fixed: `URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD` — removed unused `seatContainer` in `SeatSelectionPage`
+  - Suppressed: `PA_PUBLIC_PRIMITIVE_ATTRIBUTE` (JavaFX idiom), `EI_EXPOSE_REP*` (model types), `URF_UNREAD_FIELD` (lambda captures), `CT_CONSTRUCTOR_THROW` (JavaFX pattern)
+- **PMD:** Zero violations after cleanup — codebase passes bestpractices, errorprone, and design rulesets
+
+#### Files Changed
+- `pom.xml` — added `spotless-maven-plugin`, `spotbugs-maven-plugin`, `maven-pmd-plugin`
+- `spotbugs-exclude.xml` — new file with false-positive exclusions
+- 86 Java files auto-formatted, 4 SpotBugs real bugs fixed, 2 unused view fields removed
+
+#### Portfolio Selling Point
+> Integrated automated linting and formatting to enforce code quality standards, demonstrating professional development practices.
+
+---
+
+### Phase 6: Package Reorganization ✅ DONE
 
 **Goal:** Move files to match the target architecture layout. This is purely cosmetic — no behavioral changes. All imports are updated mechanically.
 
@@ -410,7 +442,7 @@ Either convert from UTF-16LE to UTF-8 and keep as reference, or delete it (Flywa
 
 ---
 
-### Phase 6: Transaction Safety (BookingFacade) 🔜 NEXT
+### Phase 7: Transaction Safety (BookingFacade) ✅ DONE
 
 **Goal:** Eliminate orphan bookings when payment fails after booking succeeds.
 
@@ -475,7 +507,7 @@ public class BookingFacade {
 
 ---
 
-### Phase 7: Navigation Refactor 🔜 NEXT
+### Phase 8: Navigation Refactor ✅ DONE
 
 **Goal:** Replace `new NextController(stage, ctx, ...)` chaining with a screen navigation service.
 
@@ -557,6 +589,9 @@ nav.toShowSelection(currentUser, movie);
 | Logback | 1.5.34 | stay | — |
 | JavaFX | 21.0.2 | stay | — |
 | Maven Compiler | 3.13.0 | stay | — |
+| Spotless Maven | 2.43.0 | stay | 5 |
+| SpotBugs Maven | 4.8.6.2 | stay | 5 |
+| PMD Maven | 3.21.0 | stay | 5 |
 
 ---
 
@@ -578,25 +613,27 @@ After each phase is fully completed and all tests pass:
 ## 7. EXECUTION ORDER
 
 ```
-Phase 0 ──► Phase 1 ──► Phase 2 ──► Phase 3 ──► Phase 4 ──► Phase 5 ──► Phase 6 ──► Phase 7
+Phase 0 ──► Phase 1 ──► Phase 2 ──► Phase 3 ──► Phase 4 ──► Phase 5 ──► Phase 6 ──► Phase 7 ──► Phase 8
 (tests)    (schema)     (domain)    (services)  (cleanup)   (reorg)    (txn)      (nav)
 ```
 
 ### Why this order
 
 1. **Phase 0–4:** Completed. See Section 3.5 for details.
-2. **Phase 5 (Reorg):** Next because it's pure mechanical work — no logic changes. Gets the project structure matching the target architecture before any more complex work.
-3. **Phase 6 (Txn):** Critical data-integrity fix. Must come after reorg so the BookingFacade goes in the right package.
-4. **Phase 7 (Nav):** Largest API change — saves the best for last, after everything else is stable.
+2. **Phase 5 (Linting):** Code quality automation — Spotless, SpotBugs, PMD added to build pipeline. Zero behavioral change.
+3. **Phase 6 (Reorg):** Pure mechanical work — package moves, import updates, no behavioral change.
+4. **Phase 7 (Txn):** Critical data-integrity fix — BookingFacade with atomic booking+payment.
+5. **Phase 8 (Nav):** Largest API change — instance-based NavigationManager replaces static stack.
 
 ### Deployment Risk
 
 | Phase | Deployable? | Risk |
 |---|---|---|
 | 0–4 | ✅ | All tested, merged to dev |
-| 5 | ✅ | Pure file moves + import changes. Full recompile + regression test |
-| 6 | ⚠️ Moderate | New BookingFacade — no existing code changes, but txn rollback could mask bugs |
-| 7 | ⚠️ Moderate | All controller constructors change — must test every screen transition |
+| 5 | ✅ | Spotless auto-format, SpotBugs/PMD clean. 38 tests pass |
+| 6 | ✅ | Pure file moves + import changes. Full recompile + regression test |
+| 7 | ⚠️ Moderate | New BookingFacade — no existing code changes, but txn rollback could mask bugs |
+| 8 | ⚠️ Moderate | All controller constructors change — must test every screen transition |
 
 ---
 

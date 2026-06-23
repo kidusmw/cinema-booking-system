@@ -1,5 +1,7 @@
 package ui.view;
 
+import static ui.common.Theme.*;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -8,7 +10,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import static ui.common.Theme.*;
 
 public class SignUpPage {
 
@@ -41,22 +42,22 @@ public class SignUpPage {
         backBtn.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
         backBtn.setTextFill(Color.web(TEXT_MUTED));
         backBtn.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-padding: 6 12;"
-        );
+                "-fx-background-color: transparent;" + "-fx-cursor: hand;" + "-fx-padding: 6 12;");
         topBar.getChildren().add(backBtn);
         VBox card = new VBox(14);
         card.setAlignment(Pos.CENTER);
         card.setPadding(new Insets(35, 50, 35, 50));
         card.setMaxWidth(500);
         card.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-background-radius: 12;" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 12;" +
-                        "-fx-border-width: 1;"
-        );
+                "-fx-background-color: "
+                        + WHITE
+                        + ";"
+                        + "-fx-background-radius: 12;"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 12;"
+                        + "-fx-border-width: 1;");
         card.setEffect(new DropShadow(10, Color.rgb(0, 0, 0, 0.06)));
         roleLabel = new Label("Create your account");
         roleLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 22));
@@ -91,24 +92,29 @@ public class SignUpPage {
         signUpBtn.setPrefHeight(44);
         signUpBtn.setTextFill(Color.web(WHITE));
         signUpBtn.setStyle(
-                "-fx-background-color: " + ACCENT + ";" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-cursor: hand;"
-        );
-        signUpBtn.setOnMouseEntered(e -> {
-            signUpBtn.setStyle(
-                    "-fx-background-color: " + HOVER + ";" +
-                            "-fx-background-radius: 8;" +
-                            "-fx-cursor: hand;"
-            );
-        });
-        signUpBtn.setOnMouseExited(e -> {
-            signUpBtn.setStyle(
-                    "-fx-background-color: " + ACCENT + ";" +
-                            "-fx-background-radius: 8;" +
-                            "-fx-cursor: hand;"
-            );
-        });
+                "-fx-background-color: "
+                        + ACCENT
+                        + ";"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-cursor: hand;");
+        signUpBtn.setOnMouseEntered(
+                e -> {
+                    signUpBtn.setStyle(
+                            "-fx-background-color: "
+                                    + HOVER
+                                    + ";"
+                                    + "-fx-background-radius: 8;"
+                                    + "-fx-cursor: hand;");
+                });
+        signUpBtn.setOnMouseExited(
+                e -> {
+                    signUpBtn.setStyle(
+                            "-fx-background-color: "
+                                    + ACCENT
+                                    + ";"
+                                    + "-fx-background-radius: 8;"
+                                    + "-fx-cursor: hand;");
+                });
         HBox loginBox = new HBox(5);
         loginBox.setAlignment(Pos.CENTER);
         Label haveAccount = new Label("Already have an account?");
@@ -121,17 +127,18 @@ public class SignUpPage {
 
         loginBox.getChildren().addAll(haveAccount, loginLink);
 
-        card.getChildren().addAll(
-                roleLabel, subtitle,
-                nameBox,
-                usernameField,
-                emailField,
-                phoneField,
-                passwordField,
-                errorLabel,
-                signUpBtn,
-                loginBox
-        );
+        card.getChildren()
+                .addAll(
+                        roleLabel,
+                        subtitle,
+                        nameBox,
+                        usernameField,
+                        emailField,
+                        phoneField,
+                        passwordField,
+                        errorLabel,
+                        signUpBtn,
+                        loginBox);
 
         root.setTop(topBar);
         root.setCenter(card);
@@ -149,13 +156,20 @@ public class SignUpPage {
     }
 
     private String getTextFieldStyle() {
-        return
-                "-fx-background-color: " + BG_LIGHT + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 8;" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-padding: 8 14;" +
-                        "-fx-text-fill: " + TEXT_DARK + ";" +
-                        "-fx-prompt-text-fill: " + TEXT_MUTED + ";";
+        return "-fx-background-color: "
+                + BG_LIGHT
+                + ";"
+                + "-fx-border-color: "
+                + BORDER
+                + ";"
+                + "-fx-border-radius: 8;"
+                + "-fx-background-radius: 8;"
+                + "-fx-padding: 8 14;"
+                + "-fx-text-fill: "
+                + TEXT_DARK
+                + ";"
+                + "-fx-prompt-text-fill: "
+                + TEXT_MUTED
+                + ";";
     }
 }

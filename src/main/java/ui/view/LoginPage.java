@@ -1,5 +1,7 @@
 package ui.view;
 
+import static ui.common.Theme.*;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -8,7 +10,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import static ui.common.Theme.*;
 
 public class LoginPage {
     public Label roleLabel;
@@ -38,10 +39,7 @@ public class LoginPage {
         backBtn.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
         backBtn.setTextFill(Color.web(TEXT_MUTED));
         backBtn.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-padding: 6 12;"
-        );
+                "-fx-background-color: transparent;" + "-fx-cursor: hand;" + "-fx-padding: 6 12;");
 
         topBar.getChildren().add(backBtn);
         HBox splitLayout = new HBox(60);
@@ -55,10 +53,7 @@ public class LoginPage {
         brandBox.setAlignment(Pos.CENTER_LEFT);
         StackPane logo = new StackPane();
         logo.setPrefSize(36, 36);
-        logo.setStyle(
-                "-fx-background-color: " + ACCENT + ";" +
-                        "-fx-background-radius: 8;"
-        );
+        logo.setStyle("-fx-background-color: " + ACCENT + ";" + "-fx-background-radius: 8;");
         roleLabel = new Label();
         roleLabel.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 14));
         roleLabel.setTextFill(Color.web(TEXT_MUTED));
@@ -87,12 +82,15 @@ public class LoginPage {
         card.setPadding(new Insets(40, 36, 40, 36));
         card.setPrefWidth(400);
         card.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-background-radius: 12;" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 12;" +
-                        "-fx-border-width: 1;"
-        );
+                "-fx-background-color: "
+                        + WHITE
+                        + ";"
+                        + "-fx-background-radius: 12;"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 12;"
+                        + "-fx-border-width: 1;");
         // ✅ FIXED: Color.rgb instead of Color.web
         card.setEffect(new DropShadow(10, Color.rgb(0, 0, 0, 0.06)));
 
@@ -135,25 +133,30 @@ public class LoginPage {
         loginBtn.setPrefHeight(44);
         loginBtn.setTextFill(Color.web(WHITE));
         loginBtn.setStyle(
-                "-fx-background-color: " + ACCENT + ";" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-cursor: hand;"
-        );
+                "-fx-background-color: "
+                        + ACCENT
+                        + ";"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-cursor: hand;");
 
-        loginBtn.setOnMouseEntered(e -> {
-            loginBtn.setStyle(
-                    "-fx-background-color: " + HOVER + ";" +
-                            "-fx-background-radius: 8;" +
-                            "-fx-cursor: hand;"
-            );
-        });
-        loginBtn.setOnMouseExited(e -> {
-            loginBtn.setStyle(
-                    "-fx-background-color: " + ACCENT + ";" +
-                            "-fx-background-radius: 8;" +
-                            "-fx-cursor: hand;"
-            );
-        });
+        loginBtn.setOnMouseEntered(
+                e -> {
+                    loginBtn.setStyle(
+                            "-fx-background-color: "
+                                    + HOVER
+                                    + ";"
+                                    + "-fx-background-radius: 8;"
+                                    + "-fx-cursor: hand;");
+                });
+        loginBtn.setOnMouseExited(
+                e -> {
+                    loginBtn.setStyle(
+                            "-fx-background-color: "
+                                    + ACCENT
+                                    + ";"
+                                    + "-fx-background-radius: 8;"
+                                    + "-fx-cursor: hand;");
+                });
         HBox signupBox = new HBox(5);
         signupBox.setAlignment(Pos.CENTER);
         Label noAccount = new Label("Don't have an account?");
@@ -166,15 +169,15 @@ public class LoginPage {
 
         signupBox.getChildren().addAll(noAccount, signupLink);
 
-        card.getChildren().addAll(
-                cardTitle,
-                roleLabel,
-                usernameBox,
-                passwordBox,
-                errorLabel,
-                loginBtn,
-                signupBox
-        );
+        card.getChildren()
+                .addAll(
+                        cardTitle,
+                        roleLabel,
+                        usernameBox,
+                        passwordBox,
+                        errorLabel,
+                        loginBtn,
+                        signupBox);
         splitLayout.getChildren().addAll(leftSide, card);
 
         root.setTop(topBar);
@@ -184,23 +187,32 @@ public class LoginPage {
     }
 
     private String getTextFieldStyle() {
-        return
-                "-fx-background-color: " + BG_LIGHT + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 8;" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-padding: 8 14;" +
-                        "-fx-text-fill: " + TEXT_DARK + ";" +
-                        "-fx-prompt-text-fill: " + TEXT_MUTED + ";";
+        return "-fx-background-color: "
+                + BG_LIGHT
+                + ";"
+                + "-fx-border-color: "
+                + BORDER
+                + ";"
+                + "-fx-border-radius: 8;"
+                + "-fx-background-radius: 8;"
+                + "-fx-padding: 8 14;"
+                + "-fx-text-fill: "
+                + TEXT_DARK
+                + ";"
+                + "-fx-prompt-text-fill: "
+                + TEXT_MUTED
+                + ";";
     }
 
     private void addFocusEffect(TextField field) {
-        field.focusedProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal) {
-                field.setStyle(getTextFieldStyle().replace(BORDER, ACCENT));
-            } else {
-                field.setStyle(getTextFieldStyle());
-            }
-        });
+        field.focusedProperty()
+                .addListener(
+                        (obs, oldVal, newVal) -> {
+                            if (newVal) {
+                                field.setStyle(getTextFieldStyle().replace(BORDER, ACCENT));
+                            } else {
+                                field.setStyle(getTextFieldStyle());
+                            }
+                        });
     }
 }

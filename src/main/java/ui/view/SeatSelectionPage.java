@@ -1,5 +1,7 @@
 package ui.view;
 
+import static ui.common.Theme.*;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -8,7 +10,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import static ui.common.Theme.*;
 
 public class SeatSelectionPage {
     public Button btnBack;
@@ -51,7 +52,12 @@ public class SeatSelectionPage {
         HBox infoBar = new HBox(20);
         infoBar.setAlignment(Pos.CENTER_LEFT);
         infoBar.setPadding(new Insets(15, 20, 15, 20));
-        infoBar.setStyle("-fx-background-color: " + WHITE + "; -fx-border-color: " + BORDER + "; -fx-border-radius: 10; -fx-background-radius: 10;");
+        infoBar.setStyle(
+                "-fx-background-color: "
+                        + WHITE
+                        + "; -fx-border-color: "
+                        + BORDER
+                        + "; -fx-border-radius: 10; -fx-background-radius: 10;");
 
         hallNameLabel = new Label("🏛️ Hall Name");
         hallNameLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
@@ -66,11 +72,11 @@ public class SeatSelectionPage {
 
         HBox legend = new HBox(25);
         legend.setAlignment(Pos.CENTER);
-        legend.getChildren().addAll(
-                createLegendItem("#10B981", "Available"),
-                createLegendItem("#DB2777", "Selected"),
-                createLegendItem("#EF4444", "Booked")
-        );
+        legend.getChildren()
+                .addAll(
+                        createLegendItem("#10B981", "Available"),
+                        createLegendItem("#DB2777", "Selected"),
+                        createLegendItem("#EF4444", "Booked"));
 
         VBox screenBox = new VBox(10);
         screenBox.setAlignment(Pos.CENTER);
@@ -80,13 +86,23 @@ public class SeatSelectionPage {
         screenBox.getChildren().addAll(screen, screenLabel);
 
         VBox seatContainer = new VBox(20);
-        seatContainer.setStyle("-fx-background-color: " + WHITE + "; -fx-border-color: " + BORDER + "; -fx-border-radius: 12;");
+        seatContainer.setStyle(
+                "-fx-background-color: "
+                        + WHITE
+                        + "; -fx-border-color: "
+                        + BORDER
+                        + "; -fx-border-radius: 12;");
         seatGrid = new VBox(8);
         seatGrid.setAlignment(Pos.CENTER);
         seatContainer.getChildren().add(seatGrid);
 
         HBox bottomBar = new HBox(20);
-        bottomBar.setStyle("-fx-background-color: " + WHITE + "; -fx-border-color: " + BORDER + "; -fx-border-radius: 12;");
+        bottomBar.setStyle(
+                "-fx-background-color: "
+                        + WHITE
+                        + "; -fx-border-color: "
+                        + BORDER
+                        + "; -fx-border-radius: 12;");
         VBox summaryBox = new VBox(5);
         selectedCountLabel = new Label("0 seats selected");
         totalAmountLabel = new Label("0.00 Birr");
@@ -98,7 +114,10 @@ public class SeatSelectionPage {
         HBox.setHgrow(bottomSpacer, Priority.ALWAYS);
         btnProceed = new Button("Proceed to Payment →");
         btnProceed.setDisable(true);
-        btnProceed.setStyle("-fx-background-color: " + ACCENT + "; -fx-background-radius: 8; -fx-cursor: hand; -fx-text-fill: white;");
+        btnProceed.setStyle(
+                "-fx-background-color: "
+                        + ACCENT
+                        + "; -fx-background-radius: 8; -fx-cursor: hand; -fx-text-fill: white;");
 
         bottomBar.getChildren().addAll(summaryBox, bottomSpacer, btnProceed);
         root.getChildren().addAll(topBar, infoBar, legend, screenBox, seatContainer, bottomBar);
@@ -112,5 +131,7 @@ public class SeatSelectionPage {
         return item;
     }
 
-    public VBox getView() { return root; }
+    public VBox getView() {
+        return root;
+    }
 }

@@ -15,17 +15,39 @@ public class Hall {
         this.hallType = hallType;
     }
 
-    public boolean isVip() { return "vip".equals(hallType); }
+    public boolean isVip() {
+        return "vip".equals(hallType);
+    }
 
-    public Long getHallId() { return hallId; }
-    public void setHallId(Long hallId) { this.hallId = hallId; }
+    public Long getHallId() {
+        return hallId;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setHallId(Long hallId) {
+        this.hallId = hallId;
+    }
 
-    public int getCapacity() { return capacity; }
-    public void setCapacity(int capacity) { this.capacity = capacity; }
+    public String getName() {
+        return name;
+    }
 
-    public String getHallType() { return hallType; }
-    public void setHallType(String hallType) { this.hallType = hallType; }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public String getHallType() {
+        return hallType;
+    }
+
+    public void setHallType(String hallType) {
+        this.hallType = hallType;
+    }
 }

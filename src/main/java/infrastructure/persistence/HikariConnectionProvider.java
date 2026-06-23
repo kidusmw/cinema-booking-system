@@ -12,7 +12,8 @@ import java.util.Properties;
 
 public class HikariConnectionProvider {
 
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(HikariConnectionProvider.class);
+    private static final org.slf4j.Logger log =
+            org.slf4j.LoggerFactory.getLogger(HikariConnectionProvider.class);
     private static HikariDataSource dataSource;
 
     private static synchronized HikariDataSource getDataSource() {
@@ -43,7 +44,8 @@ public class HikariConnectionProvider {
 
     private static Properties loadProperties() {
         Properties props = new Properties();
-        try (InputStream in = HikariConnectionProvider.class.getResourceAsStream("/db.properties")) {
+        try (InputStream in =
+                HikariConnectionProvider.class.getResourceAsStream("/db.properties")) {
             if (in != null) {
                 props.load(in);
             } else {
@@ -65,13 +67,13 @@ public class HikariConnectionProvider {
 
     public static void printDatabaseInfo() {
         String sql =
-            "SELECT current_database() AS current_database, " +
-            "current_user AS login_name, " +
-            "inet_server_addr() AS server_address";
+                "SELECT current_database() AS current_database, "
+                        + "current_user AS login_name, "
+                        + "inet_server_addr() AS server_address";
 
         try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 System.out.println("Connected database: " + rs.getString("current_database"));
                 System.out.println("Login name: " + rs.getString("login_name"));

@@ -1,7 +1,5 @@
 package ui;
 
-import ui.controller.NavigationManager;
-import ui.controller.WelcomeController;
 import application.AppContext;
 import application.service.BookingFacade;
 import domain.port.*;
@@ -14,6 +12,8 @@ import infrastructure.security.BCryptPasswordHasher;
 import infrastructure.security.PasswordHasher;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import ui.controller.NavigationManager;
+import ui.controller.WelcomeController;
 
 public class Main extends Application {
 
@@ -39,12 +39,19 @@ public class Main extends Application {
         PaymentService paymentService = new PaymentService(paymentRepo);
         BookingFacade bookingFacade = new BookingFacade(connectionProvider);
 
-        AppContext ctx = new AppContext(
-            userRepo, movieRepo, hallRepo, seatRepo,
-            showtimeRepo, bookingRepo, paymentRepo,
-            authService, bookingService, paymentService,
-            bookingFacade
-        );
+        AppContext ctx =
+                new AppContext(
+                        userRepo,
+                        movieRepo,
+                        hallRepo,
+                        seatRepo,
+                        showtimeRepo,
+                        bookingRepo,
+                        paymentRepo,
+                        authService,
+                        bookingService,
+                        paymentService,
+                        bookingFacade);
 
         NavigationManager nav = new NavigationManager(stage, ctx);
         new WelcomeController(stage, ctx, nav);

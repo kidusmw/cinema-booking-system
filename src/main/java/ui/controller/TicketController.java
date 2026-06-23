@@ -1,16 +1,16 @@
 package ui.controller;
 
-import ui.model.*;
-import ui.view.TicketPage;
 import application.AppContext;
+import java.text.SimpleDateFormat;
+import java.util.List;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 import javax.swing.*;
-import java.text.SimpleDateFormat;
-import java.util.List;
+import ui.model.*;
+import ui.view.TicketPage;
 
 public class TicketController {
     private TicketPage view;
@@ -30,7 +30,17 @@ public class TicketController {
     private static final String WHITE = "#FFFFFF";
     private static final String BG = "#FAFAFA";
 
-    public TicketController(Stage stage, AppContext ctx, NavigationManager nav, Customer currentUser, Movie selectedMovie, Show selectedShow, Moviehall selectedHall, List<String> selectedSeatIds, double totalAmount, List<String> bookingIds) {
+    public TicketController(
+            Stage stage,
+            AppContext ctx,
+            NavigationManager nav,
+            Customer currentUser,
+            Movie selectedMovie,
+            Show selectedShow,
+            Moviehall selectedHall,
+            List<String> selectedSeatIds,
+            double totalAmount,
+            List<String> bookingIds) {
         this.stage = stage;
         this.ctx = ctx;
         this.nav = nav;
@@ -48,20 +58,25 @@ public class TicketController {
         stage.setScene(scene);
         stage.show();
         populateTicket();
-        view.btnDownload.setOnAction(e -> {
-            Alert info = new Alert(Alert.AlertType.INFORMATION);
-            info.setTitle("Download");
-            info.setContentText("Ticket download feature (screenshot for now!)");
-            info.showAndWait();
-        });
+        view.btnDownload.setOnAction(
+                e -> {
+                    Alert info = new Alert(Alert.AlertType.INFORMATION);
+                    info.setTitle("Download");
+                    info.setContentText("Ticket download feature (screenshot for now!)");
+                    info.showAndWait();
+                });
 
-        view.btnHome.setOnAction(e -> {
-            nav.goFresh(() -> new CustomerDashboardController(stage, ctx, nav, currentUser));
-        });
+        view.btnHome.setOnAction(
+                e -> {
+                    nav.goFresh(
+                            () -> new CustomerDashboardController(stage, ctx, nav, currentUser));
+                });
 
-        view.btnMyBookings.setOnAction(e -> {
-            nav.goFresh(() -> new CustomerDashboardController(stage, ctx, nav, currentUser));
-        });
+        view.btnMyBookings.setOnAction(
+                e -> {
+                    nav.goFresh(
+                            () -> new CustomerDashboardController(stage, ctx, nav, currentUser));
+                });
     }
 
     private void populateTicket() {
@@ -69,7 +84,8 @@ public class TicketController {
         view.successLabel.setText("🎉 Booking Confirmed!");
         view.movieTitle.setText(selectedMovie.getTitle());
         view.movieGenre.setText(selectedMovie.getGenre());
-        view.dateTimeLabel.setText(sdf.format(selectedShow.getShowDate()) + " • " + selectedShow.getShowTime());
+        view.dateTimeLabel.setText(
+                sdf.format(selectedShow.getShowDate()) + " • " + selectedShow.getShowTime());
         view.hallLabel.setText(selectedHall.getName());
         StringBuilder seatList = new StringBuilder();
         if (selectedSeatIds != null && !selectedSeatIds.isEmpty()) {
@@ -87,7 +103,8 @@ public class TicketController {
 
         if (bookingIds != null && !bookingIds.isEmpty()) {
             if (bookingIds.size() > 1) {
-                view.bookingIdLabel.setText(bookingIds.get(0) + " (+" + (bookingIds.size() - 1) + " more)");
+                view.bookingIdLabel.setText(
+                        bookingIds.get(0) + " (+" + (bookingIds.size() - 1) + " more)");
             } else {
                 view.bookingIdLabel.setText(bookingIds.get(0));
             }
@@ -98,6 +115,4 @@ public class TicketController {
         SimpleDateFormat timeFormat = new SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a");
         view.bookedOnLabel.setText(timeFormat.format(new java.util.Date()));
     }
-
-
 }

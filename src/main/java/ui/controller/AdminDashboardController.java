@@ -1,6 +1,7 @@
 package ui.controller;
 
-import ui.view.AdminDashboardPage;
+import static ui.common.Theme.*;
+
 import application.AppContext;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,7 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import static ui.common.Theme.*;
+import ui.view.AdminDashboardPage;
 
 public class AdminDashboardController {
 
@@ -28,7 +29,8 @@ public class AdminDashboardController {
 
     private NavigationManager nav;
 
-    public AdminDashboardController(Stage stage, AppContext ctx, NavigationManager nav, String adminName) {
+    public AdminDashboardController(
+            Stage stage, AppContext ctx, NavigationManager nav, String adminName) {
         this.stage = stage;
         this.ctx = ctx;
         this.nav = nav;
@@ -76,12 +78,12 @@ public class AdminDashboardController {
         title.setTextFill(Color.web(TEXT_DARK));
 
         HBox statsBox = new HBox(20);
-        statsBox.getChildren().addAll(
-                createStatCard("Movies", "Total Movies", "11", ACCENT),
-                createStatCard("Bookings", "Total Bookings", "15", "#10B981"),
-                createStatCard("Revenue", "Revenue", "0.00birr", "#F59E0B"),
-                createStatCard("Users", "Total Users", "9", "#8B5CF6")
-        );
+        statsBox.getChildren()
+                .addAll(
+                        createStatCard("Movies", "Total Movies", "11", ACCENT),
+                        createStatCard("Bookings", "Total Bookings", "15", "#10B981"),
+                        createStatCard("Revenue", "Revenue", "0.00birr", "#F59E0B"),
+                        createStatCard("Users", "Total Users", "9", "#8B5CF6"));
 
         dashboardContent.getChildren().addAll(title, statsBox);
         view.contentArea.getChildren().add(dashboardContent);
@@ -90,9 +92,8 @@ public class AdminDashboardController {
     private void showMovies() {
         setActiveMenu(view.btnMovies);
         nav.go(
-            () -> new AdminDashboardController(stage, ctx, nav, adminName),
-            () -> new MovieManagementController(stage, ctx, nav, this)
-        );
+                () -> new AdminDashboardController(stage, ctx, nav, adminName),
+                () -> new MovieManagementController(stage, ctx, nav, this));
     }
 
     private void showShows() {
@@ -130,18 +131,25 @@ public class AdminDashboardController {
         UserManagmentController c = new UserManagmentController(stage, ctx, nav, this);
         injectView(c.getRootView());
     }
+
     private void setActiveMenu(Button activeBtn) {
         Button[] allButtons = {
-                view.btnDashboard, view.btnMovies, view.btnShows,
-                view.btnHalls, view.btnSeats, view.btnBookings,
-                view.btnPayments, view.btnUsers
+            view.btnDashboard, view.btnMovies, view.btnShows,
+            view.btnHalls, view.btnSeats, view.btnBookings,
+            view.btnPayments, view.btnUsers
         };
 
         for (Button btn : allButtons) {
             if (btn == activeBtn) {
-                btn.setStyle("-fx-background-color: " + ACCENT + "; -fx-text-fill: white; -fx-background-radius: 8; -fx-alignment: center-left; -fx-cursor: hand;");
+                btn.setStyle(
+                        "-fx-background-color: "
+                                + ACCENT
+                                + "; -fx-text-fill: white; -fx-background-radius: 8; -fx-alignment: center-left; -fx-cursor: hand;");
             } else {
-                btn.setStyle("-fx-background-color: transparent; -fx-text-fill: " + TEXT_MUTED + "; -fx-background-radius: 8; -fx-alignment: center-left; -fx-cursor: hand;");
+                btn.setStyle(
+                        "-fx-background-color: transparent; -fx-text-fill: "
+                                + TEXT_MUTED
+                                + "; -fx-background-radius: 8; -fx-alignment: center-left; -fx-cursor: hand;");
             }
         }
     }
@@ -151,7 +159,10 @@ public class AdminDashboardController {
         card.setAlignment(Pos.CENTER_LEFT);
         card.setPadding(new Insets(20));
         card.setPrefWidth(220);
-        card.setStyle("-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: " + BORDER + "; -fx-border-radius: 12; -fx-border-width: 1;");
+        card.setStyle(
+                "-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: "
+                        + BORDER
+                        + "; -fx-border-radius: 12; -fx-border-width: 1;");
         card.setEffect(new DropShadow(5, Color.rgb(0, 0, 0, 0.04)));
 
         Label iconLabel = new Label(icon);
@@ -168,6 +179,7 @@ public class AdminDashboardController {
         card.getChildren().addAll(iconLabel, valueLabel, nameLabel);
         return card;
     }
+
     public Parent getRootView() {
         return view.getView();
     }

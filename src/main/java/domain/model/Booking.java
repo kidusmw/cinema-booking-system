@@ -16,8 +16,13 @@ public class Booking {
 
     public Booking() {}
 
-    public Booking(Long bookingId, Long userId, Long showId,
-                   LocalDateTime bookingDate, double amount, String bookingStatus) {
+    public Booking(
+            Long bookingId,
+            Long userId,
+            Long showId,
+            LocalDateTime bookingDate,
+            double amount,
+            String bookingStatus) {
         this.bookingId = bookingId;
         this.userId = userId;
         this.showId = showId;
@@ -28,8 +33,8 @@ public class Booking {
 
     public void confirm() {
         if (!"pending".equals(bookingStatus)) {
-            throw new IllegalStateException("Cannot confirm booking " + bookingId
-                    + " with status: " + bookingStatus);
+            throw new IllegalStateException(
+                    "Cannot confirm booking " + bookingId + " with status: " + bookingStatus);
         }
         this.bookingStatus = "confirmed";
     }
@@ -42,36 +47,74 @@ public class Booking {
     }
 
     public double total() {
-        return seats.stream()
-                .mapToDouble(BookingSeat::getPrice)
-                .sum();
+        return seats.stream().mapToDouble(BookingSeat::getPrice).sum();
     }
 
     public void addSeat(BookingSeat seat) {
         seats.add(seat);
     }
 
-    public Long getBookingId() { return bookingId; }
-    public void setBookingId(Long bookingId) { this.bookingId = bookingId; }
+    public Long getBookingId() {
+        return bookingId;
+    }
 
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
+    public void setBookingId(Long bookingId) {
+        this.bookingId = bookingId;
+    }
 
-    public Long getShowId() { return showId; }
-    public void setShowId(Long showId) { this.showId = showId; }
+    public Long getUserId() {
+        return userId;
+    }
 
-    public LocalDateTime getBookingDate() { return bookingDate; }
-    public void setBookingDate(LocalDateTime bookingDate) { this.bookingDate = bookingDate; }
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
-    public String getMovieName() { return movieName; }
-    public void setMovieName(String movieName) { this.movieName = movieName; }
+    public Long getShowId() {
+        return showId;
+    }
 
-    public double getAmount() { return amount; }
-    public void setAmount(double amount) { this.amount = amount; }
+    public void setShowId(Long showId) {
+        this.showId = showId;
+    }
 
-    public String getBookingStatus() { return bookingStatus; }
-    public void setBookingStatus(String bookingStatus) { this.bookingStatus = bookingStatus; }
+    public LocalDateTime getBookingDate() {
+        return bookingDate;
+    }
 
-    public List<BookingSeat> getSeats() { return seats; }
-    public void setSeats(List<BookingSeat> seats) { this.seats = seats; }
+    public void setBookingDate(LocalDateTime bookingDate) {
+        this.bookingDate = bookingDate;
+    }
+
+    public String getMovieName() {
+        return movieName;
+    }
+
+    public void setMovieName(String movieName) {
+        this.movieName = movieName;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public String getBookingStatus() {
+        return bookingStatus;
+    }
+
+    public void setBookingStatus(String bookingStatus) {
+        this.bookingStatus = bookingStatus;
+    }
+
+    public List<BookingSeat> getSeats() {
+        return seats;
+    }
+
+    public void setSeats(List<BookingSeat> seats) {
+        this.seats = seats;
+    }
 }

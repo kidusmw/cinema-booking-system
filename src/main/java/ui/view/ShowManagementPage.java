@@ -1,6 +1,7 @@
 package ui.view;
 
-import ui.model.Show;
+import static ui.common.Theme.*;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -9,7 +10,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import static ui.common.Theme.*;
+import ui.model.Show;
 
 public class ShowManagementPage {
     public TableView<Show> showTable;
@@ -29,6 +30,7 @@ public class ShowManagementPage {
     public ShowManagementPage() {
         createUI();
     }
+
     private void createUI() {
         root = new VBox(20);
         root.setStyle("-fx-background-color: " + BG + ";");
@@ -53,21 +55,22 @@ public class ShowManagementPage {
         btnBack.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
         btnBack.setTextFill(Color.web(TEXT_MUTED));
         btnBack.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-padding: 8 16;"
-        );
-        btnBack.setOnMouseEntered(e -> btnBack.setStyle(
-                "-fx-background-color: " + BG_LIGHT + ";" +
-                        "-fx-cursor: hand;" +
-                        "-fx-padding: 8 16;" +
-                        "-fx-background-radius: 8;"
-        ));
-        btnBack.setOnMouseExited(e -> btnBack.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-padding: 8 16;"
-        ));
+                "-fx-background-color: transparent;" + "-fx-cursor: hand;" + "-fx-padding: 8 16;");
+        btnBack.setOnMouseEntered(
+                e ->
+                        btnBack.setStyle(
+                                "-fx-background-color: "
+                                        + BG_LIGHT
+                                        + ";"
+                                        + "-fx-cursor: hand;"
+                                        + "-fx-padding: 8 16;"
+                                        + "-fx-background-radius: 8;"));
+        btnBack.setOnMouseExited(
+                e ->
+                        btnBack.setStyle(
+                                "-fx-background-color: transparent;"
+                                        + "-fx-cursor: hand;"
+                                        + "-fx-padding: 8 16;"));
 
         header.getChildren().addAll(titleBox, spacer, btnBack);
         HBox toolbar = new HBox(10);
@@ -78,14 +81,21 @@ public class ShowManagementPage {
         searchField.setPrefWidth(400);
         searchField.setFont(Font.font("Segoe UI", 13));
         searchField.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 8;" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-padding: 8 14;" +
-                        "-fx-text-fill: " + TEXT_DARK + ";" +
-                        "-fx-prompt-text-fill: " + TEXT_MUTED + ";"
-        );
+                "-fx-background-color: "
+                        + WHITE
+                        + ";"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 8;"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-padding: 8 14;"
+                        + "-fx-text-fill: "
+                        + TEXT_DARK
+                        + ";"
+                        + "-fx-prompt-text-fill: "
+                        + TEXT_MUTED
+                        + ";");
 
         Region toolbarSpacer = new Region();
         HBox.setHgrow(toolbarSpacer, Priority.ALWAYS);
@@ -97,11 +107,14 @@ public class ShowManagementPage {
         toolbar.getChildren().addAll(searchField, toolbarSpacer, btnAddShow);
         showTable = new TableView<>();
         showTable.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 8;" +
-                        "-fx-background-radius: 8;"
-        );
+                "-fx-background-color: "
+                        + WHITE
+                        + ";"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 8;"
+                        + "-fx-background-radius: 8;");
         showTable.setPlaceholder(new Label("No shows scheduled. Click 'Add Show' to create one."));
         VBox.setVgrow(showTable, Priority.ALWAYS);
 
@@ -118,17 +131,21 @@ public class ShowManagementPage {
         TableColumn<Show, java.util.Date> dateCol = new TableColumn<>("Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<>("showDate"));
         dateCol.setPrefWidth(130);
-        dateCol.setCellFactory(col -> new TableCell<Show, java.util.Date>() {
-            @Override
-            protected void updateItem(java.util.Date item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(new java.text.SimpleDateFormat("yyyy-MM-dd").format(item));
-                }
-            }
-        });
+        dateCol.setCellFactory(
+                col ->
+                        new TableCell<Show, java.util.Date>() {
+                            @Override
+                            protected void updateItem(java.util.Date item, boolean empty) {
+                                super.updateItem(item, empty);
+                                if (empty || item == null) {
+                                    setText(null);
+                                } else {
+                                    setText(
+                                            new java.text.SimpleDateFormat("yyyy-MM-dd")
+                                                    .format(item));
+                                }
+                            }
+                        });
 
         TableColumn<Show, String> timeCol = new TableColumn<>("Time");
         timeCol.setCellValueFactory(new PropertyValueFactory<>("showTime"));
@@ -154,31 +171,44 @@ public class ShowManagementPage {
     public VBox getView() {
         return root;
     }
-    private Button createActionButton(String text, String normalColor, String hoverColor, String textColor) {
+
+    private Button createActionButton(
+            String text, String normalColor, String hoverColor, String textColor) {
         Button btn = new Button(text);
         btn.setFont(Font.font("Segoe UI", FontWeight.BOLD, 13));
         btn.setPrefHeight(38);
         btn.setTextFill(Color.web(textColor));
         btn.setStyle(
-                "-fx-background-color: " + normalColor + ";" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-padding: 8 16;"
-        );
-        btn.setOnMouseEntered(e -> btn.setStyle(
-                "-fx-background-color: " + hoverColor + ";" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-padding: 8 16;" +
-                        "-fx-text-fill: " + textColor + ";"
-        ));
-        btn.setOnMouseExited(e -> btn.setStyle(
-                "-fx-background-color: " + normalColor + ";" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-padding: 8 16;" +
-                        "-fx-text-fill: " + textColor + ";"
-        ));
+                "-fx-background-color: "
+                        + normalColor
+                        + ";"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-cursor: hand;"
+                        + "-fx-padding: 8 16;");
+        btn.setOnMouseEntered(
+                e ->
+                        btn.setStyle(
+                                "-fx-background-color: "
+                                        + hoverColor
+                                        + ";"
+                                        + "-fx-background-radius: 8;"
+                                        + "-fx-cursor: hand;"
+                                        + "-fx-padding: 8 16;"
+                                        + "-fx-text-fill: "
+                                        + textColor
+                                        + ";"));
+        btn.setOnMouseExited(
+                e ->
+                        btn.setStyle(
+                                "-fx-background-color: "
+                                        + normalColor
+                                        + ";"
+                                        + "-fx-background-radius: 8;"
+                                        + "-fx-cursor: hand;"
+                                        + "-fx-padding: 8 16;"
+                                        + "-fx-text-fill: "
+                                        + textColor
+                                        + ";"));
         return btn;
     }
 }

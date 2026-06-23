@@ -1,13 +1,13 @@
 package ui.view;
 
-import ui.model.Booking;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javafx.geometry.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.text.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import ui.model.Booking;
 
 public class BookingManagmentPage {
 
@@ -59,18 +59,22 @@ public class BookingManagmentPage {
         // 3. Date (with formatter)
         TableColumn<Booking, Date> dateCol = new TableColumn<>("Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<>("bookingDate"));
-        dateCol.setCellFactory(col -> new TableCell<Booking, Date>() {
-            private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            @Override
-            protected void updateItem(Date item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(format.format(item));
-                }
-            }
-        });
+        dateCol.setCellFactory(
+                col ->
+                        new TableCell<Booking, Date>() {
+                            private final SimpleDateFormat format =
+                                    new SimpleDateFormat("yyyy-MM-dd");
+
+                            @Override
+                            protected void updateItem(Date item, boolean empty) {
+                                super.updateItem(item, empty);
+                                if (empty || item == null) {
+                                    setText(null);
+                                } else {
+                                    setText(format.format(item));
+                                }
+                            }
+                        });
 
         // 4. Movie Name
         TableColumn<Booking, String> movieCol = new TableColumn<>("Movie");

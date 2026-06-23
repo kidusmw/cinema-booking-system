@@ -15,8 +15,15 @@ public class Booking {
     private String customerName;
 
     public Booking() {}
-    public Booking(int bookingID, int userID, String customerName, String showID,
-                   String seatID, double amount, String bookingStatus) {
+
+    public Booking(
+            int bookingID,
+            int userID,
+            String customerName,
+            String showID,
+            String seatID,
+            double amount,
+            String bookingStatus) {
         this.bookingID = bookingID;
         this.userID = userID;
         this.customerName = customerName;
@@ -26,46 +33,108 @@ public class Booking {
         this.bookingStatus = bookingStatus;
     }
 
-    public int getBookingID() { return bookingID; }
-    public void setBookingID(int bookingID) { this.bookingID = bookingID; }
+    public int getBookingID() {
+        return bookingID;
+    }
 
-    public int getUserID() { return userID; }
-    public void setUserID(int userID) { this.userID = userID; }
+    public void setBookingID(int bookingID) {
+        this.bookingID = bookingID;
+    }
 
-    public String getMovieName() { return movieName; }
-    public void setMovieName(String movieName) { this.movieName = movieName; }
+    public int getUserID() {
+        return userID;
+    }
 
-    public String getCustomerName() { return customerName; }
-    public void setCustomerName(String customerName) { this.customerName = customerName; }
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
 
-    public String getShowID() { return showID; }
-    public void setShowID(String showID) { this.showID = showID; }
+    public String getMovieName() {
+        return movieName;
+    }
 
-    public String getSeatID() { return seatID; }
-    public void setSeatID(String seatID) { this.seatID = seatID; }
+    public void setMovieName(String movieName) {
+        this.movieName = movieName;
+    }
 
-    public double getAmount() { return amount; }
-    public void setAmount(double amount) { this.amount = amount; }
+    public String getCustomerName() {
+        return customerName;
+    }
 
-    public String getBookingStatus() { return bookingStatus; }
-    public void setBookingStatus(String bookingStatus) { this.bookingStatus = bookingStatus; }
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
 
-    public Date getBookingDate() { return bookingDate; }
-    public void setBookingDate(Date bookingDate) { this.bookingDate = bookingDate; }
+    public String getShowID() {
+        return showID;
+    }
 
-    public int getCustomerID() { return customerID; }
-    public void setCustomerID(int customerID) { this.customerID = customerID; }
+    public void setShowID(String showID) {
+        this.showID = showID;
+    }
+
+    public String getSeatID() {
+        return seatID;
+    }
+
+    public void setSeatID(String seatID) {
+        this.seatID = seatID;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public String getBookingStatus() {
+        return bookingStatus;
+    }
+
+    public void setBookingStatus(String bookingStatus) {
+        this.bookingStatus = bookingStatus;
+    }
+
+    public Date getBookingDate() {
+        return bookingDate;
+    }
+
+    public void setBookingDate(Date bookingDate) {
+        this.bookingDate = bookingDate;
+    }
+
+    public int getCustomerID() {
+        return customerID;
+    }
+
+    public void setCustomerID(int customerID) {
+        this.customerID = customerID;
+    }
 
     @Override
     public String toString() {
-        return "Booking{" +
-                "bookingID=" + bookingID +
-                ", userID=" + userID +
-                ", username='" + customerName + '\'' +
-                ", movieName='" + movieName + '\'' +
-                ", showID='" + showID + '\'' +
-                ", bookingDate='" + bookingDate + '\'' +
-                ", bookingStatus='" + bookingStatus + '\'' +
-                '}';
+        return "Booking{"
+                + "bookingID="
+                + bookingID
+                + ", userID="
+                + userID
+                + ", username='"
+                + customerName
+                + '\''
+                + ", movieName='"
+                + movieName
+                + '\''
+                + ", showID='"
+                + showID
+                + '\''
+                + ", bookingDate='"
+                + bookingDate
+                + '\''
+                + ", bookingStatus='"
+                + bookingStatus
+                + '\''
+                + '}';
     }
 }

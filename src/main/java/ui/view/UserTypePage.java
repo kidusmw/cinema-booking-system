@@ -1,5 +1,7 @@
 package ui.view;
 
+import static ui.common.Theme.*;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -9,7 +11,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import static ui.common.Theme.*;
 
 public class UserTypePage {
     public Button btnAdmin;
@@ -19,7 +20,6 @@ public class UserTypePage {
     private static final String WHITE = "#FFFFFF";
     private static final String PRIMARY = "#F472B6";
     private static final String HOVER = "#EC4899";
-
 
     public BorderPane getView() {
 
@@ -32,10 +32,7 @@ public class UserTypePage {
         btnBack.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
         btnBack.setTextFill(Color.web(TEXT_MUTED));
         btnBack.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-padding: 6 12;"
-        );
+                "-fx-background-color: transparent;" + "-fx-cursor: hand;" + "-fx-padding: 6 12;");
         topBar.getChildren().add(btnBack);
         VBox centerBox = new VBox(30);
         centerBox.setAlignment(Pos.CENTER);
@@ -50,17 +47,11 @@ public class UserTypePage {
         HBox cardsBox = new HBox(25);
         cardsBox.setAlignment(Pos.CENTER);
 
-        VBox adminCard = createRoleCard(
-                "👨‍💼", "Administrator",
-                "Manage movies, shows, and bookings",
-                false
-        );
+        VBox adminCard =
+                createRoleCard(
+                        "👨‍💼", "Administrator", "Manage movies, shows, and bookings", false);
 
-        VBox customerCard = createRoleCard(
-                "🎬", "Customer",
-                "Browse and book movie tickets",
-                true
-        );
+        VBox customerCard = createRoleCard("🎬", "Customer", "Browse and book movie tickets", true);
         btnAdmin = new Button("Continue as Admin");
         btnCustomer = new Button("Continue as Customer");
 
@@ -87,12 +78,15 @@ public class UserTypePage {
         card.setPrefWidth(240);
         card.setPrefHeight(280);
         card.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-background-radius: 12;" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 12;" +
-                        "-fx-border-width: 1;"
-        );
+                "-fx-background-color: "
+                        + WHITE
+                        + ";"
+                        + "-fx-background-radius: 12;"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 12;"
+                        + "-fx-border-width: 1;");
         card.setEffect(new DropShadow(8, Color.rgb(0, 0, 0, 0.05)));
         Label emojiLabel = new Label(emoji);
         emojiLabel.setFont(Font.font(48));
@@ -106,25 +100,33 @@ public class UserTypePage {
         descLabel.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
 
         card.getChildren().addAll(emojiLabel, titleLabel, descLabel);
-        card.setOnMouseEntered(e -> {
-            card.setStyle(
-                    "-fx-background-color: " + WHITE + ";" +
-                            "-fx-background-radius: 12;" +
-                            "-fx-border-color: " + PRIMARY + ";" +
-                            "-fx-border-radius: 12;" +
-                            "-fx-border-width: 2;" +
-                            "-fx-cursor: hand;"
-            );
-        });
-        card.setOnMouseExited(e -> {
-            card.setStyle(
-                    "-fx-background-color: " + WHITE + ";" +
-                            "-fx-background-radius: 12;" +
-                            "-fx-border-color: " + BORDER + ";" +
-                            "-fx-border-radius: 12;" +
-                            "-fx-border-width: 1;"
-            );
-        });
+        card.setOnMouseEntered(
+                e -> {
+                    card.setStyle(
+                            "-fx-background-color: "
+                                    + WHITE
+                                    + ";"
+                                    + "-fx-background-radius: 12;"
+                                    + "-fx-border-color: "
+                                    + PRIMARY
+                                    + ";"
+                                    + "-fx-border-radius: 12;"
+                                    + "-fx-border-width: 2;"
+                                    + "-fx-cursor: hand;");
+                });
+        card.setOnMouseExited(
+                e -> {
+                    card.setStyle(
+                            "-fx-background-color: "
+                                    + WHITE
+                                    + ";"
+                                    + "-fx-background-radius: 12;"
+                                    + "-fx-border-color: "
+                                    + BORDER
+                                    + ";"
+                                    + "-fx-border-radius: 12;"
+                                    + "-fx-border-width: 1;");
+                });
 
         return card;
     }
@@ -135,27 +137,31 @@ public class UserTypePage {
         btn.setPrefHeight(38);
         btn.setTextFill(Color.web(WHITE));
         btn.setStyle(
-                "-fx-background-color: " + ACCENT + ";" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-cursor: hand;"
-        );
+                "-fx-background-color: "
+                        + ACCENT
+                        + ";"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-cursor: hand;");
     }
 
     public void setButtonHover(Button btn) {
-        btn.setOnMouseEntered(e -> {
-            btn.setStyle(
-                    "-fx-background-color: " + HOVER + ";" +
-                            "-fx-background-radius: 8;" +
-                            "-fx-cursor: hand;"
-            );
-        });
-        btn.setOnMouseExited(e -> {
-            btn.setStyle(
-                    "-fx-background-color: " + ACCENT + ";" +
-                            "-fx-background-radius: 8;" +
-                            "-fx-cursor: hand;"
-            );
-        });
+        btn.setOnMouseEntered(
+                e -> {
+                    btn.setStyle(
+                            "-fx-background-color: "
+                                    + HOVER
+                                    + ";"
+                                    + "-fx-background-radius: 8;"
+                                    + "-fx-cursor: hand;");
+                });
+        btn.setOnMouseExited(
+                e -> {
+                    btn.setStyle(
+                            "-fx-background-color: "
+                                    + ACCENT
+                                    + ";"
+                                    + "-fx-background-radius: 8;"
+                                    + "-fx-cursor: hand;");
+                });
     }
 }
-

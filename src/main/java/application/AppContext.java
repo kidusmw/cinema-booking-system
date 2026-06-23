@@ -19,12 +19,18 @@ public class AppContext {
     public final PaymentService paymentService;
     public final BookingFacade bookingFacade;
 
-    public AppContext(UserRepository userRepo, MovieRepository movieRepo,
-                      HallRepository hallRepo, SeatRepository seatRepo,
-                      ShowtimeRepository showtimeRepo, BookingRepository bookingRepo,
-                      PaymentRepository paymentRepo, AuthService authService,
-                      BookingService bookingService, PaymentService paymentService,
-                      BookingFacade bookingFacade) {
+    public AppContext(
+            UserRepository userRepo,
+            MovieRepository movieRepo,
+            HallRepository hallRepo,
+            SeatRepository seatRepo,
+            ShowtimeRepository showtimeRepo,
+            BookingRepository bookingRepo,
+            PaymentRepository paymentRepo,
+            AuthService authService,
+            BookingService bookingService,
+            PaymentService paymentService,
+            BookingFacade bookingFacade) {
         this.userRepo = userRepo;
         this.movieRepo = movieRepo;
         this.hallRepo = hallRepo;

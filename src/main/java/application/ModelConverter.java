@@ -1,7 +1,5 @@
 package application;
 
-import ui.model.Admin;
-import ui.model.Customer;
 import domain.model.Booking;
 import domain.model.Hall;
 import domain.model.Movie;
@@ -9,11 +7,11 @@ import domain.model.Payment;
 import domain.model.Seat;
 import domain.model.Showtime;
 import domain.model.User;
-
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
+import ui.model.Admin;
+import ui.model.Customer;
 
 public class ModelConverter {
 
@@ -21,30 +19,44 @@ public class ModelConverter {
         if (user == null) return null;
         if ("admin".equals(user.getRole())) {
             return new Admin(
-                user.getUserId().intValue(),
-                user.getFirstName(), user.getLastName(),
-                user.getUsername(), user.getPassword(),
-                "active", null, user.getRole(),
-                user.getPhone(), user.getEmail(), null
-            );
+                    user.getUserId().intValue(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getUsername(),
+                    user.getPassword(),
+                    "active",
+                    null,
+                    user.getRole(),
+                    user.getPhone(),
+                    user.getEmail(),
+                    null);
         }
         return new Customer(
-            user.getUserId().intValue(),
-            user.getFirstName(), user.getLastName(),
-            user.getUsername(), user.getPassword(),
-            "active", null, user.getRole(),
-            user.getPhone(), user.getEmail(), null
-        );
+                user.getUserId().intValue(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getUsername(),
+                user.getPassword(),
+                "active",
+                null,
+                user.getRole(),
+                user.getPhone(),
+                user.getEmail(),
+                null);
     }
 
     public static User toDomainUser(ui.model.User old) {
         if (old == null) return null;
-        User user = new User(
-            (long) old.getUserID(),
-            old.getFirstName(), old.getLastName(),
-            old.getUsername(), old.getPassword(),
-            old.getRole(), old.getPhone(), old.getEmail()
-        );
+        User user =
+                new User(
+                        (long) old.getUserID(),
+                        old.getFirstName(),
+                        old.getLastName(),
+                        old.getUsername(),
+                        old.getPassword(),
+                        old.getRole(),
+                        old.getPhone(),
+                        old.getEmail());
         return user;
     }
 
@@ -107,7 +119,8 @@ public class ModelConverter {
         old.setMovieID(s.getMovieId() != null ? String.valueOf(s.getMovieId()) : null);
         old.setMovieHallID(s.getHallId() != null ? String.valueOf(s.getHallId()) : null);
         if (s.getShowDate() != null) {
-            old.setShowDate(Date.from(s.getShowDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            old.setShowDate(
+                    Date.from(s.getShowDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
         }
         old.setShowTime(s.getShowTime() != null ? s.getShowTime().toString() : null);
         old.setMovieName(s.getMovieName());
@@ -128,7 +141,8 @@ public class ModelConverter {
             s.setHallId(Long.parseLong(old.getMovieHallID()));
         }
         if (old.getShowDate() != null) {
-            s.setShowDate(old.getShowDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+            s.setShowDate(
+                    old.getShowDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         }
         if (old.getShowTime() != null && !old.getShowTime().isEmpty()) {
             s.setShowTime(LocalTime.parse(old.getShowTime()));
@@ -172,7 +186,8 @@ public class ModelConverter {
         old.setBookingStatus(b.getBookingStatus());
         old.setMovieName(b.getMovieName());
         if (b.getBookingDate() != null) {
-            old.setBookingDate(Date.from(b.getBookingDate().atZone(ZoneId.systemDefault()).toInstant()));
+            old.setBookingDate(
+                    Date.from(b.getBookingDate().atZone(ZoneId.systemDefault()).toInstant()));
         }
         return old;
     }
@@ -201,7 +216,8 @@ public class ModelConverter {
         old.setOtp(p.getOtp());
         old.setPaymentMethod(p.getPaymentMethod());
         if (p.getPaymentDate() != null) {
-            old.setPaymentDate(Date.from(p.getPaymentDate().atZone(ZoneId.systemDefault()).toInstant()));
+            old.setPaymentDate(
+                    Date.from(p.getPaymentDate().atZone(ZoneId.systemDefault()).toInstant()));
         }
         return old;
     }

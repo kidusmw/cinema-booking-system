@@ -1,18 +1,17 @@
 package ui.controller;
 
-import ui.model.Booking;
-import ui.model.Customer;
-import ui.view.CustomerDashboardPage;
+import static ui.common.Theme.*;
+
 import application.AppContext;
+import java.util.List;
+import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
-import javafx.geometry.*;
-
-import java.util.List;
-import static ui.common.Theme.*;
+import ui.model.Customer;
+import ui.view.CustomerDashboardPage;
 
 public class CustomerDashboardController {
     private CustomerDashboardPage view;
@@ -21,7 +20,8 @@ public class CustomerDashboardController {
     private AppContext ctx;
     private NavigationManager nav;
 
-    public CustomerDashboardController(Stage stage, AppContext ctx, NavigationManager nav, Customer currentUser) {
+    public CustomerDashboardController(
+            Stage stage, AppContext ctx, NavigationManager nav, Customer currentUser) {
         this.stage = stage;
         this.ctx = ctx;
         this.nav = nav;
@@ -33,18 +33,21 @@ public class CustomerDashboardController {
         stage.setScene(scene);
         stage.show();
         view.welcomeLabel.setText("Welcome, " + currentUser.getFirstName() + "!");
-        view.btnBrowseMovies.setOnAction(e -> nav.go(
-            () -> new CustomerDashboardController(stage, ctx, nav, currentUser),
-            () -> new MovieBrowserController(stage, ctx, nav, currentUser)
-        ));
-        view.btnMyBookings.setOnAction(e -> {
-            showMyBookings();
-        });
+        view.btnBrowseMovies.setOnAction(
+                e ->
+                        nav.go(
+                                () -> new CustomerDashboardController(stage, ctx, nav, currentUser),
+                                () -> new MovieBrowserController(stage, ctx, nav, currentUser)));
+        view.btnMyBookings.setOnAction(
+                e -> {
+                    showMyBookings();
+                });
         view.btnLogout.setOnAction(e -> nav.goFresh(() -> new WelcomeController(stage, ctx, nav)));
     }
 
     private void showMyBookings() {
-        List<domain.model.Booking> history = ctx.bookingService.getHistory((long) currentUser.getUserID());
+        List<domain.model.Booking> history =
+                ctx.bookingService.getHistory((long) currentUser.getUserID());
         if (history.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("My Bookings");
@@ -57,7 +60,9 @@ public class CustomerDashboardController {
             sb.append("===============================\n\n");
 
             for (domain.model.Booking b : history) {
-                sb.append("Movie: ").append(b.getMovieName() != null ? b.getMovieName() : "N/A").append("\n");
+                sb.append("Movie: ")
+                        .append(b.getMovieName() != null ? b.getMovieName() : "N/A")
+                        .append("\n");
                 sb.append("Date: ").append(b.getBookingDate()).append("\n");
                 sb.append("Booking ID: ").append(b.getBookingId()).append("\n");
                 sb.append("Status: ").append(b.getBookingStatus()).append("\n");

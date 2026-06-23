@@ -4,6 +4,7 @@ import application.AppContext;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import ui.view.WelcomePage;
+
 public class WelcomeController {
 
     private WelcomePage view;
@@ -19,10 +20,10 @@ public class WelcomeController {
         stage.setScene(scene);
         stage.show();
 
-        view.enterBtn.setOnAction(e -> nav.go(
-            () -> new WelcomeController(stage, ctx, nav),
-            () -> new UsertypeController(stage, ctx, nav)
-        ));
+        view.enterBtn.setOnAction(
+                e ->
+                        nav.go(
+                                () -> new WelcomeController(stage, ctx, nav),
+                                () -> new UsertypeController(stage, ctx, nav)));
     }
-
 }

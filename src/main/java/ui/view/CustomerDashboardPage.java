@@ -1,5 +1,7 @@
 package ui.view;
 
+import static ui.common.Theme.*;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -7,7 +9,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import static ui.common.Theme.*;
 
 public class CustomerDashboardPage {
 
@@ -43,10 +44,13 @@ public class CustomerDashboardPage {
         topBar.setAlignment(Pos.CENTER_LEFT);
         topBar.setPadding(new Insets(20, 30, 20, 30));
         topBar.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-width: 0 0 1 0;"
-        );
+                "-fx-background-color: "
+                        + WHITE
+                        + ";"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-width: 0 0 1 0;");
 
         HBox brandBox = new HBox(8);
         brandBox.setAlignment(Pos.CENTER_LEFT);
@@ -72,10 +76,7 @@ public class CustomerDashboardPage {
         btnLogout.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
         btnLogout.setTextFill(Color.web(TEXT_MUTED));
         btnLogout.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-padding: 8 16;"
-        );
+                "-fx-background-color: transparent;" + "-fx-cursor: hand;" + "-fx-padding: 8 16;");
 
         topBar.getChildren().addAll(brandBox, spacer, welcomeLabel, btnLogout);
         contentArea = new VBox(20);
@@ -99,22 +100,29 @@ public class CustomerDashboardPage {
         btnBrowseMovies.setPrefWidth(280);
         btnBrowseMovies.setTextFill(Color.WHITE);
         btnBrowseMovies.setStyle(
-                "-fx-background-color: " + ACCENT + ";" +
-                        "-fx-background-radius: 10;" +
-                        "-fx-cursor: hand;"
-        );
-        btnBrowseMovies.setOnMouseEntered(e -> btnBrowseMovies.setStyle(
-                "-fx-background-color: " + HOVER + ";" +
-                        "-fx-background-radius: 10;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-text-fill: white;"
-        ));
-        btnBrowseMovies.setOnMouseExited(e -> btnBrowseMovies.setStyle(
-                "-fx-background-color: " + ACCENT + ";" +
-                        "-fx-background-radius: 10;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-text-fill: white;"
-        ));
+                "-fx-background-color: "
+                        + ACCENT
+                        + ";"
+                        + "-fx-background-radius: 10;"
+                        + "-fx-cursor: hand;");
+        btnBrowseMovies.setOnMouseEntered(
+                e ->
+                        btnBrowseMovies.setStyle(
+                                "-fx-background-color: "
+                                        + HOVER
+                                        + ";"
+                                        + "-fx-background-radius: 10;"
+                                        + "-fx-cursor: hand;"
+                                        + "-fx-text-fill: white;"));
+        btnBrowseMovies.setOnMouseExited(
+                e ->
+                        btnBrowseMovies.setStyle(
+                                "-fx-background-color: "
+                                        + ACCENT
+                                        + ";"
+                                        + "-fx-background-radius: 10;"
+                                        + "-fx-cursor: hand;"
+                                        + "-fx-text-fill: white;"));
 
         heroBox.getChildren().addAll(welcomeText, subtitle, btnBrowseMovies);
         HBox quickActions = new HBox(20);
@@ -136,12 +144,15 @@ public class CustomerDashboardPage {
         Button btn = new Button();
         btn.setPrefSize(220, 130);
         btn.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 12;" +
-                        "-fx-background-radius: 12;" +
-                        "-fx-cursor: hand;"
-        );
+                "-fx-background-color: "
+                        + WHITE
+                        + ";"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 12;"
+                        + "-fx-background-radius: 12;"
+                        + "-fx-cursor: hand;");
 
         VBox content = new VBox(8);
         content.setAlignment(Pos.CENTER);

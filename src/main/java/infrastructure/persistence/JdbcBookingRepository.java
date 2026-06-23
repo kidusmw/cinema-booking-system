@@ -5,7 +5,6 @@ import domain.model.BookingSeat;
 import domain.port.BookingRepository;
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,17 +26,21 @@ public class JdbcBookingRepository implements BookingRepository {
     }
 
     private Booking insert(Booking booking) {
-        String sql = "INSERT INTO booking (user_id, show_id, movie_name, status, total_amount, booking_date) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql =
+                "INSERT INTO booking (user_id, show_id, movie_name, status, total_amount, booking_date) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = connectionProvider.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                PreparedStatement ps =
+                        conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setLong(1, booking.getUserId());
             ps.setLong(2, booking.getShowId());
             ps.setString(3, booking.getMovieName());
             ps.setString(4, booking.getBookingStatus());
             ps.setDouble(5, booking.getAmount());
-            ps.setTimestamp(6, booking.getBookingDate() != null
-                    ? Timestamp.valueOf(booking.getBookingDate())
-                    : Timestamp.valueOf(LocalDateTime.now()));
+            ps.setTimestamp(
+                    6,
+                    booking.getBookingDate() != null
+                            ? Timestamp.valueOf(booking.getBookingDate())
+                            : Timestamp.valueOf(LocalDateTime.now()));
             ps.executeUpdate();
             try (ResultSet keys = ps.getGeneratedKeys()) {
                 if (keys.next()) {
@@ -51,9 +54,10 @@ public class JdbcBookingRepository implements BookingRepository {
     }
 
     private Booking update(Booking booking) {
-        String sql = "UPDATE booking SET user_id=?, show_id=?, movie_name=?, status=?, total_amount=? WHERE booking_id=?";
+        String sql =
+                "UPDATE booking SET user_id=?, show_id=?, movie_name=?, status=?, total_amount=? WHERE booking_id=?";
         try (Connection conn = connectionProvider.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, booking.getUserId());
             ps.setLong(2, booking.getShowId());
             ps.setString(3, booking.getMovieName());
@@ -71,7 +75,7 @@ public class JdbcBookingRepository implements BookingRepository {
     public Optional<Booking> findById(Long id) {
         String sql = "SELECT * FROM booking WHERE booking_id = ?";
         try (Connection conn = connectionProvider.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -91,7 +95,7 @@ public class JdbcBookingRepository implements BookingRepository {
         String sql = "SELECT * FROM booking WHERE user_id = ? ORDER BY booking_date DESC";
         List<Booking> bookings = new ArrayList<>();
         try (Connection conn = connectionProvider.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -108,13 +112,14 @@ public class JdbcBookingRepository implements BookingRepository {
 
     @Override
     public List<Booking> findAll() {
-        String sql = "SELECT b.*, u.username FROM booking b " +
-                     "LEFT JOIN \"user\" u ON b.user_id = u.user_id " +
-                     "ORDER BY b.booking_id DESC";
+        String sql =
+                "SELECT b.*, u.username FROM booking b "
+                        + "LEFT JOIN \"user\" u ON b.user_id = u.user_id "
+                        + "ORDER BY b.booking_id DESC";
         List<Booking> bookings = new ArrayList<>();
         try (Connection conn = connectionProvider.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Booking booking = mapRow(rs);
                 booking.setSeats(findBookingSeats(booking.getBookingId()));
@@ -130,7 +135,7 @@ public class JdbcBookingRepository implements BookingRepository {
     public void cancel(Long bookingId) {
         String sql = "UPDATE booking SET status = 'cancelled' WHERE booking_id = ?";
         try (Connection conn = connectionProvider.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, bookingId);
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -142,15 +147,15 @@ public class JdbcBookingRepository implements BookingRepository {
         String sql = "SELECT * FROM booking_seat WHERE booking_id = ?";
         List<BookingSeat> seats = new ArrayList<>();
         try (Connection conn = connectionProvider.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, bookingId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    seats.add(new BookingSeat(
-                            rs.getLong("booking_id"),
-                            rs.getLong("seat_id"),
-                            rs.getDouble("price")
-                    ));
+                    seats.add(
+                            new BookingSeat(
+                                    rs.getLong("booking_id"),
+                                    rs.getLong("seat_id"),
+                                    rs.getDouble("price")));
                 }
             }
         } catch (SQLException e) {

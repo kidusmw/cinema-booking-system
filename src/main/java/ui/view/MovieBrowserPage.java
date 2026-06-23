@@ -1,5 +1,7 @@
 package ui.view;
 
+import static ui.common.Theme.*;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -7,7 +9,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import static ui.common.Theme.*;
 
 public class MovieBrowserPage {
 
@@ -42,10 +43,7 @@ public class MovieBrowserPage {
         btnBack.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
         btnBack.setTextFill(Color.web(TEXT_MUTED));
         btnBack.setStyle(
-                "-fx-background-color: transparent;" +
-                        "-fx-cursor: hand;" +
-                        "-fx-padding: 8 16;"
-        );
+                "-fx-background-color: transparent;" + "-fx-cursor: hand;" + "-fx-padding: 8 16;");
 
         VBox titleBox = new VBox(3);
         Label title = new Label("🎬 Now Showing");
@@ -65,12 +63,15 @@ public class MovieBrowserPage {
         searchField.setPrefWidth(300);
         searchField.setFont(Font.font("Segoe UI", 13));
         searchField.setStyle(
-                "-fx-background-color: " + WHITE + ";" +
-                        "-fx-border-color: " + BORDER + ";" +
-                        "-fx-border-radius: 8;" +
-                        "-fx-background-radius: 8;" +
-                        "-fx-padding: 8 14;"
-        );
+                "-fx-background-color: "
+                        + WHITE
+                        + ";"
+                        + "-fx-border-color: "
+                        + BORDER
+                        + ";"
+                        + "-fx-border-radius: 8;"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-padding: 8 14;");
 
         header.getChildren().addAll(btnBack, titleBox, spacer, searchField);
 

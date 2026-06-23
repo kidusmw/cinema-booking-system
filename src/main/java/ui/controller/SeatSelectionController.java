@@ -1,10 +1,11 @@
 package ui.controller;
 
-import application.ModelConverter;
-import java.util.stream.Collectors;
-import ui.model.*;
-import ui.view.SeatSelectionPage;
+import static ui.common.Theme.*;
+
 import application.AppContext;
+import application.ModelConverter;
+import java.util.*;
+import java.util.stream.Collectors;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -12,9 +13,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
-
-import java.util.*;
-import static ui.common.Theme.*;
+import ui.model.*;
+import ui.view.SeatSelectionPage;
 
 public class SeatSelectionController {
 
@@ -31,13 +31,19 @@ public class SeatSelectionController {
     private List<Seat> allSeats;
     private double seatPrice;
 
-
     private static final String AVAILABLE_COLOR = "#10B981";
     private static final String BOOKED_COLOR = "#EF4444";
     private static final String SELECTED_COLOR = "#DB2777";
 
-    public SeatSelectionController(Stage stage, AppContext ctx, NavigationManager nav, Customer currentUser, Movie selectedMovie,
-                                   Show selectedShow, Moviehall selectedHall, boolean isVIP) {
+    public SeatSelectionController(
+            Stage stage,
+            AppContext ctx,
+            NavigationManager nav,
+            Customer currentUser,
+            Movie selectedMovie,
+            Show selectedShow,
+            Moviehall selectedHall,
+            boolean isVIP) {
         this.stage = stage;
         this.ctx = ctx;
         this.nav = nav;
@@ -54,7 +60,8 @@ public class SeatSelectionController {
         stage.setScene(scene);
         stage.show();
         view.hallNameLabel.setText("🏛️ " + selectedHall.getName());
-        view.showInfoLabel.setText("🕐 " + selectedShow.getShowTime() + "  |  📅 " + selectedShow.getShowDate());
+        view.showInfoLabel.setText(
+                "🕐 " + selectedShow.getShowTime() + "  |  📅 " + selectedShow.getShowDate());
         view.priceLabel.setText(String.format("%.0f Birr per seat", seatPrice));
         loadSeats();
         view.btnBack.setOnAction(e -> nav.back());
@@ -63,10 +70,15 @@ public class SeatSelectionController {
 
     private void loadSeats() {
         view.seatGrid.getChildren().clear();
-        allSeats = ctx.seatRepo.findByHallId(Long.parseLong(selectedHall.getId())).stream().map(ModelConverter::toOldSeat).collect(Collectors.toList());
+        allSeats =
+                ctx.seatRepo.findByHallId(Long.parseLong(selectedHall.getId())).stream()
+                        .map(ModelConverter::toOldSeat)
+                        .collect(Collectors.toList());
 
         if (allSeats.isEmpty()) {
-            Label noSeats = new Label("No seats available. Please ensure seats are generated for this hall.");
+            Label noSeats =
+                    new Label(
+                            "No seats available. Please ensure seats are generated for this hall.");
             noSeats.setFont(Font.font("Segoe UI", 14));
             view.seatGrid.getChildren().add(noSeats);
             return;
@@ -111,7 +123,12 @@ public class SeatSelectionController {
             color = AVAILABLE_COLOR;
         }
 
-        btn.setStyle("-fx-background-color: " + color + "; -fx-text-fill: white; -fx-background-radius: 6; -fx-cursor: " + (clickable ? "hand" : "not-allowed") + ";");
+        btn.setStyle(
+                "-fx-background-color: "
+                        + color
+                        + "; -fx-text-fill: white; -fx-background-radius: 6; -fx-cursor: "
+                        + (clickable ? "hand" : "not-allowed")
+                        + ";");
 
         if (clickable) {
             final String seatId = seat.getSeatID();
@@ -125,17 +142,24 @@ public class SeatSelectionController {
     private void toggleSeatSelection(String seatId, Button btn) {
         if (selectedSeats.contains(seatId)) {
             selectedSeats.remove(seatId);
-            btn.setStyle("-fx-background-color: " + AVAILABLE_COLOR + "; -fx-text-fill: white; -fx-background-radius: 6; -fx-cursor: hand;");
+            btn.setStyle(
+                    "-fx-background-color: "
+                            + AVAILABLE_COLOR
+                            + "; -fx-text-fill: white; -fx-background-radius: 6; -fx-cursor: hand;");
         } else {
             if (selectedSeats.size() >= 8) {
                 showAlert("Limit Reached", "You can select maximum 8 seats at a time.");
                 return;
             }
             selectedSeats.add(seatId);
-            btn.setStyle("-fx-background-color: " + SELECTED_COLOR + "; -fx-text-fill: white; -fx-background-radius: 6; -fx-cursor: hand;");
+            btn.setStyle(
+                    "-fx-background-color: "
+                            + SELECTED_COLOR
+                            + "; -fx-text-fill: white; -fx-background-radius: 6; -fx-cursor: hand;");
         }
         updateSummary();
     }
+
     private void updateSummary() {
         int count = selectedSeats.size();
         double total = count * seatPrice;
@@ -148,9 +172,27 @@ public class SeatSelectionController {
     private void proceedToPayment() {
         if (selectedSeats.isEmpty()) return;
         nav.go(
-            () -> new SeatSelectionController(stage, ctx, nav, currentUser, selectedMovie, selectedShow, selectedHall, isVIP),
-            () -> new PaymentController(stage, ctx, nav, currentUser, selectedMovie, selectedShow, selectedHall, new ArrayList<>(selectedSeats), seatPrice)
-        );
+                () ->
+                        new SeatSelectionController(
+                                stage,
+                                ctx,
+                                nav,
+                                currentUser,
+                                selectedMovie,
+                                selectedShow,
+                                selectedHall,
+                                isVIP),
+                () ->
+                        new PaymentController(
+                                stage,
+                                ctx,
+                                nav,
+                                currentUser,
+                                selectedMovie,
+                                selectedShow,
+                                selectedHall,
+                                new ArrayList<>(selectedSeats),
+                                seatPrice));
     }
 
     private void showAlert(String title, String content) {
