@@ -17,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class TicketPage {
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(TicketPage.class);
 
     public Label successLabel;
     public Label movieTitle;
@@ -34,7 +35,6 @@ public class TicketPage {
 
     private VBox root;
 
-    private static final String HOVER = "#EC4899";
     private static final String WHITE = "#FFFFFF";
     private static final String BG = "#FAFAFA";
     private static final String BG_LIGHT = "#F8FAFC";
@@ -43,7 +43,7 @@ public class TicketPage {
         try {
             createUI();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to create TicketPage UI", e);
             root = new VBox();
             root.getChildren().add(new Label("Error: " + e.getMessage()));
         }

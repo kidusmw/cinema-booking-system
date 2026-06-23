@@ -11,6 +11,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class ShowSelectionPage {
+    private static final org.slf4j.Logger log =
+            org.slf4j.LoggerFactory.getLogger(ShowSelectionPage.class);
 
     public Button btnBack;
     public Label movieTitle;
@@ -30,7 +32,7 @@ public class ShowSelectionPage {
         try {
             createUI();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to create ShowSelectionPage UI", e);
             root = new VBox();
             root.getChildren().add(new Label("Error: " + e.getMessage()));
         }

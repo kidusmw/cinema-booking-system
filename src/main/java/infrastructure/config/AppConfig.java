@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class AppConfig {
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AppConfig.class);
 
     private final Properties props;
 
@@ -19,8 +20,7 @@ public class AppConfig {
                 props.load(in);
             }
         } catch (IOException e) {
-            System.out.println(
-                    "Failed to load config from " + resourcePath + ": " + e.getMessage());
+            log.warn("Failed to load config from {}: {}", resourcePath, e.getMessage());
         }
         return new AppConfig(props);
     }

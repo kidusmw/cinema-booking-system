@@ -12,6 +12,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class SeatSelectionPage {
+    private static final org.slf4j.Logger log =
+            org.slf4j.LoggerFactory.getLogger(SeatSelectionPage.class);
+
     public Button btnBack;
     public Label hallNameLabel;
     public Label showInfoLabel;
@@ -23,7 +26,6 @@ public class SeatSelectionPage {
     public Button btnProceed;
     public FlowPane seatContainer;
     private VBox root;
-    private static final String HOVER = "#EC4899";
     private static final String WHITE = "#FFFFFF";
     private static final String BG = "#FAFAFA";
 
@@ -31,7 +33,7 @@ public class SeatSelectionPage {
         try {
             createUI();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to create SeatSelectionPage UI", e);
             root = new VBox();
             root.getChildren().add(new Label("Error: " + e.getMessage()));
         }

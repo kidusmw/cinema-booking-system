@@ -11,6 +11,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class MovieBrowserPage {
+    private static final org.slf4j.Logger log =
+            org.slf4j.LoggerFactory.getLogger(MovieBrowserPage.class);
 
     public Button btnBack;
     public TextField searchField;
@@ -25,7 +27,7 @@ public class MovieBrowserPage {
         try {
             createUI();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to create MovieBrowserPage UI", e);
             root = new VBox();
             root.getChildren().add(new Label("Error: " + e.getMessage()));
         }

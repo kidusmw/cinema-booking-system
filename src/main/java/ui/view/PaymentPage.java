@@ -13,6 +13,8 @@ import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 
 public class PaymentPage {
+    private static final org.slf4j.Logger log =
+            org.slf4j.LoggerFactory.getLogger(PaymentPage.class);
 
     public Button btnBack;
     public TextField usernameField;
@@ -26,7 +28,6 @@ public class PaymentPage {
     public Label errorLabel;
     public VBox summaryBox;
     private VBox root;
-    private static final String HOVER = "#EC4899";
     private static final String WHITE = "#FFFFFF";
     private static final String BG = "#FAFAFA";
     private static final String BG_LIGHT = "#F8FAFC";
@@ -35,7 +36,7 @@ public class PaymentPage {
         try {
             createUI();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to create PaymentPage UI", e);
             root = new VBox();
             root.getChildren().add(new Label("Error: " + e.getMessage()));
         }

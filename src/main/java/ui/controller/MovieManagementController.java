@@ -23,18 +23,12 @@ public class MovieManagementController {
     private Stage stage;
     private AppContext ctx;
     private NavigationManager nav;
-    private AdminDashboardController dashboard; // Kept to navigate back
     private ObservableList<Movie> movieList;
 
-    public MovieManagementController(
-            Stage stage,
-            AppContext ctx,
-            NavigationManager nav,
-            AdminDashboardController dashboard) {
+    public MovieManagementController(Stage stage, AppContext ctx, NavigationManager nav) {
         this.stage = stage;
         this.ctx = ctx;
         this.nav = nav;
-        this.dashboard = dashboard;
         view = new MovieManagementPage();
 
         Scene scene = new Scene(view.getView(), 1200, 750);

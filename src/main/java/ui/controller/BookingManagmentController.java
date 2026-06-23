@@ -7,27 +7,21 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ui.model.Booking;
 import ui.view.BookingManagmentPage;
 
 public class BookingManagmentController {
+    private static final Logger log = LoggerFactory.getLogger(BookingManagmentController.class);
 
     private BookingManagmentPage view;
-    private Stage stage;
     private final AppContext ctx;
-    private final NavigationManager nav;
     private final AdminDashboardController dashboard;
     private ObservableList<Booking> masterList;
 
-    public BookingManagmentController(
-            Stage stage,
-            AppContext ctx,
-            NavigationManager nav,
-            AdminDashboardController dashboard) {
-        this.stage = stage;
+    public BookingManagmentController(AppContext ctx, AdminDashboardController dashboard) {
         this.ctx = ctx;
-        this.nav = nav;
         this.dashboard = dashboard;
         this.view = new BookingManagmentPage();
 
@@ -48,7 +42,7 @@ public class BookingManagmentController {
                                 .map(ModelConverter::toOldBooking)
                                 .collect(Collectors.toList()));
         view.bookingTable.setItems(masterList);
-        System.out.println("✅ Data Loaded: " + masterList.size() + " bookings.");
+        log.info("Data Loaded: {} bookings.", masterList.size());
     }
 
     private void filterBookings(String searchText) {

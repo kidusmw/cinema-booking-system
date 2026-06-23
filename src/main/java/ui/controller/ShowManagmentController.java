@@ -14,16 +14,13 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import ui.model.Show;
 import ui.view.ShowManagementPage;
 
 public class ShowManagmentController {
 
     private final ShowManagementPage view;
-    private final Stage stage;
     private final AppContext ctx;
-    private final NavigationManager nav;
     private final AdminDashboardController dashboard;
     private ObservableList<Show> showList;
     private final Map<String, String> movieMap = new HashMap<>();
@@ -31,14 +28,8 @@ public class ShowManagmentController {
     private final Map<String, String> movieMapById = new HashMap<>();
     private final Map<String, String> hallMapById = new HashMap<>();
 
-    public ShowManagmentController(
-            Stage stage,
-            AppContext ctx,
-            NavigationManager nav,
-            AdminDashboardController dashboard) {
-        this.stage = stage;
+    public ShowManagmentController(AppContext ctx, AdminDashboardController dashboard) {
         this.ctx = ctx;
-        this.nav = nav;
         this.dashboard = dashboard;
         this.view = new ShowManagementPage();
         loadLiveDatabaseDropdownMaps();

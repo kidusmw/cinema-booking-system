@@ -9,7 +9,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.stage.Stage;
 import ui.model.User;
 import ui.view.UserManagmentPage;
 
@@ -17,20 +16,12 @@ public class UserManagmentController {
     private static final org.slf4j.Logger log =
             org.slf4j.LoggerFactory.getLogger(UserManagmentController.class);
     private final UserManagmentPage view;
-    private final Stage stage;
     private final AppContext ctx;
-    private final NavigationManager nav;
     private final AdminDashboardController dashboard;
     private ObservableList<User> userList = FXCollections.observableArrayList();
 
-    public UserManagmentController(
-            Stage stage,
-            AppContext ctx,
-            NavigationManager nav,
-            AdminDashboardController dashboard) {
-        this.stage = stage;
+    public UserManagmentController(AppContext ctx, AdminDashboardController dashboard) {
         this.ctx = ctx;
-        this.nav = nav;
         this.dashboard = dashboard;
         this.view = new UserManagmentPage();
         view.roleDropdown.getItems().setAll("ADMIN", "CUSTOMER");

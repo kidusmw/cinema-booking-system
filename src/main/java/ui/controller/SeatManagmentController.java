@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 import ui.model.Moviehall;
 import ui.model.Seat;
 import ui.view.SeatManagmentPage;
@@ -17,21 +16,13 @@ public class SeatManagmentController {
     private static final org.slf4j.Logger log =
             org.slf4j.LoggerFactory.getLogger(SeatManagmentController.class);
     private SeatManagmentPage view;
-    private Stage stage;
     private final AppContext ctx;
     private final NavigationManager nav;
-    private final AdminDashboardController dashboard;
     private Moviehall selectedHall;
 
-    public SeatManagmentController(
-            Stage stage,
-            AppContext ctx,
-            NavigationManager nav,
-            AdminDashboardController dashboard) {
-        this.stage = stage;
+    public SeatManagmentController(AppContext ctx, NavigationManager nav) {
         this.ctx = ctx;
         this.nav = nav;
-        this.dashboard = dashboard;
         this.view = new SeatManagmentPage();
         loadHalls();
         view.btnBack.setOnAction(e -> handleBack());
@@ -93,11 +84,8 @@ public class SeatManagmentController {
         if (selectedHall == null) return;
 
         String countText = view.seatCountField.getText().trim();
-        System.out.println(
-                "DEBUG: Attempting to generate "
-                        + countText
-                        + " seats for Hall ID: "
-                        + selectedHall.getId());
+        log.debug(
+                "Attempting to generate {} seats for Hall ID: {}", countText, selectedHall.getId());
 
         try {
             int seatCount = Integer.parseInt(countText);
@@ -112,7 +100,7 @@ public class SeatManagmentController {
 
                 ctx.seatRepo.save(ModelConverter.toDomainSeat(seat));
             }
-            System.out.println("DEBUG: Generation loop finished.");
+            log.debug("Generation loop finished.");
             loadSeatsForSelectedHall();
             showAlert("Success", "Seats generated.");
         } catch (Exception e) {

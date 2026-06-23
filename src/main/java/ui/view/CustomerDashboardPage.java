@@ -11,6 +11,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class CustomerDashboardPage {
+    private static final org.slf4j.Logger log =
+            org.slf4j.LoggerFactory.getLogger(CustomerDashboardPage.class);
 
     public Label welcomeLabel;
     public Button btnBrowseMovies;
@@ -29,7 +31,7 @@ public class CustomerDashboardPage {
         try {
             createUI();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to create CustomerDashboardPage UI", e);
             root = new VBox();
             root.getChildren().add(new Label("Error: " + e.getMessage()));
         }

@@ -8,7 +8,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
-import javax.swing.*;
 import ui.model.*;
 import ui.view.TicketPage;
 

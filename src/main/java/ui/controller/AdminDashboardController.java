@@ -93,42 +93,42 @@ public class AdminDashboardController {
         setActiveMenu(view.btnMovies);
         nav.go(
                 () -> new AdminDashboardController(stage, ctx, nav, adminName),
-                () -> new MovieManagementController(stage, ctx, nav, this));
+                () -> new MovieManagementController(stage, ctx, nav));
     }
 
     private void showShows() {
         setActiveMenu(view.btnShows);
-        ShowManagmentController c = new ShowManagmentController(stage, ctx, nav, this);
+        ShowManagmentController c = new ShowManagmentController(ctx, this);
         injectView(c.getRootView());
     }
 
     private void showHalls() {
         setActiveMenu(view.btnHalls);
-        MoviehallManagmentController c = new MoviehallManagmentController(stage, ctx, nav, this);
+        MoviehallManagmentController c = new MoviehallManagmentController(stage, ctx, nav);
         injectView(c.getRootView());
     }
 
     private void showSeats() {
         setActiveMenu(view.btnSeats);
-        SeatManagmentController c = new SeatManagmentController(stage, ctx, nav, this);
+        SeatManagmentController c = new SeatManagmentController(ctx, nav);
         injectView(c.getRootView());
     }
 
     private void showBookings() {
         setActiveMenu(view.btnBookings);
-        BookingManagmentController c = new BookingManagmentController(stage, ctx, nav, this);
+        BookingManagmentController c = new BookingManagmentController(ctx, this);
         injectView(c.getRootView());
     }
 
     private void showPayments() {
         setActiveMenu(view.btnPayments);
-        PaymentManagmentController c = new PaymentManagmentController(stage, ctx, nav, this);
+        PaymentManagmentController c = new PaymentManagmentController(ctx, this);
         injectView(c.getRootView());
     }
 
     private void showUsers() {
         setActiveMenu(view.btnUsers);
-        UserManagmentController c = new UserManagmentController(stage, ctx, nav, this);
+        UserManagmentController c = new UserManagmentController(ctx, this);
         injectView(c.getRootView());
     }
 
