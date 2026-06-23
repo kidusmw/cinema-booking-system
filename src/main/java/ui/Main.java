@@ -12,8 +12,8 @@ import infrastructure.security.BCryptPasswordHasher;
 import infrastructure.security.PasswordHasher;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import ui.controller.NavigationManager;
-import ui.controller.WelcomeController;
+import ui.controller.common.NavigationManager;
+import ui.controller.common.WelcomeController;
 
 public class Main extends Application {
 

@@ -151,4 +151,32 @@ class DomainModelTest {
         Movie movie = new Movie(1L, "Test", "Action", 142, 8.5, "Desc", null, "EN", "/poster.jpg");
         assertEquals("2h 22m", movie.getFormattedDuration());
     }
+
+    @Test
+    void movieFormattedDurationZero() {
+        Movie movie = new Movie(2L, "Test", "Action", 0, 0, "Desc", null, "EN", null);
+        assertEquals("0h 0m", movie.getFormattedDuration());
+    }
+
+    @Test
+    void bookingAddSeatAccumulatesTotal() {
+        Booking booking = new Booking(1L, 1L, 1L, LocalDateTime.now(), 0, "pending");
+        booking.addSeat(new BookingSeat(1L, 1L, 25.0));
+        booking.addSeat(new BookingSeat(1L, 2L, 25.0));
+        booking.addSeat(new BookingSeat(1L, 3L, 50.0));
+        assertEquals(100.0, booking.total());
+    }
+
+    @Test
+    void bookingTotalZeroWhenNoSeats() {
+        Booking booking = new Booking(1L, 1L, 1L, LocalDateTime.now(), 0, "pending");
+        assertEquals(0.0, booking.total());
+    }
+
+    @Test
+    void showtimeIsNotPastWhenToday() {
+        Showtime show =
+                new Showtime(1L, 1L, 1L, LocalDate.now(), LocalTime.now().plusHours(2), 10.0);
+        assertFalse(show.isPast());
+    }
 }

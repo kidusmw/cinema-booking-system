@@ -60,4 +60,22 @@ class PaymentServiceTest {
         when(paymentRepo.findById(999L)).thenReturn(Optional.empty());
         assertFalse(paymentService.verifyOtp(999L, "ABC123"));
     }
+
+    @Test
+    void refundMarksPaymentFailed() {
+        Payment payment = new Payment(1L, 1L, 100.0, "pending", "ABC123", "card");
+        when(paymentRepo.findById(1L)).thenReturn(Optional.of(payment));
+        when(paymentRepo.save(any())).thenAnswer(inv -> inv.getArgument(0));
+
+        paymentService.refund(1L);
+
+        assertEquals("failed", payment.getStatus());
+        verify(paymentRepo).save(payment);
+    }
+
+    @Test
+    void refundThrowsWhenPaymentNotFound() {
+        when(paymentRepo.findById(999L)).thenReturn(Optional.empty());
+        assertThrows(IllegalArgumentException.class, () -> paymentService.refund(999L));
+    }
 }
