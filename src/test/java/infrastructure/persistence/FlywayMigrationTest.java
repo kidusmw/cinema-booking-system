@@ -28,7 +28,7 @@ class FlywayMigrationTest {
                     .withPassword("test_pass");
 
     @Test
-    void bothMigrationsApplySuccessfully() {
+    void allMigrationsApplySuccessfully() {
         String jdbcUrl = postgres.getJdbcUrl();
         String user = postgres.getUsername();
         String password = postgres.getPassword();
@@ -42,7 +42,7 @@ class FlywayMigrationTest {
         MigrateResult result = flyway.migrate();
 
         assertThat(result.success).isTrue();
-        assertThat(result.migrationsExecuted).isEqualTo(2);
+        assertThat(result.migrationsExecuted).isEqualTo(3);
 
         // Verify all expected tables exist
         String[] expectedTables = {
