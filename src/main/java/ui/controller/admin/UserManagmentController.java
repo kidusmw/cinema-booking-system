@@ -135,7 +135,7 @@ public class UserManagmentController {
 
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            ctx.userRepo.delete((long) selected.getUserId());
+            ctx.userRepo.delete(selected.getUserId());
             showAlert("Success", "User account wiped successfully.");
             loadUsers();
         }

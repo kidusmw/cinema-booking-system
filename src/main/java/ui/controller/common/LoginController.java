@@ -49,10 +49,10 @@ public class LoginController {
 
         User user = userOpt.get();
 
-        if ("admin".equalsIgnoreCase(expectedRole) && user instanceof User) {
+        if ("admin".equalsIgnoreCase(expectedRole)) {
             nav.goFresh(() -> new AdminDashboardController(stage, ctx, nav, user.getFirstName()));
-        } else if ("customer".equalsIgnoreCase(expectedRole) && user instanceof User) {
-            nav.goFresh(() -> new CustomerDashboardController(stage, ctx, nav, (User) user));
+        } else if ("customer".equalsIgnoreCase(expectedRole)) {
+            nav.goFresh(() -> new CustomerDashboardController(stage, ctx, nav, user));
         } else {
             view.errorLabel.setText("Role mismatch or invalid user type");
             view.errorLabel.setVisible(true);

@@ -180,7 +180,7 @@ public class PaymentController {
         try {
             List<Long> domainSeatIds =
                     selectedSeatIds.stream().map(Long::parseLong).collect(Collectors.toList());
-            Long userId = (long) currentUser.getUserId();
+            Long userId = currentUser.getUserId();
             Long showId = selectedShow.getShowId();
             ctx.bookingFacade.bookAndPay(userId, showId, domainSeatIds, totalAmount, "CARD");
             showSuccessAndTicket();

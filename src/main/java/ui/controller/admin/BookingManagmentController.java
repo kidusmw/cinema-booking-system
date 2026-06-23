@@ -63,7 +63,7 @@ public class BookingManagmentController {
             showAlert("No Selection", "Please select a booking to cancel.");
             return;
         }
-        ctx.bookingService.cancelBooking((long) selected.getBookingId());
+        ctx.bookingService.cancelBooking(selected.getBookingId());
         showAlert("Success", "Booking Cancelled");
         loadTableData();
     }

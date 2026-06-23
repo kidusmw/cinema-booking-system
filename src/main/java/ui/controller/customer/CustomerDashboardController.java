@@ -48,8 +48,7 @@ public class CustomerDashboardController {
     }
 
     private void showMyBookings() {
-        List<domain.model.Booking> history =
-                ctx.bookingService.getHistory((long) currentUser.getUserId());
+        List<domain.model.Booking> history = ctx.bookingService.getHistory(currentUser.getUserId());
         if (history.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("My Bookings");
