@@ -1,5 +1,6 @@
 package Controller;
 
+import application.AppContext;
 import DAO.ShowDAO;
 import DAO.ShowDAOimp;
 import Model.Show;
@@ -24,6 +25,7 @@ public class ShowManagmentController {
 
     private final ShowManagementPage view;
     private final Stage stage;
+    private final AppContext ctx;
     private final AdminDashboardController dashboard;
     private final ShowDAO showDAO = new ShowDAOimp();
     private ObservableList<Show> showList;
@@ -34,9 +36,11 @@ public class ShowManagmentController {
 
     public ShowManagmentController(
         Stage stage,
+        AppContext ctx,
         AdminDashboardController dashboard
     ) {
         this.stage = stage;
+        this.ctx = ctx;
         this.dashboard = dashboard;
         this.view = new ShowManagementPage();
         loadLiveDatabaseDropdownMaps();

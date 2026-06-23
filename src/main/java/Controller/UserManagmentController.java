@@ -1,5 +1,6 @@
 package Controller;
 
+import application.AppContext;
 import DAO.UserDAO;
 import DAO.UserDAOimp;
 import Model.User;
@@ -16,12 +17,14 @@ public class UserManagmentController {
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(UserManagmentController.class);
     private final UserManagmentPage view;
     private final Stage stage;
+    private final AppContext ctx;
     private final AdminDashboardController dashboard;
     private final UserDAO userDAO = new UserDAOimp();
     private ObservableList<User> userList = FXCollections.observableArrayList();
 
-    public UserManagmentController(Stage stage, AdminDashboardController dashboard) {
+    public UserManagmentController(Stage stage, AppContext ctx, AdminDashboardController dashboard) {
         this.stage = stage;
+        this.ctx = ctx;
         this.dashboard = dashboard;
         this.view = new UserManagmentPage();
         view.roleDropdown.getItems().setAll("ADMIN", "CUSTOMER");

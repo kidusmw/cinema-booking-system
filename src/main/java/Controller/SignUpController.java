@@ -1,23 +1,21 @@
 package Controller;
 
-import DAO.UserDAOimp;
 import Model.User;
 import View.SingUpPage;
+import application.AppContext;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-import Model.Customer;
-import Model.Admin;
-import java.util.Date;
 
 public class SignUpController {
-    private final UserDAOimp userDAO = new UserDAOimp();
+    private final AppContext ctx;
     private SingUpPage view;
     private String role;
     private Stage stage;
 
-    public SignUpController(Stage stage, String role) {
+    public SignUpController(Stage stage, AppContext ctx, String role) {
         this.stage = stage;
+        this.ctx = ctx;
         this.role = role;
         view = new SingUpPage();
         Scene scene = new Scene(view.getView(), 800, 700);
@@ -30,10 +28,10 @@ public class SignUpController {
 
         view.backBtn.setOnAction(e -> {
             NavigationManager.pop();
-            new AuthChoiceController(stage, role);
+            new AuthChoiceController(stage, ctx, role);
         });
 
-        view.loginLink.setOnAction(e -> new LoginController(stage, role));
+        view.loginLink.setOnAction(e -> new LoginController(stage, ctx, role));
     }
 
     private void handleSignUp() {
@@ -50,31 +48,16 @@ public class SignUpController {
             return;
         }
 
-        if (userDAO.isUsernameExists(username)) {
+        if (ctx.userRepo.findByUsername(username).isPresent()) {
             showError("Username already taken.");
             return;
         }
 
-        User newUser;
-        if ("admin".equalsIgnoreCase(role)) {
-            newUser = new Admin();
-        } else {
-            newUser = new Customer();
-        }
-        newUser.setFirstName(firstName);
-        newUser.setLastName(lastName);
-        newUser.setUsername(username);
-        newUser.setPassword(password);
-        newUser.setEmail(email);
-        newUser.setPhone(phone);
-        newUser.setRole(role.toUpperCase());
-        newUser.setLoginStatus("active");
-        newUser.setRegistrationDate(new Date());
-
-        if (userDAO.addUser(newUser)) {
+        try {
+            ctx.authService.register(username, password, firstName, lastName, role, phone, email);
             showInfo("Account Created", "Welcome, " + firstName + "!");
-            new LoginController(stage, role);
-        } else {
+            new LoginController(stage, ctx, role);
+        } catch (Exception e) {
             showError("Failed to create account.");
         }
     }

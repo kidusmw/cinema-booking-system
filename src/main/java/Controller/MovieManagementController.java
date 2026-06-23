@@ -1,4 +1,5 @@
 package Controller;
+import application.AppContext;
 import View.MovieManagemnetPage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,12 +22,14 @@ import java.util.Optional;
 public class MovieManagementController {
     private MovieManagemnetPage view;
     private Stage stage;
+    private AppContext ctx;
     private AdminDashboardController dashboard; // Kept to navigate back
     private final MovieDAO movieDAO = new MovieDAO();
     private ObservableList<Movie> movieList;
 
-    public MovieManagementController(Stage stage, AdminDashboardController dashboard) {
+    public MovieManagementController(Stage stage, AppContext ctx, AdminDashboardController dashboard) {
         this.stage = stage;
+        this.ctx = ctx;
         this.dashboard = dashboard;
         view = new MovieManagemnetPage();
 
@@ -62,7 +65,7 @@ public class MovieManagementController {
     }
 
     private void handleBackToDashboard() {
-            new AdminDashboardController(stage, dashboard.getAdminName());
+            new AdminDashboardController(stage, ctx, dashboard.getAdminName());
         }
 
         private void loadMovies() {

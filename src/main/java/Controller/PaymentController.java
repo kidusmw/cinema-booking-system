@@ -5,6 +5,7 @@ import DAO.PaymentDAO;
 import DAO.PaymentDAOimp;
 import Model.*;
 import View.PaymentPage;
+import application.AppContext;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Insets;
@@ -37,6 +38,7 @@ public class PaymentController {
     private List<String> selectedSeatIds;
     private double totalAmount;
     private boolean isVIP;
+    private AppContext ctx;
     private final PaymentDAO paymentDAO = new PaymentDAOimp();
     private final BookingDAO bookingDAO = new BookingDAO();
     private Timeline countdownTimer;
@@ -48,8 +50,9 @@ public class PaymentController {
 
 
 
-    public PaymentController(Stage stage, Customer currentUser, Movie selectedMovie, Show selectedShow, Moviehall selectedHall, List<String> selectedSeatIds, double seatPrice) {
+    public PaymentController(Stage stage, AppContext ctx, Customer currentUser, Movie selectedMovie, Show selectedShow, Moviehall selectedHall, List<String> selectedSeatIds, double seatPrice) {
         this.stage = stage;
+        this.ctx = ctx;
         this.currentUser = currentUser;
         this.selectedMovie = selectedMovie;
         this.selectedShow = selectedShow;
@@ -188,7 +191,7 @@ public class PaymentController {
 
 
     private void showSuccessAndTicket() {
-        new TicketController(stage, currentUser, selectedMovie, selectedShow, selectedHall,
+        new TicketController(stage, ctx, currentUser, selectedMovie, selectedShow, selectedHall,
                 selectedSeatIds, totalAmount, new ArrayList<>());
     }
 
@@ -198,6 +201,6 @@ public class PaymentController {
 
     private void goBack() {
         countdownTimer.stop();
-        new SeatSelectionController(stage, currentUser, selectedMovie, selectedShow, selectedHall, isVIP);
+        new SeatSelectionController(stage, ctx, currentUser, selectedMovie, selectedShow, selectedHall, isVIP);
     }
 }

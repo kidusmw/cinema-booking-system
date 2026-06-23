@@ -1,5 +1,6 @@
 package Controller;
 
+import application.AppContext;
 import DAO.BookingDAO;
 import Model.Booking;
 import View.BookingManagmentPage;
@@ -13,12 +14,14 @@ public class BookingManagmentController {
 
     private BookingManagmentPage view;
     private Stage stage;
+    private final AppContext ctx;
     private final AdminDashboardController dashboard;
     private final BookingDAO bookingDAO = new BookingDAO();
     private ObservableList<Booking> masterList;
 
-    public BookingManagmentController(Stage stage, AdminDashboardController dashboard) {
+    public BookingManagmentController(Stage stage, AppContext ctx, AdminDashboardController dashboard) {
         this.stage = stage;
+        this.ctx = ctx;
         this.dashboard = dashboard;
         this.view = new BookingManagmentPage();
 

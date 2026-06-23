@@ -1,5 +1,6 @@
 package Controller;
 
+import application.AppContext;
 import DAO.MovieHallDAO;
 import Model.Moviehall;
 import View.MovieHallManagmentPage;
@@ -21,12 +22,14 @@ public class MoviehallManagmentController {
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(MoviehallManagmentController.class);
     private MovieHallManagmentPage view;
     private Stage stage;
+    private final AppContext ctx;
     private final AdminDashboardController dashboard;
     private final MovieHallDAO hallDAO = new MovieHallDAO();
     private ObservableList<Moviehall> hallList;
 
-    public MoviehallManagmentController(Stage stage, AdminDashboardController dashboard) {
+    public MoviehallManagmentController(Stage stage, AppContext ctx, AdminDashboardController dashboard) {
         this.stage = stage;
+        this.ctx = ctx;
         this.dashboard = dashboard;
         this.view = new MovieHallManagmentPage();
 
@@ -139,7 +142,7 @@ public class MoviehallManagmentController {
     }
     private void handleBack() {
         System.out.println("Going back to admin dashboard...");
-        new AdminDashboardController(stage, dashboard.getAdminName());
+        new AdminDashboardController(stage, ctx, dashboard.getAdminName());
     }
 
     private Dialog<Moviehall> createHallDialog(Moviehall existing) {

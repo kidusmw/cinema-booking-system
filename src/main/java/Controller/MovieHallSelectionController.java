@@ -7,6 +7,7 @@ import View.MovieHallSelectionPage;
 import DAO.MovieHallDAO;
 import DAO.SeatDAO;
 import DAO.SeatDAOimp;
+import application.AppContext;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -28,13 +29,14 @@ public class MovieHallSelectionController {
     private Customer currentUser;
     private Movie selectedMovie;
     private Show selectedShow;
+    private AppContext ctx;
     private final MovieHallDAO hallDAO = new MovieHallDAO();
     private final SeatDAO seatDAO = new SeatDAOimp();
-    private static final String HOVER = "#EC4899";
     private static final String WHITE = "#FFFFFF";
 
-    public MovieHallSelectionController(Stage stage, Customer currentUser, Movie selectedMovie, Show selectedShow) {
+    public MovieHallSelectionController(Stage stage, AppContext ctx, Customer currentUser, Movie selectedMovie, Show selectedShow) {
         this.stage = stage;
+        this.ctx = ctx;
         this.currentUser = currentUser;
         this.selectedMovie = selectedMovie;
         this.selectedShow = selectedShow;
@@ -46,7 +48,7 @@ public class MovieHallSelectionController {
         view.showInfoLabel.setText("🕐 " + selectedShow.getShowTime() + "  |  📅 " + selectedShow.getShowDate());
         loadHalls();
         view.btnBack.setOnAction(e -> {
-            new ShowSelectionController(stage, currentUser, selectedMovie);
+            new ShowSelectionController(stage, ctx, currentUser, selectedMovie);
         });
     }
     private void loadHalls() {
@@ -165,14 +167,14 @@ public class MovieHallSelectionController {
                         "-fx-cursor: hand;"
         );
         selectBtn.setOnAction(e -> {
-            new SeatSelectionController(stage, currentUser, selectedMovie, selectedShow, hall, isVIP);
+            new SeatSelectionController(stage, ctx, currentUser, selectedMovie, selectedShow, hall, isVIP);
         });
 
         card.getChildren().addAll(topRow, detailsRow, selectBtn);
 
         card.setOnMouseClicked(e -> {
             if (e.getClickCount() == 1) {
-                new SeatSelectionController(stage, currentUser, selectedMovie, selectedShow, hall, isVIP);
+                new SeatSelectionController(stage, ctx, currentUser, selectedMovie, selectedShow, hall, isVIP);
             }
         });
 

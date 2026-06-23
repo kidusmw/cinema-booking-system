@@ -1,5 +1,6 @@
 package Controller;
 
+import application.AppContext;
 import DAO.MovieHallDAO;
 import DAO.SeatDAO;
 import DAO.SeatDAOimp;
@@ -20,13 +21,15 @@ public class SeatManagmentController {
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(SeatManagmentController.class);
     private SeatManagmentPage view;
     private Stage stage;
+    private final AppContext ctx;
     private final AdminDashboardController dashboard;
     private final MovieHallDAO hallDAO = new MovieHallDAO();
     private final SeatDAO seatDAO = new SeatDAOimp();
     private Moviehall selectedHall;
 
-    public SeatManagmentController(Stage stage, AdminDashboardController dashboard) {
+    public SeatManagmentController(Stage stage, AppContext ctx, AdminDashboardController dashboard) {
         this.stage = stage;
+        this.ctx = ctx;
         this.dashboard = dashboard;
         this.view = new SeatManagmentPage();
         loadHalls();
@@ -107,7 +110,7 @@ public class SeatManagmentController {
     }
 
     private void handleBack() {
-        new AdminDashboardController(stage, dashboard.getAdminName());
+        new AdminDashboardController(stage, ctx, dashboard.getAdminName());
     }
 
     private void showAlert(String title, String content) {

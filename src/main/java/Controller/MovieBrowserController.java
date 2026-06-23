@@ -5,6 +5,7 @@ import Controller.ShowSelectionController;
 import DAO.MovieDAO;
 import Model.Customer;
 import Model.Movie;
+import application.AppContext;
 import View.MovieBrowserpage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,11 +28,13 @@ public class MovieBrowserController{
     private MovieBrowserpage view;
     private Stage stage;
     private Customer currentUser;
+    private AppContext ctx;
     private final MovieDAO movieDAO = new MovieDAO();
     private ObservableList<Movie> movies;
 
-    public MovieBrowserController(Stage stage, Customer currentUser) {
+    public MovieBrowserController(Stage stage, AppContext ctx, Customer currentUser) {
         this.stage = stage;
+        this.ctx = ctx;
         this.currentUser = currentUser;
         this.view = new MovieBrowserpage();
         Scene scene = new Scene(view.getView(), 1200, 750);
@@ -40,7 +43,7 @@ public class MovieBrowserController{
         stage.show();
         loadMovies();
         view.btnBack.setOnAction(e -> {
-            new CustomerDashboardController(stage, currentUser);
+            new CustomerDashboardController(stage, ctx, currentUser);
         });
         view.searchField.textProperty().addListener((obs, old, newVal) -> filterMovies(newVal));
     }
@@ -143,7 +146,7 @@ public class MovieBrowserController{
 
         card.getChildren().addAll(poster, info);
         card.setOnMouseClicked(e -> {
-            new ShowSelectionController(stage, currentUser, movie);
+            new ShowSelectionController(stage, ctx, currentUser, movie);
         });
 
         return card;

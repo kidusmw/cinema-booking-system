@@ -1,4 +1,5 @@
 package Controller;
+import application.AppContext;
 import DAO.PaymentDAO;
 import DAO.PaymentDAOimp;
 import Model.Payment;
@@ -11,12 +12,14 @@ import javafx.stage.Stage;
 public class PaymentManagmentController {
     private final PaymentManagment view;
     private final Stage stage;
+    private final AppContext ctx;
     private final AdminDashboardController dashboard;
     private final PaymentDAO paymentDAO = new PaymentDAOimp();
     private final ObservableList<Payment> list = FXCollections.observableArrayList();
 
-    public PaymentManagmentController(Stage stage, AdminDashboardController dashboard) {
+    public PaymentManagmentController(Stage stage, AppContext ctx, AdminDashboardController dashboard) {
         this.stage = stage;
+        this.ctx = ctx;
         this.dashboard = dashboard;
         this.view = new PaymentManagment();
 
