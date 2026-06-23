@@ -8,6 +8,8 @@ import java.util.List;
 
 public class PaymentDAOimp implements PaymentDAO {
 
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(PaymentDAOimp.class);
+
     public boolean addPayment(Payment payment) {
         String sql =
             "INSERT INTO Payment (Status, Total_Amount, Verification_code, Booking_ID) VALUES (?, ?, ?, ?)";
@@ -25,17 +27,14 @@ public class PaymentDAOimp implements PaymentDAO {
             int rows = ps.executeUpdate();
 
             if (rows > 0) {
-                System.out.println("DEBUG: Payment inserted successfully!");
+                log.debug("Payment inserted successfully");
                 return true;
             } else {
-                System.out.println(
-                    "DEBUG: Database rejected the insert. Check if BookingID exists."
-                );
+                log.warn("Database rejected the insert. Check if BookingID exists.");
                 return false;
             }
         } catch (SQLException e) {
-            System.err.println("DEBUG: SQL EXCEPTION: " + e.getMessage());
-            e.printStackTrace();
+            log.error("SQL EXCEPTION: {}", e.getMessage(), e);
         }
         return false;
     }
@@ -57,7 +56,7 @@ public class PaymentDAOimp implements PaymentDAO {
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return false;
     }
@@ -73,7 +72,7 @@ public class PaymentDAOimp implements PaymentDAO {
             ps.setString(1, paymentID);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return false;
     }
@@ -93,7 +92,7 @@ public class PaymentDAOimp implements PaymentDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return null;
     }
@@ -112,7 +111,7 @@ public class PaymentDAOimp implements PaymentDAO {
                 list.add(mapResultSetToPayment(rs));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return list;
     }
@@ -132,7 +131,7 @@ public class PaymentDAOimp implements PaymentDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return null;
     }
@@ -156,7 +155,7 @@ public class PaymentDAOimp implements PaymentDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return false;
     }
@@ -173,7 +172,7 @@ public class PaymentDAOimp implements PaymentDAO {
             ps.setString(2, paymentID);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return false;
     }

@@ -12,7 +12,6 @@ public interface SeatDAO {
     List<Seat> getAllSeats();
     boolean updateSeatStatus(String seatID, String status);
     boolean isSeatAvailable(String seatID);
-    List<Seat> getSeatsByShow(String showID);
     List<Seat> getSeatsByHall(String movieHallID);
     List<Seat> getAvailableSeatsByHall(String movieHallID);
     boolean isSeatBookedForShow(int seatID, String showID);

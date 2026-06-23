@@ -10,6 +10,8 @@ import java.util.List;
 
 public class UserDAOimp implements UserDAO {
 
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(UserDAOimp.class);
+
     @Override
     public boolean addUser(User user) {
         String sql =
@@ -42,7 +44,7 @@ public class UserDAOimp implements UserDAO {
 
             return rows > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return false;
     }
@@ -68,7 +70,7 @@ public class UserDAOimp implements UserDAO {
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return false;
     }
@@ -84,7 +86,7 @@ public class UserDAOimp implements UserDAO {
             ps.setInt(1, userID);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return false;
     }
@@ -104,7 +106,7 @@ public class UserDAOimp implements UserDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return null;
     }
@@ -124,7 +126,7 @@ public class UserDAOimp implements UserDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return false;
     }
@@ -145,7 +147,7 @@ public class UserDAOimp implements UserDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return null;
     }
@@ -164,7 +166,7 @@ public class UserDAOimp implements UserDAO {
                 list.add(mapResultSetToUser(rs));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error("Database operation failed", e);
         }
         return list;
     }

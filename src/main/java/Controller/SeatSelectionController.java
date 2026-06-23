@@ -13,6 +13,7 @@ import javafx.scene.text.*;
 import javafx.stage.Stage;
 
 import java.util.*;
+import static ui.common.Theme.*;
 
 public class SeatSelectionController {
 
@@ -29,9 +30,7 @@ public class SeatSelectionController {
     private List<Seat> allSeats;
     private double seatPrice;
 
-    private static final String ACCENT = "#DB2777";
-    private static final String TEXT_DARK = "#1E293B";
-    private static final String TEXT_MUTED = "#64748B";
+
     private static final String AVAILABLE_COLOR = "#10B981";
     private static final String BOOKED_COLOR = "#EF4444";
     private static final String SELECTED_COLOR = "#DB2777";

@@ -18,16 +18,14 @@ import javafx.stage.Stage;
 import javafx.scene.layout.BorderPane;
 import java.util.List;
 import javafx.scene.Parent;
+import static ui.common.Theme.*;
 public class AdminDashboardController {
 
     private AdminDashboardPage view;
     private Stage stage;
     private String adminName;
 
-    private static final String ACCENT = "#DB2777";
-    private static final String TEXT_DARK = "#1E293B";
-    private static final String TEXT_MUTED = "#64748B";
-    private static final String BORDER = "#E2E8F0";
+
 
     public Parent getView() {
         return view.getView();
@@ -95,7 +93,7 @@ public class AdminDashboardController {
 
     private void showMovies() {
         setActiveMenu(view.btnMovies);
-        new MovieManagmentContrller(stage, this);
+        new MovieManagementController(stage, this);
     }
 
     private void showShows() {

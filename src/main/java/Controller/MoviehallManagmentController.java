@@ -18,6 +18,7 @@ import java.util.Optional;
 
 public class MoviehallManagmentController {
 
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(MoviehallManagmentController.class);
     private MovieHallManagmentPage view;
     private Stage stage;
     private final AdminDashboardController dashboard;
@@ -54,7 +55,7 @@ public class MoviehallManagmentController {
             view.hallTable.setItems(hallList);
             System.out.println("✅ Loaded " + halls.size() + " halls into table");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to load halls", e);
             showAlert("Error", "Failed to load halls: " + e.getMessage());
         }
     }

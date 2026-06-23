@@ -13,6 +13,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import static ui.common.Theme.*;
 
 public class TicketPage {
 
@@ -32,15 +33,10 @@ public class TicketPage {
 
     private VBox root;
 
-    private static final String ACCENT = "#DB2777";
     private static final String HOVER = "#EC4899";
-    private static final String TEXT_DARK = "#1E293B";
-    private static final String TEXT_MUTED = "#64748B";
-    private static final String BORDER = "#E2E8F0";
     private static final String WHITE = "#FFFFFF";
     private static final String BG = "#FAFAFA";
     private static final String BG_LIGHT = "#F8FAFC";
-    private static final String SUCCESS = "#10B981";
 
     public TicketPage() {
         try {
