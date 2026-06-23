@@ -1,7 +1,7 @@
 package ui.controller;
 
-import Model.Booking;
-import Model.Customer;
+import ui.model.Booking;
+import ui.model.Customer;
 import ui.view.CustomerDashboardPage;
 import application.AppContext;
 import javafx.scene.Scene;

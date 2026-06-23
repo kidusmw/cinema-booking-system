@@ -14,7 +14,7 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import application.ModelConverter;
-import Model.Movie;
+import ui.model.Movie;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

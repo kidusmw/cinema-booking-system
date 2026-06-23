@@ -7,7 +7,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import Model.Payment;
+import ui.model.Payment;
 import static ui.common.Theme.*;
 public class PaymentManagment {
     public TableView<Payment> paymentTable;

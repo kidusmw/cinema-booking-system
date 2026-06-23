@@ -2,7 +2,7 @@ package ui.controller;
 
 import application.AppContext;
 import application.ModelConverter;
-import Model.Show;
+import ui.model.Show;
 import ui.view.ShowManagementPage;
 import java.util.HashMap;
 import java.util.List;

@@ -2,8 +2,8 @@ package ui.controller;
 
 import application.AppContext;
 import application.ModelConverter;
-import Model.Moviehall;
-import Model.Seat;
+import ui.model.Moviehall;
+import ui.model.Seat;
 import ui.view.SeatManagmentPage;
 import javafx.collections.FXCollections;
 import javafx.scene.Scene;

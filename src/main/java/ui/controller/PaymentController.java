@@ -1,7 +1,7 @@
 package ui.controller;
 
 import java.util.stream.Collectors;
-import Model.*;
+import ui.model.*;
 import ui.view.PaymentPage;
 import application.AppContext;
 import javafx.animation.KeyFrame;

@@ -1,4 +1,4 @@
-package Model;
+package ui.model;
 
 public class UserSession {
     private static int currentUserID;

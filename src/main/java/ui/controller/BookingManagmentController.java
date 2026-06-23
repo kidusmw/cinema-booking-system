@@ -2,7 +2,7 @@ package ui.controller;
 
 import application.AppContext;
 import application.ModelConverter;
-import Model.Booking;
+import ui.model.Booking;
 import ui.view.BookingManagmentPage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

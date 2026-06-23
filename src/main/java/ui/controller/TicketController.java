@@ -1,6 +1,6 @@
 package ui.controller;
 
-import Model.*;
+import ui.model.*;
 import ui.view.TicketPage;
 import application.AppContext;
 import javafx.scene.Scene;

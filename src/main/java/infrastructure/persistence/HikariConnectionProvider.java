@@ -1,4 +1,4 @@
-package Database;
+package infrastructure.persistence;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -10,9 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class DatabaseConnection {
+public class HikariConnectionProvider {
 
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(DatabaseConnection.class);
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(HikariConnectionProvider.class);
     private static HikariDataSource dataSource;
 
     private static synchronized HikariDataSource getDataSource() {
@@ -41,16 +41,9 @@ public class DatabaseConnection {
         return dataSource;
     }
 
-    // Reads db.properties from the classpath (src/main/resources/db.properties).
-    // Falls back to the hardcoded defaults above if the file is missing,
-    // so nothing breaks if someone hasn't set it up yet.
     private static Properties loadProperties() {
         Properties props = new Properties();
-        try (
-            InputStream in = DatabaseConnection.class.getResourceAsStream(
-                "/db.properties"
-            )
-        ) {
+        try (InputStream in = HikariConnectionProvider.class.getResourceAsStream("/db.properties")) {
             if (in != null) {
                 props.load(in);
             } else {
@@ -62,10 +55,6 @@ public class DatabaseConnection {
         return props;
     }
 
-    // Borrows a connection from the pool. Callers are expected to use
-    // try-with-resources, same as before - calling close() on a pooled
-    // connection returns it to the pool instead of actually closing the
-    // socket, so no DAO code needs to change.
     public static Connection getConnection() throws SQLException {
         return getDataSource().getConnection();
     }
@@ -80,19 +69,13 @@ public class DatabaseConnection {
             "current_user AS login_name, " +
             "inet_server_addr() AS server_address";
 
-        try (
-            Connection conn = getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery()
-        ) {
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
-                System.out.println(
-                    "Connected database: " + rs.getString("current_database")
-                );
+                System.out.println("Connected database: " + rs.getString("current_database"));
                 System.out.println("Login name: " + rs.getString("login_name"));
-                System.out.println(
-                    "Server address: " + rs.getString("server_address")
-                );
+                System.out.println("Server address: " + rs.getString("server_address"));
             }
         } catch (SQLException e) {
             log.error("Database info query failed", e);

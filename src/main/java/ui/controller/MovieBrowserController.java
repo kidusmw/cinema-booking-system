@@ -2,8 +2,8 @@ package ui.controller;
 
 import application.ModelConverter;
 import java.util.stream.Collectors;
-import Model.Customer;
-import Model.Movie;
+import ui.model.Customer;
+import ui.model.Movie;
 import application.AppContext;
 import ui.view.MovieBrowserpage;
 import javafx.collections.FXCollections;

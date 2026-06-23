@@ -1,9 +1,9 @@
 package ui.controller;
 
 import application.ModelConverter;
-import Model.Show;
-import Model.Movie;
-import Model.Customer;
+import ui.model.Show;
+import ui.model.Movie;
+import ui.model.Customer;
 import ui.view.ShowSelectionPage;
 import application.AppContext;
 import javafx.collections.FXCollections;

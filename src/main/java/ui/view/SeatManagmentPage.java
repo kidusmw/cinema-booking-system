@@ -1,7 +1,7 @@
 package ui.view;
 
-import Model.Moviehall;
-import Model.Seat;
+import ui.model.Moviehall;
+import ui.model.Seat;
 import javafx.collections.FXCollections;
 import javafx.geometry.*;
 import javafx.scene.control.*;

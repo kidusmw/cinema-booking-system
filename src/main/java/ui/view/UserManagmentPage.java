@@ -7,7 +7,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import Model.User;
+import ui.model.User;
 import static ui.common.Theme.*;
 public class UserManagmentPage {
     public TableView<User> userTable;

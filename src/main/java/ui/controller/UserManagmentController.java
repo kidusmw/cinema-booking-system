@@ -2,7 +2,7 @@ package ui.controller;
 
 import application.AppContext;
 import application.ModelConverter;
-import Model.User;
+import ui.model.User;
 import ui.view.UserManagmentPage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
