@@ -161,10 +161,8 @@
                     <argLine>
                         --add-opens java.base/java.lang=ALL-UNNAMED
                         --add-opens java.base/java.util=ALL-UNNAMED
+                        -Dapi.version=1.40
                     </argLine>
-                    <environmentVariables>
-                        <DOCKER_API_VERSION>1.40</DOCKER_API_VERSION>
-                    </environmentVariables>
                 </configuration>
             </plugin>
 

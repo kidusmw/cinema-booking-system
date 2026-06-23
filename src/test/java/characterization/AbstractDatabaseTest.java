@@ -11,7 +11,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.sql.Connection;
 import java.sql.Statement;
 
@@ -86,15 +85,6 @@ public abstract class AbstractDatabaseTest {
         config.setMinimumIdle(1);
         config.setPoolName("TestPool");
 
-        HikariDataSource newDs = new HikariDataSource(config);
-
-        // Overcome the `final` modifier on the field (Java 12+ still allows
-        // this via reflection if the field holds an object reference, not a
-        // compile-time constant).
-        Field modifiersField = Field.class.getDeclaredField("modifiers");
-        modifiersField.setAccessible(true);
-        modifiersField.setInt(dsField, dsField.getModifiers() & ~Modifier.FINAL);
-
-        dsField.set(null, newDs);
+        dsField.set(null, new HikariDataSource(config));
     }
 }
