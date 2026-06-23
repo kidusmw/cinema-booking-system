@@ -168,6 +168,8 @@
                         --add-opens java.base/java.lang=ALL-UNNAMED
                         --add-opens java.base/java.util=ALL-UNNAMED
                         -Dapi.version=1.40
+                        -XX:+EnableDynamicAgentLoading
+                        -Djdk.instrument.traceUsage=false
                     </argLine>
                 </configuration>
             </plugin>
@@ -225,7 +227,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.21.0</version>
+                <version>3.25.0</version>
                 <configuration>
                     <rulesets>
                         <ruleset>/category/java/bestpractices.xml</ruleset>
