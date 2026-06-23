@@ -23,15 +23,17 @@ public class TicketController {
     private double totalAmount;
     private List<String> bookingIds;
     private AppContext ctx;
+    private NavigationManager nav;
     private static final String TEXT_DARK = "#1E293B";
     private static final String TEXT_MUTED = "#64748B";
     private static final String BORDER = "#E2E8F0";
     private static final String WHITE = "#FFFFFF";
     private static final String BG = "#FAFAFA";
 
-    public TicketController(Stage stage, AppContext ctx, Customer currentUser, Movie selectedMovie, Show selectedShow, Moviehall selectedHall, List<String> selectedSeatIds, double totalAmount, List<String> bookingIds) {
+    public TicketController(Stage stage, AppContext ctx, NavigationManager nav, Customer currentUser, Movie selectedMovie, Show selectedShow, Moviehall selectedHall, List<String> selectedSeatIds, double totalAmount, List<String> bookingIds) {
         this.stage = stage;
         this.ctx = ctx;
+        this.nav = nav;
         this.currentUser = currentUser;
         this.selectedMovie = selectedMovie;
         this.selectedShow = selectedShow;
@@ -54,11 +56,11 @@ public class TicketController {
         });
 
         view.btnHome.setOnAction(e -> {
-            new CustomerDashboardController(stage, ctx, currentUser);
+            nav.goFresh(() -> new CustomerDashboardController(stage, ctx, nav, currentUser));
         });
 
         view.btnMyBookings.setOnAction(e -> {
-            new CustomerDashboardController(stage, ctx, currentUser);
+            nav.goFresh(() -> new CustomerDashboardController(stage, ctx, nav, currentUser));
         });
     }
 

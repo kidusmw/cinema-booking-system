@@ -1,5 +1,6 @@
 package ui;
 
+import ui.controller.NavigationManager;
 import ui.controller.WelcomeController;
 import application.AppContext;
 import application.service.BookingFacade;
@@ -45,7 +46,8 @@ public class Main extends Application {
             bookingFacade
         );
 
-        new WelcomeController(stage, ctx);
+        NavigationManager nav = new NavigationManager(stage, ctx);
+        new WelcomeController(stage, ctx, nav);
     }
 
     public static void main(String[] args) {

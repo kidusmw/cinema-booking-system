@@ -26,6 +26,7 @@ public class SeatSelectionController {
     private Moviehall selectedHall;
     private boolean isVIP;
     private AppContext ctx;
+    private NavigationManager nav;
     private final Set<String> selectedSeats = new LinkedHashSet<>();
     private List<Seat> allSeats;
     private double seatPrice;
@@ -35,10 +36,11 @@ public class SeatSelectionController {
     private static final String BOOKED_COLOR = "#EF4444";
     private static final String SELECTED_COLOR = "#DB2777";
 
-    public SeatSelectionController(Stage stage, AppContext ctx, Customer currentUser, Movie selectedMovie,
+    public SeatSelectionController(Stage stage, AppContext ctx, NavigationManager nav, Customer currentUser, Movie selectedMovie,
                                    Show selectedShow, Moviehall selectedHall, boolean isVIP) {
         this.stage = stage;
         this.ctx = ctx;
+        this.nav = nav;
         this.currentUser = currentUser;
         this.selectedMovie = selectedMovie;
         this.selectedShow = selectedShow;
@@ -55,7 +57,7 @@ public class SeatSelectionController {
         view.showInfoLabel.setText("🕐 " + selectedShow.getShowTime() + "  |  📅 " + selectedShow.getShowDate());
         view.priceLabel.setText(String.format("%.0f Birr per seat", seatPrice));
         loadSeats();
-        view.btnBack.setOnAction(e -> new MovieHallSelectionController(stage, ctx, currentUser, selectedMovie, selectedShow));
+        view.btnBack.setOnAction(e -> nav.back());
         view.btnProceed.setOnAction(e -> proceedToPayment());
     }
 
@@ -145,7 +147,10 @@ public class SeatSelectionController {
 
     private void proceedToPayment() {
         if (selectedSeats.isEmpty()) return;
-        new PaymentController(stage, ctx, currentUser, selectedMovie, selectedShow, selectedHall, new ArrayList<>(selectedSeats), seatPrice);
+        nav.go(
+            () -> new SeatSelectionController(stage, ctx, nav, currentUser, selectedMovie, selectedShow, selectedHall, isVIP),
+            () -> new PaymentController(stage, ctx, nav, currentUser, selectedMovie, selectedShow, selectedHall, new ArrayList<>(selectedSeats), seatPrice)
+        );
     }
 
     private void showAlert(String title, String content) {

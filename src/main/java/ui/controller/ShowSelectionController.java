@@ -30,6 +30,7 @@ public class ShowSelectionController {
     private Customer currentUser;
     private Movie selectedMovie;
     private AppContext ctx;
+    private NavigationManager nav;
     private List<Show> movieShows;
 
     private static final String ACCENT = "#DB2777";
@@ -38,9 +39,10 @@ public class ShowSelectionController {
     private static final String BORDER = "#E2E8F0";
     private static final String WHITE = "#FFFFFF";
 
-    public ShowSelectionController(Stage stage, AppContext ctx, Customer currentUser, Movie selectedMovie) {
+    public ShowSelectionController(Stage stage, AppContext ctx, NavigationManager nav, Customer currentUser, Movie selectedMovie) {
         this.stage = stage;
         this.ctx = ctx;
+        this.nav = nav;
         this.currentUser = currentUser;
         this.selectedMovie = selectedMovie;
         this.view = new ShowSelectionPage();
@@ -58,9 +60,7 @@ public class ShowSelectionController {
         view.movieDuration.setText("⏱ " + hours + "h " + mins + "m");
 
         loadShows();
-        view.btnBack.setOnAction(e -> {
-            new MovieBrowserController(stage, ctx, currentUser);
-        });
+        view.btnBack.setOnAction(e -> nav.back());
     }
 
     private void loadShows() {
@@ -193,9 +193,10 @@ public class ShowSelectionController {
                         "-fx-background-radius: 6;" +
                         "-fx-cursor: hand;"
         );
-        bookBtn.setOnAction(e -> {
-            new MovieHallSelectionController(stage, ctx, currentUser, selectedMovie, show);
-        });
+        bookBtn.setOnAction(e -> nav.go(
+            () -> new ShowSelectionController(stage, ctx, nav, currentUser, selectedMovie),
+            () -> new MovieHallSelectionController(stage, ctx, nav, currentUser, selectedMovie, show)
+        ));
 
         HBox bottomRow = new HBox();
         Region spacer = new Region();

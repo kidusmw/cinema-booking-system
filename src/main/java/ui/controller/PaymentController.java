@@ -37,6 +37,7 @@ public class PaymentController {
     private double totalAmount;
     private boolean isVIP;
     private AppContext ctx;
+    private NavigationManager nav;
     private Timeline countdownTimer;
     private int secondsRemaining = 120;
     private String generatedOTP;
@@ -44,9 +45,10 @@ public class PaymentController {
 
 
 
-    public PaymentController(Stage stage, AppContext ctx, Customer currentUser, Movie selectedMovie, Show selectedShow, Moviehall selectedHall, List<String> selectedSeatIds, double seatPrice) {
+    public PaymentController(Stage stage, AppContext ctx, NavigationManager nav, Customer currentUser, Movie selectedMovie, Show selectedShow, Moviehall selectedHall, List<String> selectedSeatIds, double seatPrice) {
         this.stage = stage;
         this.ctx = ctx;
+        this.nav = nav;
         this.currentUser = currentUser;
         this.selectedMovie = selectedMovie;
         this.selectedShow = selectedShow;
@@ -67,7 +69,7 @@ public class PaymentController {
         view.otpInfoLabel.setVisible(true);
         startCountdown();
         view.btnVerify.setOnAction(e -> verifyPayment());
-        view.btnBack.setOnAction(e -> goBack());
+        view.btnBack.setOnAction(e -> nav.back());
     }
 
     private void displayBookingSummary() {
@@ -175,16 +177,13 @@ public class PaymentController {
 
 
     private void showSuccessAndTicket() {
-        new TicketController(stage, ctx, currentUser, selectedMovie, selectedShow, selectedHall,
-                selectedSeatIds, totalAmount, new ArrayList<>());
+        nav.goFresh(() -> new TicketController(stage, ctx, nav, currentUser, selectedMovie, selectedShow, selectedHall,
+                selectedSeatIds, totalAmount, new ArrayList<>()));
     }
 
     private String generateOTP() {
         return String.format("%06d", new Random().nextInt(1000000));
     }
 
-    private void goBack() {
-        countdownTimer.stop();
-        new SeatSelectionController(stage, ctx, currentUser, selectedMovie, selectedShow, selectedHall, isVIP);
-    }
+
 }

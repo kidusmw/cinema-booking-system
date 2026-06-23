@@ -26,9 +26,12 @@ public class AdminDashboardController {
         return view.getView();
     }
 
-    public AdminDashboardController(Stage stage, AppContext ctx, String adminName) {
+    private NavigationManager nav;
+
+    public AdminDashboardController(Stage stage, AppContext ctx, NavigationManager nav, String adminName) {
         this.stage = stage;
         this.ctx = ctx;
+        this.nav = nav;
         this.adminName = adminName;
         this.view = new AdminDashboardPage();
 
@@ -39,10 +42,7 @@ public class AdminDashboardController {
 
         view.welcomeLabel.setText("Welcome, " + adminName);
 
-        view.btnLogout.setOnAction(e -> {
-            NavigationManager.clear();
-            new WelcomeController(stage, ctx);
-        });
+        view.btnLogout.setOnAction(e -> nav.goFresh(() -> new WelcomeController(stage, ctx, nav)));
 
         view.btnDashboard.setOnAction(e -> showDashboard());
         view.btnMovies.setOnAction(e -> showMovies());
@@ -89,42 +89,45 @@ public class AdminDashboardController {
 
     private void showMovies() {
         setActiveMenu(view.btnMovies);
-        new MovieManagementController(stage, ctx, this);
+        nav.go(
+            () -> new AdminDashboardController(stage, ctx, nav, adminName),
+            () -> new MovieManagementController(stage, ctx, nav, this)
+        );
     }
 
     private void showShows() {
         setActiveMenu(view.btnShows);
-        ShowManagmentController c = new ShowManagmentController(stage, ctx, this);
+        ShowManagmentController c = new ShowManagmentController(stage, ctx, nav, this);
         injectView(c.getRootView());
     }
 
     private void showHalls() {
         setActiveMenu(view.btnHalls);
-        MoviehallManagmentController c = new MoviehallManagmentController(stage, ctx, this);
+        MoviehallManagmentController c = new MoviehallManagmentController(stage, ctx, nav, this);
         injectView(c.getRootView());
     }
 
     private void showSeats() {
         setActiveMenu(view.btnSeats);
-        SeatManagmentController c = new SeatManagmentController(stage, ctx, this);
+        SeatManagmentController c = new SeatManagmentController(stage, ctx, nav, this);
         injectView(c.getRootView());
     }
 
     private void showBookings() {
         setActiveMenu(view.btnBookings);
-        BookingManagmentController c = new BookingManagmentController(stage, ctx, this);
+        BookingManagmentController c = new BookingManagmentController(stage, ctx, nav, this);
         injectView(c.getRootView());
     }
 
     private void showPayments() {
         setActiveMenu(view.btnPayments);
-        PaymentManagmentController c = new PaymentManagmentController(stage, ctx, this);
+        PaymentManagmentController c = new PaymentManagmentController(stage, ctx, nav, this);
         injectView(c.getRootView());
     }
 
     private void showUsers() {
         setActiveMenu(view.btnUsers);
-        UserManagmentController c = new UserManagmentController(stage, ctx, this);
+        UserManagmentController c = new UserManagmentController(stage, ctx, nav, this);
         injectView(c.getRootView());
     }
     private void setActiveMenu(Button activeBtn) {

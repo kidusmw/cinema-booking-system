@@ -29,11 +29,13 @@ public class MovieHallSelectionController {
     private Movie selectedMovie;
     private Show selectedShow;
     private AppContext ctx;
+    private NavigationManager nav;
     private static final String WHITE = "#FFFFFF";
 
-    public MovieHallSelectionController(Stage stage, AppContext ctx, Customer currentUser, Movie selectedMovie, Show selectedShow) {
+    public MovieHallSelectionController(Stage stage, AppContext ctx, NavigationManager nav, Customer currentUser, Movie selectedMovie, Show selectedShow) {
         this.stage = stage;
         this.ctx = ctx;
+        this.nav = nav;
         this.currentUser = currentUser;
         this.selectedMovie = selectedMovie;
         this.selectedShow = selectedShow;
@@ -44,9 +46,7 @@ public class MovieHallSelectionController {
         stage.show();
         view.showInfoLabel.setText("🕐 " + selectedShow.getShowTime() + "  |  📅 " + selectedShow.getShowDate());
         loadHalls();
-        view.btnBack.setOnAction(e -> {
-            new ShowSelectionController(stage, ctx, currentUser, selectedMovie);
-        });
+        view.btnBack.setOnAction(e -> nav.back());
     }
     private void loadHalls() {
         view.hallsContainer.getChildren().clear();
@@ -163,15 +163,19 @@ public class MovieHallSelectionController {
                         "-fx-background-radius: 8;" +
                         "-fx-cursor: hand;"
         );
-        selectBtn.setOnAction(e -> {
-            new SeatSelectionController(stage, ctx, currentUser, selectedMovie, selectedShow, hall, isVIP);
-        });
+        selectBtn.setOnAction(e -> nav.go(
+            () -> new MovieHallSelectionController(stage, ctx, nav, currentUser, selectedMovie, selectedShow),
+            () -> new SeatSelectionController(stage, ctx, nav, currentUser, selectedMovie, selectedShow, hall, isVIP)
+        ));
 
         card.getChildren().addAll(topRow, detailsRow, selectBtn);
 
         card.setOnMouseClicked(e -> {
             if (e.getClickCount() == 1) {
-                new SeatSelectionController(stage, ctx, currentUser, selectedMovie, selectedShow, hall, isVIP);
+                nav.go(
+                    () -> new MovieHallSelectionController(stage, ctx, nav, currentUser, selectedMovie, selectedShow),
+                    () -> new SeatSelectionController(stage, ctx, nav, currentUser, selectedMovie, selectedShow, hall, isVIP)
+                );
             }
         });
 

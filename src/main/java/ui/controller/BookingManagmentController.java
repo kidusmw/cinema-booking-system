@@ -16,12 +16,14 @@ public class BookingManagmentController {
     private BookingManagmentPage view;
     private Stage stage;
     private final AppContext ctx;
+    private final NavigationManager nav;
     private final AdminDashboardController dashboard;
     private ObservableList<Booking> masterList;
 
-    public BookingManagmentController(Stage stage, AppContext ctx, AdminDashboardController dashboard) {
+    public BookingManagmentController(Stage stage, AppContext ctx, NavigationManager nav, AdminDashboardController dashboard) {
         this.stage = stage;
         this.ctx = ctx;
+        this.nav = nav;
         this.dashboard = dashboard;
         this.view = new BookingManagmentPage();
 

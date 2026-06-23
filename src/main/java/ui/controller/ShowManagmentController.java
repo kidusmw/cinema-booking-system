@@ -23,6 +23,7 @@ public class ShowManagmentController {
     private final ShowManagementPage view;
     private final Stage stage;
     private final AppContext ctx;
+    private final NavigationManager nav;
     private final AdminDashboardController dashboard;
     private ObservableList<Show> showList;
     private final Map<String, String> movieMap = new HashMap<>();
@@ -33,10 +34,12 @@ public class ShowManagmentController {
     public ShowManagmentController(
         Stage stage,
         AppContext ctx,
+        NavigationManager nav,
         AdminDashboardController dashboard
     ) {
         this.stage = stage;
         this.ctx = ctx;
+        this.nav = nav;
         this.dashboard = dashboard;
         this.view = new ShowManagementPage();
         loadLiveDatabaseDropdownMaps();

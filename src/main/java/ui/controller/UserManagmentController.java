@@ -18,12 +18,14 @@ public class UserManagmentController {
     private final UserManagmentPage view;
     private final Stage stage;
     private final AppContext ctx;
+    private final NavigationManager nav;
     private final AdminDashboardController dashboard;
     private ObservableList<User> userList = FXCollections.observableArrayList();
 
-    public UserManagmentController(Stage stage, AppContext ctx, AdminDashboardController dashboard) {
+    public UserManagmentController(Stage stage, AppContext ctx, NavigationManager nav, AdminDashboardController dashboard) {
         this.stage = stage;
         this.ctx = ctx;
+        this.nav = nav;
         this.dashboard = dashboard;
         this.view = new UserManagmentPage();
         view.roleDropdown.getItems().setAll("ADMIN", "CUSTOMER");

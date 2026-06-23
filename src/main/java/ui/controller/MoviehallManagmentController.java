@@ -24,12 +24,14 @@ public class MoviehallManagmentController {
     private MovieHallManagmentPage view;
     private Stage stage;
     private final AppContext ctx;
+    private final NavigationManager nav;
     private final AdminDashboardController dashboard;
     private ObservableList<Moviehall> hallList;
 
-    public MoviehallManagmentController(Stage stage, AppContext ctx, AdminDashboardController dashboard) {
+    public MoviehallManagmentController(Stage stage, AppContext ctx, NavigationManager nav, AdminDashboardController dashboard) {
         this.stage = stage;
         this.ctx = ctx;
+        this.nav = nav;
         this.dashboard = dashboard;
         this.view = new MovieHallManagmentPage();
 
@@ -130,7 +132,7 @@ public class MoviehallManagmentController {
     }
     private void handleBack() {
         System.out.println("Going back to admin dashboard...");
-        new AdminDashboardController(stage, ctx, dashboard.getAdminName());
+        nav.back();
     }
 
     private Dialog<Moviehall> createHallDialog(Moviehall existing) {

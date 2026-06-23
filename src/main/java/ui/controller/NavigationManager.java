@@ -1,27 +1,36 @@
 package ui.controller;
+
+import application.AppContext;
 import javafx.stage.Stage;
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class NavigationManager {
-    private static final Stack<String> history = new Stack<>();
+    private final Stage stage;
+    private final AppContext ctx;
+    private final Deque<Runnable> backStack = new ArrayDeque<>();
 
-    public static void push(String pageName) {
-        history.push(pageName);
+    public NavigationManager(Stage stage, AppContext ctx) {
+        this.stage = stage;
+        this.ctx = ctx;
     }
 
-    public static String pop() {
-        if (!history.isEmpty()) {
-            return history.pop();
+    public AppContext getCtx() { return ctx; }
+    public Stage getStage() { return stage; }
+
+    public void go(Runnable restoreCurrent, Runnable showNext) {
+        backStack.push(restoreCurrent);
+        showNext.run();
+    }
+
+    public void goFresh(Runnable showNext) {
+        backStack.clear();
+        showNext.run();
+    }
+
+    public void back() {
+        if (!backStack.isEmpty()) {
+            backStack.pop().run();
         }
-        return null;
-    }
-
-    public static String peek() {
-        return history.isEmpty() ? null : history.peek();
-    }
-
-    public static void clear() {
-        history.clear();
     }
 }
-
-

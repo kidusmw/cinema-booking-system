@@ -28,11 +28,13 @@ public class MovieBrowserController{
     private Stage stage;
     private Customer currentUser;
     private AppContext ctx;
+    private NavigationManager nav;
     private ObservableList<Movie> movies;
 
-    public MovieBrowserController(Stage stage, AppContext ctx, Customer currentUser) {
+    public MovieBrowserController(Stage stage, AppContext ctx, NavigationManager nav, Customer currentUser) {
         this.stage = stage;
         this.ctx = ctx;
+        this.nav = nav;
         this.currentUser = currentUser;
         this.view = new MovieBrowserpage();
         Scene scene = new Scene(view.getView(), 1200, 750);
@@ -40,9 +42,7 @@ public class MovieBrowserController{
         stage.setScene(scene);
         stage.show();
         loadMovies();
-        view.btnBack.setOnAction(e -> {
-            new CustomerDashboardController(stage, ctx, currentUser);
-        });
+        view.btnBack.setOnAction(e -> nav.back());
         view.searchField.textProperty().addListener((obs, old, newVal) -> filterMovies(newVal));
     }
 
@@ -143,9 +143,10 @@ public class MovieBrowserController{
         info.getChildren().addAll(title, meta);
 
         card.getChildren().addAll(poster, info);
-        card.setOnMouseClicked(e -> {
-            new ShowSelectionController(stage, ctx, currentUser, movie);
-        });
+        card.setOnMouseClicked(e -> nav.go(
+            () -> new MovieBrowserController(stage, ctx, nav, currentUser),
+            () -> new ShowSelectionController(stage, ctx, nav, currentUser, movie)
+        ));
 
         return card;
     }

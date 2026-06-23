@@ -19,10 +19,12 @@ public class CustomerDashboardController {
     private Stage stage;
     private Customer currentUser;
     private AppContext ctx;
+    private NavigationManager nav;
 
-    public CustomerDashboardController(Stage stage, AppContext ctx, Customer currentUser) {
+    public CustomerDashboardController(Stage stage, AppContext ctx, NavigationManager nav, Customer currentUser) {
         this.stage = stage;
         this.ctx = ctx;
+        this.nav = nav;
         this.currentUser = currentUser;
         this.view = new CustomerDashboardPage();
 
@@ -31,16 +33,14 @@ public class CustomerDashboardController {
         stage.setScene(scene);
         stage.show();
         view.welcomeLabel.setText("Welcome, " + currentUser.getFirstName() + "!");
-        view.btnBrowseMovies.setOnAction(e -> {
-            new MovieBrowserController(stage, ctx, currentUser);
-        });
+        view.btnBrowseMovies.setOnAction(e -> nav.go(
+            () -> new CustomerDashboardController(stage, ctx, nav, currentUser),
+            () -> new MovieBrowserController(stage, ctx, nav, currentUser)
+        ));
         view.btnMyBookings.setOnAction(e -> {
             showMyBookings();
         });
-        view.btnLogout.setOnAction(e -> {
-            NavigationManager.clear();
-            new WelcomeController(stage, ctx);
-        });
+        view.btnLogout.setOnAction(e -> nav.goFresh(() -> new WelcomeController(stage, ctx, nav)));
     }
 
     private void showMyBookings() {

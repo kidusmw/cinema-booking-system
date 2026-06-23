@@ -15,10 +15,12 @@ public class LoginController {
     private Loginpage view;
     private String expectedRole;
     private Stage stage;
+    private NavigationManager nav;
 
-    public LoginController(Stage stage, AppContext ctx, String role) {
+    public LoginController(Stage stage, AppContext ctx, NavigationManager nav, String role) {
         this.stage = stage;
         this.ctx = ctx;
+        this.nav = nav;
         this.expectedRole = role;
         view = new Loginpage();
         Scene scene = new Scene(view.getView(), 900, 650);
@@ -28,8 +30,11 @@ public class LoginController {
 
         view.roleLabel.setText("Sign in as " + capitalize(role));
         view.loginBtn.setOnAction(e -> handleLogin());
-        view.backBtn.setOnAction(e -> new AuthChoiceController(stage, ctx, role));
-        view.signupLink.setOnAction(e -> new SignUpController(stage, ctx, role));
+        view.backBtn.setOnAction(e -> nav.back());
+        view.signupLink.setOnAction(e -> nav.go(
+            () -> new LoginController(stage, ctx, nav, role),
+            () -> new SignUpController(stage, ctx, nav, role)
+        ));
     }
 
     private void handleLogin() {
@@ -46,9 +51,9 @@ public class LoginController {
         User oldUser = ModelConverter.toOldUser(userOpt.get());
 
         if ("admin".equalsIgnoreCase(expectedRole) && oldUser instanceof Admin) {
-            new AdminDashboardController(stage, ctx, oldUser.getFirstName());
+            nav.goFresh(() -> new AdminDashboardController(stage, ctx, nav, oldUser.getFirstName()));
         } else if ("customer".equalsIgnoreCase(expectedRole) && oldUser instanceof Customer) {
-            new CustomerDashboardController(stage, ctx, (Customer) oldUser);
+            nav.goFresh(() -> new CustomerDashboardController(stage, ctx, nav, (Customer) oldUser));
         } else {
             view.errorLabel.setText("Role mismatch or invalid user type");
             view.errorLabel.setVisible(true);

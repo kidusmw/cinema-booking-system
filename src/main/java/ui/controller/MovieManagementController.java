@@ -22,12 +22,14 @@ public class MovieManagementController {
     private MovieManagemnetPage view;
     private Stage stage;
     private AppContext ctx;
+    private NavigationManager nav;
     private AdminDashboardController dashboard; // Kept to navigate back
     private ObservableList<Movie> movieList;
 
-    public MovieManagementController(Stage stage, AppContext ctx, AdminDashboardController dashboard) {
+    public MovieManagementController(Stage stage, AppContext ctx, NavigationManager nav, AdminDashboardController dashboard) {
         this.stage = stage;
         this.ctx = ctx;
+        this.nav = nav;
         this.dashboard = dashboard;
         view = new MovieManagemnetPage();
 
@@ -63,7 +65,7 @@ public class MovieManagementController {
     }
 
     private void handleBackToDashboard() {
-            new AdminDashboardController(stage, ctx, dashboard.getAdminName());
+            nav.back();
         }
 
         private void loadMovies() {

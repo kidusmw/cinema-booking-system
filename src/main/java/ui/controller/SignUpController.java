@@ -12,10 +12,12 @@ public class SignUpController {
     private SingUpPage view;
     private String role;
     private Stage stage;
+    private NavigationManager nav;
 
-    public SignUpController(Stage stage, AppContext ctx, String role) {
+    public SignUpController(Stage stage, AppContext ctx, NavigationManager nav, String role) {
         this.stage = stage;
         this.ctx = ctx;
+        this.nav = nav;
         this.role = role;
         view = new SingUpPage();
         Scene scene = new Scene(view.getView(), 800, 700);
@@ -26,12 +28,12 @@ public class SignUpController {
 
         view.signUpBtn.setOnAction(e -> handleSignUp());
 
-        view.backBtn.setOnAction(e -> {
-            NavigationManager.pop();
-            new AuthChoiceController(stage, ctx, role);
-        });
+        view.backBtn.setOnAction(e -> nav.back());
 
-        view.loginLink.setOnAction(e -> new LoginController(stage, ctx, role));
+        view.loginLink.setOnAction(e -> nav.go(
+            () -> new SignUpController(stage, ctx, nav, role),
+            () -> new LoginController(stage, ctx, nav, role)
+        ));
     }
 
     private void handleSignUp() {
@@ -56,7 +58,7 @@ public class SignUpController {
         try {
             ctx.authService.register(username, password, firstName, lastName, role, phone, email);
             showInfo("Account Created", "Welcome, " + firstName + "!");
-            new LoginController(stage, ctx, role);
+            nav.goFresh(() -> new LoginController(stage, ctx, nav, role));
         } catch (Exception e) {
             showError("Failed to create account.");
         }
