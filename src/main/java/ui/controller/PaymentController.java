@@ -163,13 +163,10 @@ public class PaymentController {
 
     private void processSuccessfulPayment() {
         try {
-            List<String> seatIds = selectedSeatIds;
-            List<Long> domainSeatIds = seatIds.stream().map(Long::parseLong).collect(Collectors.toList());
-            double total = totalAmount;
+            List<Long> domainSeatIds = selectedSeatIds.stream().map(Long::parseLong).collect(Collectors.toList());
             Long userId = (long) currentUser.getUserID();
             Long showId = Long.parseLong(selectedShow.getShowID());
-            domain.model.Booking domainBooking = ctx.bookingService.createBooking(userId, showId, domainSeatIds, total);
-            domain.model.Payment domainPayment = ctx.paymentService.processPayment(domainBooking.getBookingId(), total, "CARD");
+            ctx.bookingFacade.bookAndPay(userId, showId, domainSeatIds, totalAmount, "CARD");
             showSuccessAndTicket();
         } catch (Exception e) {
             log.error("Payment processing failed", e);

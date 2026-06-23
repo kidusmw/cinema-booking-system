@@ -2,6 +2,7 @@ package ui;
 
 import ui.controller.WelcomeController;
 import application.AppContext;
+import application.service.BookingFacade;
 import domain.port.*;
 import domain.service.AuthService;
 import domain.service.BookingService;
@@ -35,11 +36,13 @@ public class Main extends Application {
         AuthService authService = new AuthService(userRepo, passwordHasher);
         BookingService bookingService = new BookingService(bookingRepo, seatRepo);
         PaymentService paymentService = new PaymentService(paymentRepo);
+        BookingFacade bookingFacade = new BookingFacade(connectionProvider);
 
         AppContext ctx = new AppContext(
             userRepo, movieRepo, hallRepo, seatRepo,
             showtimeRepo, bookingRepo, paymentRepo,
-            authService, bookingService, paymentService
+            authService, bookingService, paymentService,
+            bookingFacade
         );
 
         new WelcomeController(stage, ctx);

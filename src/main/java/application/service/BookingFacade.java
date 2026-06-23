@@ -1,51 +1,52 @@
 package application.service;
 
-import domain.model.Booking;
-import domain.model.Payment;
+import domain.port.BookingRepository;
+import domain.port.PaymentRepository;
+import domain.port.SeatRepository;
 import domain.service.BookingService;
 import domain.service.PaymentService;
 import infrastructure.persistence.ConnectionProvider;
+import infrastructure.persistence.JdbcBookingRepository;
+import infrastructure.persistence.JdbcPaymentRepository;
+import infrastructure.persistence.JdbcSeatRepository;
+import infrastructure.persistence.TransactionalConnectionProvider;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
 public class BookingFacade {
-    private final BookingService bookingService;
-    private final PaymentService paymentService;
     private final ConnectionProvider connectionProvider;
 
-    public BookingFacade(BookingService bookingService, PaymentService paymentService,
-                         ConnectionProvider connectionProvider) {
-        this.bookingService = bookingService;
-        this.paymentService = paymentService;
+    public BookingFacade(ConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
     }
 
-    public Payment bookAndPay(Long userId, Long showId, List<Long> seatIds,
-                              double amount, String paymentMethod) {
-        Connection connection = null;
+    public void bookAndPay(Long userId, Long showId, List<Long> seatIds, double amount, String paymentMethod) {
+        TransactionalConnectionProvider txProvider = new TransactionalConnectionProvider(connectionProvider);
+        Connection conn = null;
         try {
-            connection = connectionProvider.getConnection();
-            connection.setAutoCommit(false);
+            conn = txProvider.getConnection();
+            conn.setAutoCommit(false);
 
-            Booking booking = bookingService.createBooking(userId, showId, seatIds, amount);
-            Payment payment = paymentService.processPayment(booking.getBookingId(), amount, paymentMethod);
+            SeatRepository txSeatRepo = new JdbcSeatRepository(txProvider);
+            BookingRepository txBookingRepo = new JdbcBookingRepository(txProvider);
+            PaymentRepository txPaymentRepo = new JdbcPaymentRepository(txProvider);
 
-            connection.commit();
-            return payment;
+            BookingService txBookingService = new BookingService(txBookingRepo, txSeatRepo);
+            PaymentService txPaymentService = new PaymentService(txPaymentRepo);
+
+            domain.model.Booking booking = txBookingService.createBooking(userId, showId, seatIds, amount);
+            txPaymentService.processPayment(booking.getBookingId(), amount, paymentMethod);
+
+            conn.commit();
         } catch (Exception e) {
-            if (connection != null) {
-                try {
-                    connection.rollback();
-                } catch (SQLException ignored) {}
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ignored) {}
             }
-            throw new RuntimeException("Booking and payment transaction failed", e);
+            throw new RuntimeException("Booking+Payment transaction failed", e);
         } finally {
-            if (connection != null) {
-                try {
-                    connection.setAutoCommit(true);
-                    connection.close();
-                } catch (SQLException ignored) {}
+            if (conn != null) {
+                try { conn.setAutoCommit(true); conn.close(); } catch (SQLException ignored) {}
             }
         }
     }

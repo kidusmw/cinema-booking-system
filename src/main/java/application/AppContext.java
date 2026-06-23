@@ -1,5 +1,6 @@
 package application;
 
+import application.service.BookingFacade;
 import domain.port.*;
 import domain.service.AuthService;
 import domain.service.BookingService;
@@ -16,12 +17,14 @@ public class AppContext {
     public final AuthService authService;
     public final BookingService bookingService;
     public final PaymentService paymentService;
+    public final BookingFacade bookingFacade;
 
     public AppContext(UserRepository userRepo, MovieRepository movieRepo,
                       HallRepository hallRepo, SeatRepository seatRepo,
                       ShowtimeRepository showtimeRepo, BookingRepository bookingRepo,
                       PaymentRepository paymentRepo, AuthService authService,
-                      BookingService bookingService, PaymentService paymentService) {
+                      BookingService bookingService, PaymentService paymentService,
+                      BookingFacade bookingFacade) {
         this.userRepo = userRepo;
         this.movieRepo = movieRepo;
         this.hallRepo = hallRepo;
@@ -32,5 +35,6 @@ public class AppContext {
         this.authService = authService;
         this.bookingService = bookingService;
         this.paymentService = paymentService;
+        this.bookingFacade = bookingFacade;
     }
 }
