@@ -3,6 +3,7 @@ package ui.controller.customer;
 import static ui.common.Theme.*;
 
 import application.AppContext;
+import domain.model.User;
 import java.util.List;
 import javafx.geometry.*;
 import javafx.scene.Scene;
@@ -12,18 +13,17 @@ import javafx.scene.text.*;
 import javafx.stage.Stage;
 import ui.controller.common.NavigationManager;
 import ui.controller.common.WelcomeController;
-import ui.model.Customer;
 import ui.view.customer.CustomerDashboardPage;
 
 public class CustomerDashboardController {
     private CustomerDashboardPage view;
     private Stage stage;
-    private Customer currentUser;
+    private User currentUser;
     private AppContext ctx;
     private NavigationManager nav;
 
     public CustomerDashboardController(
-            Stage stage, AppContext ctx, NavigationManager nav, Customer currentUser) {
+            Stage stage, AppContext ctx, NavigationManager nav, User currentUser) {
         this.stage = stage;
         this.ctx = ctx;
         this.nav = nav;
@@ -31,7 +31,7 @@ public class CustomerDashboardController {
         this.view = new CustomerDashboardPage();
 
         Scene scene = new Scene(view.getView(), 1200, 750);
-        stage.setTitle("CinemaBook - Customer");
+        stage.setTitle("CinemaBook - User");
         stage.setScene(scene);
         stage.show();
         view.welcomeLabel.setText("Welcome, " + currentUser.getFirstName() + "!");
@@ -49,7 +49,7 @@ public class CustomerDashboardController {
 
     private void showMyBookings() {
         List<domain.model.Booking> history =
-                ctx.bookingService.getHistory((long) currentUser.getUserID());
+                ctx.bookingService.getHistory((long) currentUser.getUserId());
         if (history.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("My Bookings");

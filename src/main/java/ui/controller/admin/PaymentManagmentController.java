@@ -1,11 +1,10 @@
 package ui.controller.admin;
 
 import application.AppContext;
-import application.ModelConverter;
+import domain.model.Payment;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import ui.model.Payment;
 import ui.view.admin.PaymentManagment;
 
 public class PaymentManagmentController {
@@ -30,10 +29,7 @@ public class PaymentManagmentController {
 
     private void refreshData() {
         list.clear();
-        list.addAll(
-                ctx.paymentRepo.findAll().stream()
-                        .map(ModelConverter::toOldPayment)
-                        .collect(Collectors.toList()));
+        list.addAll(ctx.paymentRepo.findAll().stream().collect(Collectors.toList()));
         view.paymentTable.setItems(list);
 
         // Realtime structural calculation metrics aggregation

@@ -40,7 +40,7 @@ public class AdminDashboardController {
         this.view = new AdminDashboardPage();
 
         Scene scene = new Scene(view.getView(), 1200, 750);
-        stage.setTitle("Admin Dashboard - CinemaBook");
+        stage.setTitle("User Dashboard - CinemaBook");
         stage.setScene(scene);
         stage.show();
 

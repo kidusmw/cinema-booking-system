@@ -70,7 +70,7 @@ public class CustomerDashboardPage {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        welcomeLabel = new Label("Welcome, Customer!");
+        welcomeLabel = new Label("Welcome, User!");
         welcomeLabel.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 14));
         welcomeLabel.setTextFill(Color.web(TEXT_MUTED));
 

@@ -1,5 +1,6 @@
 package ui.view.admin;
 
+import domain.model.Booking;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javafx.geometry.*;
@@ -7,7 +8,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.text.*;
-import ui.model.Booking;
 
 public class BookingManagmentPage {
 
@@ -52,8 +52,8 @@ public class BookingManagmentPage {
         TableColumn<Booking, Integer> idCol = new TableColumn<>("ID");
         idCol.setCellValueFactory(new PropertyValueFactory<>("bookingID"));
 
-        // 2. Customer Name
-        TableColumn<Booking, String> customerCol = new TableColumn<>("Customer");
+        // 2. User Name
+        TableColumn<Booking, String> customerCol = new TableColumn<>("User");
         customerCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
 
         // 3. Date (with formatter)

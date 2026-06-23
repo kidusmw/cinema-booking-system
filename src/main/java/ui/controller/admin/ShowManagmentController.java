@@ -1,7 +1,7 @@
 package ui.controller.admin;
 
 import application.AppContext;
-import application.ModelConverter;
+import domain.model.Showtime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +14,6 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import ui.model.Show;
 import ui.view.admin.ShowManagementPage;
 
 public class ShowManagmentController {
@@ -22,7 +21,7 @@ public class ShowManagmentController {
     private final ShowManagementPage view;
     private final AppContext ctx;
     private final AdminDashboardController dashboard;
-    private ObservableList<Show> showList;
+    private ObservableList<Showtime> showList;
     private final Map<String, String> movieMap = new HashMap<>();
     private final Map<String, String> hallMap = new HashMap<>();
     private final Map<String, String> movieMapById = new HashMap<>();
@@ -80,16 +79,15 @@ public class ShowManagmentController {
     }
 
     private void loadShows() {
-        List<Show> shows =
-                ctx.showtimeRepo.findAll().stream()
-                        .map(ModelConverter::toOldShowtime)
-                        .collect(Collectors.toList());
-        for (Show show : shows) {
-            if (show.getMovieID() != null && movieMapById.containsKey(show.getMovieID())) {
-                show.setMovieName(movieMapById.get(show.getMovieID()));
+        List<Showtime> shows = ctx.showtimeRepo.findAll().stream().collect(Collectors.toList());
+        for (Showtime show : shows) {
+            if (show.getMovieId() != null
+                    && movieMapById.containsKey(String.valueOf(show.getMovieId()))) {
+                show.setMovieName(movieMapById.get(String.valueOf(show.getMovieId())));
             }
-            if (show.getMovieHallID() != null && hallMapById.containsKey(show.getMovieHallID())) {
-                show.setHallName(hallMapById.get(show.getMovieHallID()));
+            if (show.getHallId() != null
+                    && hallMapById.containsKey(String.valueOf(show.getHallId()))) {
+                show.setHallName(hallMapById.get(String.valueOf(show.getHallId())));
             }
         }
 
@@ -102,15 +100,15 @@ public class ShowManagmentController {
             view.getShowTable().setItems(showList);
             return;
         }
-        ObservableList<Show> filtered = FXCollections.observableArrayList();
+        ObservableList<Showtime> filtered = FXCollections.observableArrayList();
         String lower = searchText.toLowerCase();
-        for (Show show : showList) {
-            if (show.getShowID().toLowerCase().contains(lower)
+        for (Showtime show : showList) {
+            if (String.valueOf(show.getShowId()).contains(lower)
                     || (show.getMovieName() != null
                             && show.getMovieName().toLowerCase().contains(lower))
                     || (show.getHallName() != null
                             && show.getHallName().toLowerCase().contains(lower))
-                    || show.getShowTime().toLowerCase().contains(lower)) {
+                    || show.getShowTime().toString().toLowerCase().contains(lower)) {
                 filtered.add(show);
             }
         }
@@ -118,41 +116,41 @@ public class ShowManagmentController {
     }
 
     private void handleAddShow() {
-        Dialog<Show> dialog = createShowDialog(null);
-        Optional<Show> result = dialog.showAndWait();
+        Dialog<Showtime> dialog = createShowDialog(null);
+        Optional<Showtime> result = dialog.showAndWait();
 
         result.ifPresent(
                 show -> {
-                    ctx.showtimeRepo.save(ModelConverter.toDomainShowtime(show));
+                    ctx.showtimeRepo.save(show);
                     loadShows();
                 });
     }
 
     private void handleEditShow() {
-        Show selected = view.showTable.getSelectionModel().getSelectedItem();
+        Showtime selected = view.showTable.getSelectionModel().getSelectedItem();
         if (selected == null) return;
 
-        Dialog<Show> dialog = createShowDialog(selected);
-        Optional<Show> result = dialog.showAndWait();
+        Dialog<Showtime> dialog = createShowDialog(selected);
+        Optional<Showtime> result = dialog.showAndWait();
 
         result.ifPresent(
                 show -> {
-                    show.setShowID(selected.getShowID());
-                    ctx.showtimeRepo.save(ModelConverter.toDomainShowtime(show));
+                    show.setShowId(selected.getShowId());
+                    ctx.showtimeRepo.save(show);
                     loadShows();
                 });
     }
 
     private void handleDeleteShow() {
-        Show selected = view.showTable.getSelectionModel().getSelectedItem();
+        Showtime selected = view.showTable.getSelectionModel().getSelectedItem();
         if (selected == null) return;
 
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
-        confirm.setContentText("Delete show ID: \"" + selected.getShowID() + "\"?");
+        confirm.setContentText("Delete show ID: \"" + selected.getShowId() + "\"?");
 
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            ctx.showtimeRepo.delete(Long.parseLong(selected.getShowID()));
+            ctx.showtimeRepo.delete(selected.getShowId());
             loadShows();
         }
     }
@@ -165,8 +163,8 @@ public class ShowManagmentController {
         }
     }
 
-    private Dialog<Show> createShowDialog(Show existing) {
-        Dialog<Show> dialog = new Dialog<>();
+    private Dialog<Showtime> createShowDialog(Showtime existing) {
+        Dialog<Showtime> dialog = new Dialog<>();
         dialog.setTitle(
                 existing == null ? "Schedule New Screening" : "Modify Screening Properties");
 
@@ -181,7 +179,7 @@ public class ShowManagmentController {
         grid.setPadding(new Insets(20, 40, 10, 20));
 
         TextField showIDField = new TextField();
-        if (existing != null) showIDField.setText(existing.getShowID());
+        if (existing != null) showIDField.setText(String.valueOf(existing.getShowId()));
         showIDField.setDisable(existing != null);
 
         ComboBox<String> movieComboBox = new ComboBox<>();
@@ -194,11 +192,11 @@ public class ShowManagmentController {
 
         DatePicker datePicker = new DatePicker();
         if (existing != null && existing.getShowDate() != null) {
-            datePicker.setValue(new java.sql.Date(existing.getShowDate().getTime()).toLocalDate());
+            datePicker.setValue(existing.getShowDate());
         }
 
         TextField timeField = new TextField();
-        if (existing != null) timeField.setText(existing.getShowTime());
+        if (existing != null) timeField.setText(existing.getShowTime().toString());
 
         grid.add(new Label("Show Code Key:"), 0, 0);
         grid.add(showIDField, 1, 0);
@@ -231,8 +229,8 @@ public class ShowManagmentController {
         dialog.setResultConverter(
                 dialogButton -> {
                     if (dialogButton == saveButtonType) {
-                        Show show = new Show();
-                        show.setShowID(showIDField.getText().trim());
+                        Showtime show = new Showtime();
+                        show.setShowId(Long.parseLong(showIDField.getText().trim()));
 
                         String selectedTitle = movieComboBox.getValue();
                         String selectedHallName = hallComboBox.getValue();
@@ -240,13 +238,13 @@ public class ShowManagmentController {
                         show.setMovieName(selectedTitle);
                         show.setHallName(selectedHallName);
 
-                        show.setMovieID(movieMap.get(selectedTitle));
-                        show.setMovieHallID(hallMap.get(selectedHallName));
+                        show.setMovieId(Long.parseLong(movieMap.get(selectedTitle)));
+                        show.setHallId(Long.parseLong(hallMap.get(selectedHallName)));
 
                         if (datePicker.getValue() != null) {
-                            show.setShowDate(java.sql.Date.valueOf(datePicker.getValue()));
+                            show.setShowDate(datePicker.getValue());
                         }
-                        show.setShowTime(timeField.getText().trim());
+                        show.setShowTime(java.time.LocalTime.parse(timeField.getText().trim()));
                         return show;
                     }
                     return null;

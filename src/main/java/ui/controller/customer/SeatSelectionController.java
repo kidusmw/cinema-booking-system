@@ -3,7 +3,7 @@ package ui.controller.customer;
 import static ui.common.Theme.*;
 
 import application.AppContext;
-import application.ModelConverter;
+import domain.model.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import javafx.geometry.Pos;
@@ -14,17 +14,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 import ui.controller.common.NavigationManager;
-import ui.model.*;
 import ui.view.customer.SeatSelectionPage;
 
 public class SeatSelectionController {
 
     private SeatSelectionPage view;
     private Stage stage;
-    private Customer currentUser;
+    private User currentUser;
     private Movie selectedMovie;
-    private Show selectedShow;
-    private Moviehall selectedHall;
+    private Showtime selectedShow;
+    private Hall selectedHall;
     private boolean isVIP;
     private AppContext ctx;
     private NavigationManager nav;
@@ -40,10 +39,10 @@ public class SeatSelectionController {
             Stage stage,
             AppContext ctx,
             NavigationManager nav,
-            Customer currentUser,
+            User currentUser,
             Movie selectedMovie,
-            Show selectedShow,
-            Moviehall selectedHall,
+            Showtime selectedShow,
+            Hall selectedHall,
             boolean isVIP) {
         this.stage = stage;
         this.ctx = ctx;
@@ -72,8 +71,7 @@ public class SeatSelectionController {
     private void loadSeats() {
         view.seatGrid.getChildren().clear();
         allSeats =
-                ctx.seatRepo.findByHallId(Long.parseLong(selectedHall.getId())).stream()
-                        .map(ModelConverter::toOldSeat)
+                ctx.seatRepo.findByHallId(selectedHall.getHallId()).stream()
                         .collect(Collectors.toList());
 
         if (allSeats.isEmpty()) {
@@ -118,7 +116,7 @@ public class SeatSelectionController {
         if ("BOOKED".equalsIgnoreCase(seat.getStatus())) {
             color = BOOKED_COLOR;
             clickable = false;
-        } else if (selectedSeats.contains(seat.getSeatID())) {
+        } else if (selectedSeats.contains(String.valueOf(seat.getSeatId()))) {
             color = SELECTED_COLOR;
         } else {
             color = AVAILABLE_COLOR;
@@ -132,7 +130,7 @@ public class SeatSelectionController {
                         + ";");
 
         if (clickable) {
-            final String seatId = seat.getSeatID();
+            final String seatId = String.valueOf(seat.getSeatId());
             btn.setOnAction(e -> toggleSeatSelection(seatId, btn));
         } else {
             btn.setDisable(true);

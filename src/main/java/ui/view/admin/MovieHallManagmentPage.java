@@ -2,26 +2,26 @@ package ui.view.admin;
 
 import static ui.common.Theme.*;
 
+import domain.model.Hall;
 import javafx.geometry.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*;
-import ui.model.Moviehall;
 
 public class MovieHallManagmentPage {
 
-    public TableView<Moviehall> hallTable;
+    public TableView<Hall> hallTable;
     public TextField searchField;
     public Button btnAddHall;
     public Button btnEdit;
     public Button btnDelete;
     public Button btnRefresh;
     public Button btnBack;
-    public TableColumn<Moviehall, String> idCol;
-    public TableColumn<Moviehall, String> nameCol;
-    public TableColumn<Moviehall, Integer> capacityCol;
+    public TableColumn<Hall, String> idCol;
+    public TableColumn<Hall, String> nameCol;
+    public TableColumn<Hall, Integer> capacityCol;
 
     private VBox root;
 

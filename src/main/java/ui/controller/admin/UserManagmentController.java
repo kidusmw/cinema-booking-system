@@ -1,7 +1,7 @@
 package ui.controller.admin;
 
 import application.AppContext;
-import application.ModelConverter;
+import domain.model.User;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,7 +9,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import ui.model.User;
 import ui.view.admin.UserManagmentPage;
 
 public class UserManagmentController {
@@ -55,10 +54,7 @@ public class UserManagmentController {
 
     private void loadUsers() {
         try {
-            List<User> users =
-                    ctx.userRepo.findAll().stream()
-                            .map(ModelConverter::toOldUser)
-                            .collect(Collectors.toList());
+            List<User> users = ctx.userRepo.findAll().stream().collect(Collectors.toList());
             if (users == null || users.isEmpty()) {
                 log.warn("Database query executed but returned 0 records.");
             }
@@ -116,7 +112,7 @@ public class UserManagmentController {
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             selected.setRole(selectedRole);
-            ctx.userRepo.save(ModelConverter.toDomainUser(selected));
+            ctx.userRepo.save(selected);
             showAlert("Success", "User security role altered smoothly!");
             loadUsers();
         }
@@ -139,7 +135,7 @@ public class UserManagmentController {
 
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            ctx.userRepo.delete((long) selected.getUserID());
+            ctx.userRepo.delete((long) selected.getUserId());
             showAlert("Success", "User account wiped successfully.");
             loadUsers();
         }

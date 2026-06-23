@@ -3,7 +3,10 @@ package ui.controller.customer;
 import static ui.common.Theme.*;
 
 import application.AppContext;
-import application.ModelConverter;
+import domain.model.Hall;
+import domain.model.Movie;
+import domain.model.Showtime;
+import domain.model.User;
 import java.util.List;
 import java.util.stream.Collectors;
 import javafx.geometry.Insets;
@@ -20,18 +23,14 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import ui.controller.common.NavigationManager;
-import ui.model.Customer;
-import ui.model.Movie;
-import ui.model.Moviehall;
-import ui.model.Show;
 import ui.view.customer.MovieHallSelectionPage;
 
 public class MovieHallSelectionController {
     private MovieHallSelectionPage view;
     private Stage stage;
-    private Customer currentUser;
+    private User currentUser;
     private Movie selectedMovie;
-    private Show selectedShow;
+    private Showtime selectedShow;
     private AppContext ctx;
     private NavigationManager nav;
     private static final String WHITE = "#FFFFFF";
@@ -40,9 +39,9 @@ public class MovieHallSelectionController {
             Stage stage,
             AppContext ctx,
             NavigationManager nav,
-            Customer currentUser,
+            User currentUser,
             Movie selectedMovie,
-            Show selectedShow) {
+            Showtime selectedShow) {
         this.stage = stage;
         this.ctx = ctx;
         this.nav = nav;
@@ -62,10 +61,7 @@ public class MovieHallSelectionController {
 
     private void loadHalls() {
         view.hallsContainer.getChildren().clear();
-        List<Moviehall> halls =
-                ctx.hallRepo.findAll().stream()
-                        .map(ModelConverter::toOldHall)
-                        .collect(Collectors.toList());
+        List<Hall> halls = ctx.hallRepo.findAll().stream().collect(Collectors.toList());
         if (halls.isEmpty()) {
             Label noHalls = new Label("🏛️ No halls available");
             noHalls.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 14));
@@ -74,12 +70,12 @@ public class MovieHallSelectionController {
             return;
         }
 
-        for (Moviehall hall : halls) {
+        for (Hall hall : halls) {
             view.hallsContainer.getChildren().add(createHallCard(hall));
         }
     }
 
-    private VBox createHallCard(Moviehall hall) {
+    private VBox createHallCard(Hall hall) {
         VBox card = new VBox(15);
         card.setPadding(new Insets(20, 25, 20, 25));
         card.setStyle(
@@ -162,7 +158,7 @@ public class MovieHallSelectionController {
         capacityLabel.setTextFill(Color.web(TEXT_MUTED));
         capacityBox.getChildren().addAll(capacityValue, capacityLabel);
         VBox priceBox = new VBox(2);
-        double price = (hall.getPricePerSeat() <= 0) ? 50.00 : hall.getPricePerSeat();
+        double price = hall.isVip() ? 120.00 : 50.00;
 
         Label priceValue = new Label(String.format("%.2f Birr", price));
         priceValue.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
@@ -247,7 +243,7 @@ public class MovieHallSelectionController {
         return card;
     }
 
-    private boolean isVIPHall(Moviehall hall) {
+    private boolean isVIPHall(Hall hall) {
         if (hall.getName() == null) return false;
         String name = hall.getName().toUpperCase();
         return name.contains("VIP");

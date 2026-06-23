@@ -51,9 +51,9 @@ public class UserTypePage {
                 createRoleCard(
                         "👨‍💼", "Administrator", "Manage movies, shows, and bookings", false);
 
-        VBox customerCard = createRoleCard("🎬", "Customer", "Browse and book movie tickets", true);
-        btnAdmin = new Button("Continue as Admin");
-        btnCustomer = new Button("Continue as Customer");
+        VBox customerCard = createRoleCard("🎬", "User", "Browse and book movie tickets", true);
+        btnAdmin = new Button("Continue as User");
+        btnCustomer = new Button("Continue as User");
 
         stylePrimaryButton(btnAdmin);
         stylePrimaryButton(btnCustomer);

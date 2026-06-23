@@ -1,15 +1,15 @@
 package ui.view.admin;
 
+import domain.model.Hall;
+import domain.model.Seat;
 import javafx.geometry.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.*;
-import ui.model.Moviehall;
-import ui.model.Seat;
 
 public class SeatManagmentPage {
     public TableView<Seat> seatTable;
-    public ComboBox<Moviehall> hallDropdown;
+    public ComboBox<Hall> hallDropdown;
     public TextField seatCountField;
     public Button btnGenerate;
     public Button btnDelete;

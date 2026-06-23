@@ -1,15 +1,12 @@
 package ui.controller.common;
 
 import application.AppContext;
-import application.ModelConverter;
+import domain.model.User;
 import java.util.Optional;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import ui.controller.admin.AdminDashboardController;
 import ui.controller.customer.CustomerDashboardController;
-import ui.model.Admin;
-import ui.model.Customer;
-import ui.model.User;
 import ui.view.common.LoginPage;
 
 public class LoginController {
@@ -50,13 +47,12 @@ public class LoginController {
             return;
         }
 
-        User oldUser = ModelConverter.toOldUser(userOpt.get());
+        User user = userOpt.get();
 
-        if ("admin".equalsIgnoreCase(expectedRole) && oldUser instanceof Admin) {
-            nav.goFresh(
-                    () -> new AdminDashboardController(stage, ctx, nav, oldUser.getFirstName()));
-        } else if ("customer".equalsIgnoreCase(expectedRole) && oldUser instanceof Customer) {
-            nav.goFresh(() -> new CustomerDashboardController(stage, ctx, nav, (Customer) oldUser));
+        if ("admin".equalsIgnoreCase(expectedRole) && user instanceof User) {
+            nav.goFresh(() -> new AdminDashboardController(stage, ctx, nav, user.getFirstName()));
+        } else if ("customer".equalsIgnoreCase(expectedRole) && user instanceof User) {
+            nav.goFresh(() -> new CustomerDashboardController(stage, ctx, nav, (User) user));
         } else {
             view.errorLabel.setText("Role mismatch or invalid user type");
             view.errorLabel.setVisible(true);

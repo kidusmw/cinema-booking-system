@@ -3,6 +3,7 @@ package ui.controller.customer;
 import static ui.common.Theme.*;
 
 import application.AppContext;
+import domain.model.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,7 +25,6 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import ui.controller.common.NavigationManager;
-import ui.model.*;
 import ui.view.customer.PaymentPage;
 
 public class PaymentController {
@@ -32,10 +32,10 @@ public class PaymentController {
             org.slf4j.LoggerFactory.getLogger(PaymentController.class);
     private PaymentPage view;
     private Stage stage;
-    private Customer currentUser;
+    private User currentUser;
     private Movie selectedMovie;
-    private Show selectedShow;
-    private Moviehall selectedHall;
+    private Showtime selectedShow;
+    private Hall selectedHall;
     private List<String> selectedSeatIds;
     private double totalAmount;
     private boolean isVIP;
@@ -50,10 +50,10 @@ public class PaymentController {
             Stage stage,
             AppContext ctx,
             NavigationManager nav,
-            Customer currentUser,
+            User currentUser,
             Movie selectedMovie,
-            Show selectedShow,
-            Moviehall selectedHall,
+            Showtime selectedShow,
+            Hall selectedHall,
             List<String> selectedSeatIds,
             double seatPrice) {
         this.stage = stage;
@@ -88,7 +88,7 @@ public class PaymentController {
         addSummaryRow("🎬 Movie", selectedMovie.getTitle());
         addSummaryRow("🏛️ Hall", selectedHall.getName() + (isVIP ? " (VIP)" : ""));
         addSummaryRow("📅 Date", selectedShow.getShowDate().toString());
-        addSummaryRow("🕐 Time", selectedShow.getShowTime());
+        addSummaryRow("🕐 Time", selectedShow.getShowTime().toString());
         addSummaryRow("💺 Seats", String.join(", ", selectedSeatIds));
         addSummaryRow("👤 User", currentUser.getFirstName() + " " + currentUser.getLastName());
         summary.getChildren().add(new Separator());
@@ -180,8 +180,8 @@ public class PaymentController {
         try {
             List<Long> domainSeatIds =
                     selectedSeatIds.stream().map(Long::parseLong).collect(Collectors.toList());
-            Long userId = (long) currentUser.getUserID();
-            Long showId = Long.parseLong(selectedShow.getShowID());
+            Long userId = (long) currentUser.getUserId();
+            Long showId = selectedShow.getShowId();
             ctx.bookingFacade.bookAndPay(userId, showId, domainSeatIds, totalAmount, "CARD");
             showSuccessAndTicket();
         } catch (Exception e) {

@@ -1,7 +1,7 @@
 package ui.controller.admin;
 
 import application.AppContext;
-import application.ModelConverter;
+import domain.model.Booking;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,7 +9,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ui.model.Booking;
 import ui.view.admin.BookingManagmentPage;
 
 public class BookingManagmentController {
@@ -38,9 +37,7 @@ public class BookingManagmentController {
     private void loadTableData() {
         this.masterList =
                 FXCollections.observableArrayList(
-                        ctx.bookingRepo.findAll().stream()
-                                .map(ModelConverter::toOldBooking)
-                                .collect(Collectors.toList()));
+                        ctx.bookingRepo.findAll().stream().collect(Collectors.toList()));
         view.bookingTable.setItems(masterList);
         log.info("Data Loaded: {} bookings.", masterList.size());
     }
@@ -52,8 +49,8 @@ public class BookingManagmentController {
         }
         ObservableList<Booking> filtered = FXCollections.observableArrayList();
         for (Booking b : masterList) {
-            if (b.getCustomerName() != null
-                    && b.getCustomerName().toLowerCase().contains(searchText.toLowerCase())) {
+            if (b.getMovieName() != null
+                    && b.getMovieName().toLowerCase().contains(searchText.toLowerCase())) {
                 filtered.add(b);
             }
         }
@@ -66,7 +63,7 @@ public class BookingManagmentController {
             showAlert("No Selection", "Please select a booking to cancel.");
             return;
         }
-        ctx.bookingService.cancelBooking((long) selected.getBookingID());
+        ctx.bookingService.cancelBooking((long) selected.getBookingId());
         showAlert("Success", "Booking Cancelled");
         loadTableData();
     }

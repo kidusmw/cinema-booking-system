@@ -1,7 +1,8 @@
 package ui.controller.customer;
 
 import application.AppContext;
-import application.ModelConverter;
+import domain.model.Movie;
+import domain.model.User;
 import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,20 +20,18 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 import ui.controller.common.NavigationManager;
-import ui.model.Customer;
-import ui.model.Movie;
 import ui.view.customer.MovieBrowserPage;
 
 public class MovieBrowserController {
     private MovieBrowserPage view;
     private Stage stage;
-    private Customer currentUser;
+    private User currentUser;
     private AppContext ctx;
     private NavigationManager nav;
     private ObservableList<Movie> movies;
 
     public MovieBrowserController(
-            Stage stage, AppContext ctx, NavigationManager nav, Customer currentUser) {
+            Stage stage, AppContext ctx, NavigationManager nav, User currentUser) {
         this.stage = stage;
         this.ctx = ctx;
         this.nav = nav;
@@ -48,10 +47,7 @@ public class MovieBrowserController {
     }
 
     private void loadMovies() {
-        List<Movie> movieList =
-                ctx.movieRepo.findAll().stream()
-                        .map(ModelConverter::toOldMovie)
-                        .collect(Collectors.toList());
+        List<Movie> movieList = ctx.movieRepo.findAll().stream().collect(Collectors.toList());
         movies = FXCollections.observableArrayList(movieList);
         view.movieContainer.getChildren().clear();
 

@@ -1,7 +1,7 @@
 package ui.controller.admin;
 
 import application.AppContext;
-import application.ModelConverter;
+import domain.model.Movie;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +16,6 @@ import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ui.controller.common.NavigationManager;
-import ui.model.Movie;
 import ui.view.admin.MovieManagementPage;
 
 public class MovieManagementController {
@@ -33,7 +32,7 @@ public class MovieManagementController {
         view = new MovieManagementPage();
 
         Scene scene = new Scene(view.getView(), 1200, 750);
-        stage.setTitle("Manage Movies - CinemaBook Admin");
+        stage.setTitle("Manage Movies - CinemaBook User");
         stage.setScene(scene);
         stage.show();
 
@@ -71,10 +70,7 @@ public class MovieManagementController {
     }
 
     private void loadMovies() {
-        List<Movie> movies =
-                ctx.movieRepo.findAll().stream()
-                        .map(ModelConverter::toOldMovie)
-                        .collect(Collectors.toList());
+        List<Movie> movies = ctx.movieRepo.findAll().stream().collect(Collectors.toList());
         movieList = FXCollections.observableArrayList(movies);
         view.movieTable.setItems(movieList);
     }
@@ -101,7 +97,7 @@ public class MovieManagementController {
 
         result.ifPresent(
                 movie -> {
-                    ctx.movieRepo.save(ModelConverter.toDomainMovie(movie));
+                    ctx.movieRepo.save(movie);
                     showAlert("Success", "Movie added successfully!");
                     loadMovies();
                 });
@@ -119,8 +115,8 @@ public class MovieManagementController {
 
         result.ifPresent(
                 movie -> {
-                    movie.setMovieID(selected.getMovieID());
-                    ctx.movieRepo.save(ModelConverter.toDomainMovie(movie));
+                    movie.setMovieId(selected.getMovieId());
+                    ctx.movieRepo.save(movie);
                     showAlert("Success", "Movie updated successfully!");
                     loadMovies();
                 });
@@ -324,7 +320,7 @@ public class MovieManagementController {
                                 movie.setReleaseDate(date);
                             }
                             if (existing != null) {
-                                movie.setMovieID(existing.getMovieID());
+                                movie.setMovieId(existing.getMovieId());
                             }
 
                             return movie;

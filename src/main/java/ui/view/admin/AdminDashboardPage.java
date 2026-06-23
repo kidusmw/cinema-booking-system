@@ -130,7 +130,7 @@ public class AdminDashboardPage {
                         + ";"
                         + "-fx-border-width: 0 0 1 0;");
 
-        welcomeLabel = new Label("Welcome, Admin");
+        welcomeLabel = new Label("Welcome, User");
         welcomeLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
         welcomeLabel.setTextFill(Color.web(TEXT_DARK));
 

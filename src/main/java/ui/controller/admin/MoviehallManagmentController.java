@@ -1,7 +1,7 @@
 package ui.controller.admin;
 
 import application.AppContext;
-import application.ModelConverter;
+import domain.model.Hall;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -14,7 +14,6 @@ import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 import ui.controller.common.NavigationManager;
-import ui.model.Moviehall;
 import ui.view.admin.MovieHallManagmentPage;
 
 public class MoviehallManagmentController {
@@ -25,7 +24,7 @@ public class MoviehallManagmentController {
     private Stage stage;
     private final AppContext ctx;
     private final NavigationManager nav;
-    private ObservableList<Moviehall> hallList;
+    private ObservableList<Hall> hallList;
 
     public MoviehallManagmentController(Stage stage, AppContext ctx, NavigationManager nav) {
         this.stage = stage;
@@ -34,7 +33,7 @@ public class MoviehallManagmentController {
         this.view = new MovieHallManagmentPage();
 
         Scene scene = new Scene(view.getView(), 1100, 700);
-        stage.setTitle("Hall Management - CinemaBook Admin");
+        stage.setTitle("Hall Management - CinemaBook User");
         stage.setScene(scene);
         stage.show();
 
@@ -53,10 +52,7 @@ public class MoviehallManagmentController {
 
     private void loadHalls() {
         try {
-            List<Moviehall> halls =
-                    ctx.hallRepo.findAll().stream()
-                            .map(ModelConverter::toOldHall)
-                            .collect(Collectors.toList());
+            List<Hall> halls = ctx.hallRepo.findAll().stream().collect(Collectors.toList());
             hallList = FXCollections.observableArrayList(halls);
             view.hallTable.setItems(hallList);
             log.info("Loaded {} halls into table", halls.size());
@@ -71,11 +67,11 @@ public class MoviehallManagmentController {
             view.hallTable.setItems(hallList);
             return;
         }
-        ObservableList<Moviehall> filtered = FXCollections.observableArrayList();
+        ObservableList<Hall> filtered = FXCollections.observableArrayList();
         String lower = searchText.toLowerCase();
-        for (Moviehall hall : hallList) {
+        for (Hall hall : hallList) {
             if (hall.getName().toLowerCase().contains(lower)
-                    || hall.getId().toLowerCase().contains(lower)) {
+                    || String.valueOf(hall.getHallId()).contains(lower)) {
                 filtered.add(hall);
             }
         }
@@ -83,40 +79,40 @@ public class MoviehallManagmentController {
     }
 
     private void handleAddHall() {
-        Dialog<Moviehall> dialog = createHallDialog(null);
-        Optional<Moviehall> result = dialog.showAndWait();
+        Dialog<Hall> dialog = createHallDialog(null);
+        Optional<Hall> result = dialog.showAndWait();
 
         result.ifPresent(
                 hall -> {
-                    ctx.hallRepo.save(ModelConverter.toDomainHall(hall));
+                    ctx.hallRepo.save(hall);
                     showAlert("Success", "Hall added successfully!");
                     loadHalls();
                 });
     }
 
     private void handleEditHall() {
-        Moviehall selected = view.hallTable.getSelectionModel().getSelectedItem();
+        Hall selected = view.hallTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
             showAlert("No Selection", "Please select a hall to edit.");
             return;
         }
 
-        Dialog<Moviehall> dialog = createHallDialog(selected);
-        Optional<Moviehall> result = dialog.showAndWait();
+        Dialog<Hall> dialog = createHallDialog(selected);
+        Optional<Hall> result = dialog.showAndWait();
 
         result.ifPresent(
                 hall -> {
-                    // FIXED: Changed .getId(...) to .setId(...)
-                    hall.setId(selected.getId());
+                    // FIXED: Changed .getId(...) to .setHallId(...)
+                    hall.setHallId(selected.getHallId());
 
-                    ctx.hallRepo.save(ModelConverter.toDomainHall(hall));
+                    ctx.hallRepo.save(hall);
                     showAlert("Success", "Hall updated successfully!");
                     loadHalls();
                 });
     }
 
     private void handleDeleteHall() {
-        Moviehall selected = view.hallTable.getSelectionModel().getSelectedItem();
+        Hall selected = view.hallTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
             showAlert("No Selection", "Please select a hall to delete.");
             return;
@@ -129,7 +125,7 @@ public class MoviehallManagmentController {
 
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            ctx.hallRepo.delete(Long.parseLong(selected.getId()));
+            ctx.hallRepo.delete(selected.getHallId());
             showAlert("Success", "Hall deleted successfully!");
             loadHalls();
         }
@@ -140,8 +136,8 @@ public class MoviehallManagmentController {
         nav.back();
     }
 
-    private Dialog<Moviehall> createHallDialog(Moviehall existing) {
-        Dialog<Moviehall> dialog = new Dialog<>();
+    private Dialog<Hall> createHallDialog(Hall existing) {
+        Dialog<Hall> dialog = new Dialog<>();
         dialog.setTitle(existing == null ? "Add New Hall" : "Edit Hall");
         dialog.setHeaderText(existing == null ? "Enter hall details" : "Update hall details");
 
@@ -185,7 +181,7 @@ public class MoviehallManagmentController {
                             return null;
                         }
                         try {
-                            Moviehall hall = new Moviehall();
+                            Hall hall = new Hall();
                             hall.setName(nameField.getText().trim());
                             hall.setCapacity(Integer.parseInt(capacityField.getText().trim()));
                             return hall;

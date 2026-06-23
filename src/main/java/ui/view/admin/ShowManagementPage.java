@@ -2,6 +2,8 @@ package ui.view.admin;
 
 import static ui.common.Theme.*;
 
+import domain.model.Showtime;
+import java.time.LocalDate;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -10,10 +12,9 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import ui.model.Show;
 
 public class ShowManagementPage {
-    public TableView<Show> showTable;
+    public TableView<Showtime> showTable;
     public TextField searchField;
     public Button btnAddShow;
     public Button btnEdit;
@@ -118,36 +119,34 @@ public class ShowManagementPage {
         showTable.setPlaceholder(new Label("No shows scheduled. Click 'Add Show' to create one."));
         VBox.setVgrow(showTable, Priority.ALWAYS);
 
-        TableColumn<Show, String> showIdCol = new TableColumn<>("Show ID");
-        showIdCol.setCellValueFactory(new PropertyValueFactory<>("showID"));
+        TableColumn<Showtime, String> showIdCol = new TableColumn<>("Show ID");
+        showIdCol.setCellValueFactory(new PropertyValueFactory<>("showId"));
         showIdCol.setPrefWidth(120);
-        TableColumn<Show, String> movieCol = new TableColumn<>("Movie Name");
+        TableColumn<Showtime, String> movieCol = new TableColumn<>("Movie Name");
         movieCol.setCellValueFactory(new PropertyValueFactory<>("movieName"));
         movieCol.setPrefWidth(180);
-        TableColumn<Show, String> hallCol = new TableColumn<>("Hall Name");
+        TableColumn<Showtime, String> hallCol = new TableColumn<>("Hall Name");
         hallCol.setCellValueFactory(new PropertyValueFactory<>("hallName"));
         hallCol.setPrefWidth(140);
 
-        TableColumn<Show, java.util.Date> dateCol = new TableColumn<>("Date");
+        TableColumn<Showtime, LocalDate> dateCol = new TableColumn<>("Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<>("showDate"));
         dateCol.setPrefWidth(130);
         dateCol.setCellFactory(
                 col ->
-                        new TableCell<Show, java.util.Date>() {
+                        new TableCell<Showtime, LocalDate>() {
                             @Override
-                            protected void updateItem(java.util.Date item, boolean empty) {
+                            protected void updateItem(LocalDate item, boolean empty) {
                                 super.updateItem(item, empty);
                                 if (empty || item == null) {
                                     setText(null);
                                 } else {
-                                    setText(
-                                            new java.text.SimpleDateFormat("yyyy-MM-dd")
-                                                    .format(item));
+                                    setText(item.toString());
                                 }
                             }
                         });
 
-        TableColumn<Show, String> timeCol = new TableColumn<>("Time");
+        TableColumn<Showtime, String> timeCol = new TableColumn<>("Time");
         timeCol.setCellValueFactory(new PropertyValueFactory<>("showTime"));
         timeCol.setPrefWidth(100);
 
@@ -164,7 +163,7 @@ public class ShowManagementPage {
         root.getChildren().add(actionRow);
     }
 
-    public TableView<Show> getShowTable() {
+    public TableView<Showtime> getShowTable() {
         return showTable;
     }
 

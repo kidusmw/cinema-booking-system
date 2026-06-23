@@ -14,7 +14,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class MovieManagementPage {
-    public TableView<ui.model.Movie> movieTable;
+    public TableView<domain.model.Movie> movieTable;
     public TextField searchField;
     public Button btnAddMovie;
     public Button btnEdit;
@@ -92,36 +92,36 @@ public class MovieManagementPage {
         movieTable.setPlaceholder(new Label("No movies found. Click 'Add Movie' to create one."));
 
         VBox.setVgrow(movieTable, Priority.ALWAYS);
-        TableColumn<ui.model.Movie, String> idCol = new TableColumn<>("Movie ID");
+        TableColumn<domain.model.Movie, String> idCol = new TableColumn<>("Movie ID");
         idCol.setCellValueFactory(new PropertyValueFactory<>("movieID"));
         idCol.setPrefWidth(80);
-        TableColumn<ui.model.Movie, String> titleCol = new TableColumn<>("Title");
+        TableColumn<domain.model.Movie, String> titleCol = new TableColumn<>("Title");
         titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         titleCol.setPrefWidth(180);
-        TableColumn<ui.model.Movie, String> genreCol = new TableColumn<>("Genre");
+        TableColumn<domain.model.Movie, String> genreCol = new TableColumn<>("Genre");
         genreCol.setCellValueFactory(new PropertyValueFactory<>("genre"));
         genreCol.setPrefWidth(110);
-        TableColumn<ui.model.Movie, Integer> durationCol = new TableColumn<>("Duration");
+        TableColumn<domain.model.Movie, Integer> durationCol = new TableColumn<>("Duration");
         durationCol.setCellValueFactory(new PropertyValueFactory<>("duration"));
         durationCol.setPrefWidth(100);
-        TableColumn<ui.model.Movie, Double> ratingCol = new TableColumn<>("Rating");
+        TableColumn<domain.model.Movie, Double> ratingCol = new TableColumn<>("Rating");
         ratingCol.setCellValueFactory(new PropertyValueFactory<>("rating"));
         ratingCol.setPrefWidth(80);
-        TableColumn<ui.model.Movie, String> langCol = new TableColumn<>("Language");
+        TableColumn<domain.model.Movie, String> langCol = new TableColumn<>("Language");
         langCol.setCellValueFactory(new PropertyValueFactory<>("language"));
         langCol.setPrefWidth(100);
-        TableColumn<ui.model.Movie, Date> dateCol = new TableColumn<>("Release Date");
+        TableColumn<domain.model.Movie, Date> dateCol = new TableColumn<>("Release Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<>("releaseDate"));
         dateCol.setPrefWidth(110);
-        TableColumn<ui.model.Movie, String> posterCol = new TableColumn<>("Poster Path");
+        TableColumn<domain.model.Movie, String> posterCol = new TableColumn<>("Poster Path");
         posterCol.setCellValueFactory(new PropertyValueFactory<>("posterPath"));
         posterCol.setPrefWidth(150);
-        TableColumn<ui.model.Movie, String> descCol = new TableColumn<>("Description");
+        TableColumn<domain.model.Movie, String> descCol = new TableColumn<>("Description");
         descCol.setCellValueFactory(new PropertyValueFactory<>("description"));
         descCol.setPrefWidth(200);
         ratingCol.setCellFactory(
                 col ->
-                        new TableCell<ui.model.Movie, Double>() {
+                        new TableCell<domain.model.Movie, Double>() {
                             @Override
                             protected void updateItem(Double item, boolean empty) {
                                 super.updateItem(item, empty);
@@ -134,7 +134,7 @@ public class MovieManagementPage {
                         });
         durationCol.setCellFactory(
                 col ->
-                        new TableCell<ui.model.Movie, Integer>() {
+                        new TableCell<domain.model.Movie, Integer>() {
                             @Override
                             protected void updateItem(Integer item, boolean empty) {
                                 super.updateItem(item, empty);
@@ -149,7 +149,7 @@ public class MovieManagementPage {
                         });
         dateCol.setCellFactory(
                 col ->
-                        new TableCell<ui.model.Movie, Date>() {
+                        new TableCell<domain.model.Movie, Date>() {
                             private final SimpleDateFormat format =
                                     new SimpleDateFormat("yyyy-MM-dd");
 

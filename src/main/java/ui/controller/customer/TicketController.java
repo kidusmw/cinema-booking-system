@@ -1,6 +1,7 @@
 package ui.controller.customer;
 
 import application.AppContext;
+import domain.model.*;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import javafx.scene.Scene;
@@ -9,16 +10,15 @@ import javafx.scene.layout.*;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 import ui.controller.common.NavigationManager;
-import ui.model.*;
 import ui.view.customer.TicketPage;
 
 public class TicketController {
     private TicketPage view;
     private Stage stage;
-    private Customer currentUser;
+    private User currentUser;
     private Movie selectedMovie;
-    private Show selectedShow;
-    private Moviehall selectedHall;
+    private Showtime selectedShow;
+    private Hall selectedHall;
     private List<String> selectedSeatIds;
     private double totalAmount;
     private List<String> bookingIds;
@@ -34,10 +34,10 @@ public class TicketController {
             Stage stage,
             AppContext ctx,
             NavigationManager nav,
-            Customer currentUser,
+            User currentUser,
             Movie selectedMovie,
-            Show selectedShow,
-            Moviehall selectedHall,
+            Showtime selectedShow,
+            Hall selectedHall,
             List<String> selectedSeatIds,
             double totalAmount,
             List<String> bookingIds) {
@@ -80,12 +80,13 @@ public class TicketController {
     }
 
     private void populateTicket() {
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
         view.successLabel.setText("🎉 Booking Confirmed!");
         view.movieTitle.setText(selectedMovie.getTitle());
         view.movieGenre.setText(selectedMovie.getGenre());
         view.dateTimeLabel.setText(
-                sdf.format(selectedShow.getShowDate()) + " • " + selectedShow.getShowTime());
+                selectedShow.getShowDate().toString()
+                        + " • "
+                        + selectedShow.getShowTime().toString());
         view.hallLabel.setText(selectedHall.getName());
         StringBuilder seatList = new StringBuilder();
         if (selectedSeatIds != null && !selectedSeatIds.isEmpty()) {

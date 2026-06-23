@@ -1,8 +1,11 @@
 package ui.controller.customer;
 
 import application.AppContext;
-import application.ModelConverter;
-import java.text.SimpleDateFormat;
+import domain.model.Movie;
+import domain.model.Showtime;
+import domain.model.User;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 import javafx.geometry.Insets;
@@ -14,9 +17,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 import ui.controller.common.NavigationManager;
-import ui.model.Customer;
-import ui.model.Movie;
-import ui.model.Show;
 import ui.view.customer.ShowSelectionPage;
 
 public class ShowSelectionController {
@@ -25,11 +25,11 @@ public class ShowSelectionController {
             org.slf4j.LoggerFactory.getLogger(ShowSelectionController.class);
     private ShowSelectionPage view;
     private Stage stage;
-    private Customer currentUser;
+    private User currentUser;
     private Movie selectedMovie;
     private AppContext ctx;
     private NavigationManager nav;
-    private List<Show> movieShows;
+    private List<Showtime> movieShows;
 
     private static final String ACCENT = "#DB2777";
     private static final String TEXT_DARK = "#1E293B";
@@ -41,7 +41,7 @@ public class ShowSelectionController {
             Stage stage,
             AppContext ctx,
             NavigationManager nav,
-            Customer currentUser,
+            User currentUser,
             Movie selectedMovie) {
         this.stage = stage;
         this.ctx = ctx;
@@ -70,8 +70,7 @@ public class ShowSelectionController {
         view.showCardsContainer.getChildren().clear();
         view.dateButtonsContainer.getChildren().clear();
         movieShows =
-                ctx.showtimeRepo.findByMovieId(Long.parseLong(selectedMovie.getMovieID())).stream()
-                        .map(ModelConverter::toOldShowtime)
+                ctx.showtimeRepo.findByMovieId(selectedMovie.getMovieId()).stream()
                         .collect(Collectors.toList());
 
         if (movieShows.isEmpty()) {
@@ -81,30 +80,24 @@ public class ShowSelectionController {
             view.showCardsContainer.getChildren().add(noShows);
             return;
         }
-        Set<Date> uniqueDates = new TreeSet<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        for (Show show : movieShows) {
+        Set<LocalDate> uniqueDates = new TreeSet<>();
+        for (Showtime show : movieShows) {
             if (show.getShowDate() != null) {
-                String dateStr = sdf.format(show.getShowDate());
-                try {
-                    uniqueDates.add(sdf.parse(dateStr));
-                } catch (Exception e) {
-                    log.error("Failed to parse date", e);
-                }
+                uniqueDates.add(show.getShowDate());
             }
         }
-        createDateButtons(uniqueDates, sdf);
-        displayShowsForDate(null, sdf);
+        createDateButtons(uniqueDates);
+        displayShowsForDate(null);
     }
 
-    private void createDateButtons(Set<Date> uniqueDates, SimpleDateFormat sdf) {
+    private void createDateButtons(Set<LocalDate> uniqueDates) {
 
         Button allBtn = createDateButton("All Dates", null);
         allBtn.setStyle(getDateButtonStyle(true));
         view.dateButtonsContainer.getChildren().add(allBtn);
 
-        for (Date date : uniqueDates) {
-            String dateStr = sdf.format(date);
+        for (LocalDate date : uniqueDates) {
+            String dateStr = date.toString();
             Button dateBtn = createDateButton(formatDateLabel(date), dateStr);
             view.dateButtonsContainer.getChildren().add(dateBtn);
         }
@@ -125,22 +118,22 @@ public class ShowSelectionController {
                         }
                     }
                     btn.setStyle(getDateButtonStyle(true));
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    displayShowsForDate(dateValue, sdf);
+                    displayShowsForDate(dateValue);
                 });
         return btn;
     }
 
-    private void displayShowsForDate(String dateFilter, SimpleDateFormat sdf) {
+    private void displayShowsForDate(String dateFilter) {
         view.showCardsContainer.getChildren().clear();
-        List<Show> filteredShows = movieShows;
+        List<Showtime> filteredShows = movieShows;
         if (dateFilter != null) {
             filteredShows =
                     movieShows.stream()
                             .filter(
                                     s ->
                                             s.getShowDate() != null
-                                                    && sdf.format(s.getShowDate())
+                                                    && s.getShowDate()
+                                                            .toString()
                                                             .equals(dateFilter))
                             .collect(Collectors.toList());
         }
@@ -152,12 +145,12 @@ public class ShowSelectionController {
             view.showCardsContainer.getChildren().add(noShows);
             return;
         }
-        for (Show show : filteredShows) {
-            view.showCardsContainer.getChildren().add(createShowCard(show, sdf));
+        for (Showtime show : filteredShows) {
+            view.showCardsContainer.getChildren().add(createShowCard(show));
         }
     }
 
-    private VBox createShowCard(Show show, SimpleDateFormat sdf) {
+    private VBox createShowCard(Showtime show) {
         VBox card = new VBox(10);
         card.setPadding(new Insets(15, 20, 15, 20));
         card.setStyle(
@@ -195,7 +188,7 @@ public class ShowSelectionController {
         HBox topRow = new HBox(15);
         topRow.setAlignment(Pos.CENTER_LEFT);
 
-        Label dateLabel = new Label("📅 " + sdf.format(show.getShowDate()));
+        Label dateLabel = new Label("📅 " + show.getShowDate().toString());
         dateLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 13));
         dateLabel.setTextFill(Color.web(TEXT_DARK));
 
@@ -204,7 +197,7 @@ public class ShowSelectionController {
         timeLabel.setTextFill(Color.web(ACCENT));
 
         topRow.getChildren().addAll(dateLabel, timeLabel);
-        Label hallLabel = new Label("🏛️ Hall: " + show.getMovieHallID());
+        Label hallLabel = new Label("🏛️ Hall: " + show.getHallId());
         hallLabel.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 12));
         hallLabel.setTextFill(Color.web(TEXT_MUTED));
         Button bookBtn = new Button("Book Seats →");
@@ -268,21 +261,14 @@ public class ShowSelectionController {
         }
     }
 
-    private String formatDateLabel(Date date) {
-        SimpleDateFormat dayFormat = new SimpleDateFormat("EEE");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd");
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        Calendar today = Calendar.getInstance();
-
-        if (cal.get(Calendar.YEAR) == today.get(Calendar.YEAR)
-                && cal.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)) {
+    private String formatDateLabel(LocalDate date) {
+        LocalDate today = LocalDate.now();
+        if (date.equals(today)) {
             return "Today";
-        } else if (cal.get(Calendar.YEAR) == today.get(Calendar.YEAR)
-                && cal.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR) + 1) {
+        } else if (date.equals(today.plusDays(1))) {
             return "Tomorrow";
         } else {
-            return dayFormat.format(date) + " " + dateFormat.format(date);
+            return date.format(DateTimeFormatter.ofPattern("EEE MMM dd"));
         }
     }
 }

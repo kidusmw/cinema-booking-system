@@ -2,6 +2,7 @@ package ui.view.admin;
 
 import static ui.common.Theme.*;
 
+import domain.model.Payment;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -10,7 +11,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import ui.model.Payment;
 
 public class PaymentManagment {
     public TableView<Payment> paymentTable;
