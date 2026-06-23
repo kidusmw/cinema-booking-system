@@ -27,11 +27,6 @@ public class BookingManagmentController {
         this.dashboard = dashboard;
         this.view = new BookingManagmentPage();
 
-        // ✅ DO NOT set a new Scene here — the dashboard injects this view
-        // Scene scene = new Scene(view.getView(), 1100, 700); ← REMOVED
-        // stage.setScene(scene);                              ← REMOVED
-        // stage.show();                                       ← REMOVED
-
         // 1. Initial Load
         loadTableData();
 

@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 import ui.model.Customer;
 import ui.model.Movie;
 import application.AppContext;
-import ui.view.MovieBrowserpage;
+import ui.view.MovieBrowserPage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -24,7 +24,7 @@ import java.io.File;
 import java.util.List;
 
 public class MovieBrowserController{
-    private MovieBrowserpage view;
+    private MovieBrowserPage view;
     private Stage stage;
     private Customer currentUser;
     private AppContext ctx;
@@ -36,7 +36,7 @@ public class MovieBrowserController{
         this.ctx = ctx;
         this.nav = nav;
         this.currentUser = currentUser;
-        this.view = new MovieBrowserpage();
+        this.view = new MovieBrowserPage();
         Scene scene = new Scene(view.getView(), 1200, 750);
         stage.setTitle("Browse Movies - CinemaBook");
         stage.setScene(scene);

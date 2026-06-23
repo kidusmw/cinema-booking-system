@@ -1,7 +1,7 @@
 package ui.controller;
 
 import ui.model.User;
-import ui.view.SingUpPage;
+import ui.view.SignUpPage;
 import application.AppContext;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 
 public class SignUpController {
     private final AppContext ctx;
-    private SingUpPage view;
+    private SignUpPage view;
     private String role;
     private Stage stage;
     private NavigationManager nav;
@@ -19,7 +19,7 @@ public class SignUpController {
         this.ctx = ctx;
         this.nav = nav;
         this.role = role;
-        view = new SingUpPage();
+        view = new SignUpPage();
         Scene scene = new Scene(view.getView(), 800, 700);
         stage.setTitle("Create Account - CinemaBook");
         stage.setScene(scene);

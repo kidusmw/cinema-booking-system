@@ -10,7 +10,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import static ui.common.Theme.*;
 
-public class Loginpage {
+public class LoginPage {
     public Label roleLabel;
     private static final String BG = "#FAFAFA";
     private static final String WHITE = "#FFFFFF";
