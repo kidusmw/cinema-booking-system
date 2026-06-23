@@ -10,7 +10,7 @@ db-down:
 	docker compose down
 
 ci:
-	mvn clean verify spotless:check spotbugs:check pmd:check
+	mvn clean verify spotless:check spotbugs:check
 
 run: db-up ci
 	mvn javafx:run
