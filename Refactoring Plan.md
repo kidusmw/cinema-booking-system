@@ -2,30 +2,40 @@
 
 ## 1. CURRENT STATE (As-Is)
 
-### Architecture: Degenerate Layered MVC / Transaction Script
+### Architecture: Hybrid — Old UI shell wrapping new domain core
 
 ```
 src/main/java/
-├── Controller/        ← fat: UI + business logic + data access mixed together
-├── DAO/               ← inconsistent: some have interfaces, some are concrete
-├── Database/          ← static singleton HikariCP pool (no interface)
-├── Model/             ← anemic POJOs with mixed int/String IDs
-└── View/              ← JavaFX builders with no logic
+├── Controller/        ← accept AppContext via DI, delegate to services/repos, use ModelConverter
+│                       (no more new XxxDAOimp() — all gone)
+├── DAO/               ← DEAD CODE — zero imports from main sources (only characterization tests)
+├── Database/          ← lazy singleton HikariCP — still exists but unused by controllers
+├── Model/             ← old anemic types — still REQUIRED by all View/ files (transitional)
+├── View/              ← JavaFX builders referencing old Model types
+├── application/       ← AppContext.java (DI container), ModelConverter.java (bridge)
+├── domain/            ← rich models + services + repository ports
+├── infrastructure/    ← JDBC repos, Flyway, BCrypt, ConnectionProvider
+│   └── resources/db/migration/ ← V1 + V2 Flyway migrations
+└── ui/common/         ← Theme.java (consolidated UI constants)
 ```
 
-### Tightest Coupling
+### Actual Coupling (Post-DI Migration)
 
-| Coupling | Severity |
-|---|---|
-| `Controller` → `new XxxDAOimp()` directly | **Critical** — no DI, no interface programming |
-| `DAO` → `DatabaseConnection.getConnection()` (static) | **Critical** — impossible to mock |
-| `PaymentController` → `BookingDAO` + `PaymentDAO` (no txn) | **Critical** — orphan bookings on crash |
-| `UserSession` (static) + `NavigationManager` (static) | **High** — global mutable state, untestable |
-| Controller → Controller via `new NextController(stage,…)` | **High** — tangled navigation graph |
+| Coupling | Severity | Status |
+|---|---|---|
+| `Controller` → `new XxxDAOimp()` | **Critical** | ✅ Eliminated — all use injected `AppContext` |
+| `DAO` → `DatabaseConnection.getConnection()` (static) | **Critical** | ✅ Eliminated — DAOs are dead code in main |
+| `PaymentController` → raw DAOs (no txn) | **Critical** | ⚠️ Now uses services, but still no txn boundary |
+| Global mutable state (`UserSession`, `NavigationManager`) | **High** | ❌ Still present |
+| Controller → Controller via `new NextController(stage,…)` | **High** | ❌ Still present |
 
-### Single Biggest Testability Bottleneck
+### What's Actually Running
 
-**`DatabaseConnection` is a static singleton with no interface.** Every DAO calls `getConnection()` directly. Zero tests exist anywhere in the repo.
+Runtime uses the new architecture:
+- `Main.java` → creates `AppContext` (7 repos + 3 services) → passes to `WelcomeController`
+- All 21 controllers accept `ctx` + old Model types for View compatibility
+- `ModelConverter` bridges domain ↔ old Model at each controller ⇄ repo boundary
+- `DatabaseConnection` is only hit by dead DAO code (never called in normal flow)
 
 ---
 
@@ -33,39 +43,39 @@ src/main/java/
 
 ### P0 — Security & Data Integrity
 
-| # | Smell | Location | Impact |
-|---|---|---|---|
-| 1 | **Plaintext passwords** | `UserDAOimp.login()` line 134: `WHERE Username=? AND user_Password=?` | Full credential exposure. |
-| 2 | **No password hashing** | `UserDAOimp.addUser()` stores raw `user.getPassword()` | Same as above. |
-| 3 | **No transactional boundary** | `PaymentController.processSuccessfulPayment()` line 170–189: booking in one connection, payment in another | Booking saved, payment fails → orphan. |
-| 4 | **DB schema mismatch (code ≠ SQL)** | DAOs reference `User_`, `Movie_Hall_`, `Show_Table`, `Movie_` with columns like `First_N`, `Last_N`, `Poster_Path` — but `script.sql` defines `"user"`, `hall`, `showtime`, `movie` with snake_case | App cannot run against the provided schema. |
-| 5 | **Hardcoded DB credentials** | `docker-compose.yml` + `script.sql`: `java_user` / `java_pass` | Leaked to git. |
-| 6 | **T-SQL in Postgres code** | `MovieDAO.getTopRatedMovies()`: `SELECT TOP (?) …` | Runtime crash on Postgres. |
+| # | Smell | Location | Impact | Status |
+|---|---|---|---|---|
+| 1 | **Plaintext passwords** | `UserDAOimp.login()` | Full credential exposure | ✅ Fixed — `AuthService` uses BCrypt |
+| 2 | **No password hashing** | `UserDAOimp.addUser()` | Same as above | ✅ Fixed — `AuthService.register()` hashes |
+| 3 | **No transactional boundary** | `PaymentController` — booking in one connection, payment in another | Orphan bookings on crash | ❌ Still open |
+| 4 | **DB schema mismatch (code ≠ SQL)** | Old DAOs reference `User_`, `Movie_Hall_`, `Show_Table`, `Movie_` | App cannot run against provided schema | ✅ Fixed — DAOs dead, new repos target Flyway schema |
+| 5 | **Hardcoded DB credentials** | `docker-compose.yml` + `script.sql` | Leaked to git | ❌ Still open |
+| 6 | **T-SQL in Postgres code** | `MovieDAO.getTopRatedMovies()` | Runtime crash on Postgres | ✅ Dead code — DAO not imported |
 
 ### P1 — Architectural
 
-| # | Smell | Location |
-|---|---|---|
-| 7 | **God Controller** (206 lines) | `PaymentController`: OTP, countdown, booking, payment, seat nav, UI styling |
-| 8 | **Inconsistent DAO pattern** | `MovieDAO`, `MovieHallDAO`, `BookingDAO` = concrete; `UserDAO`, `SeatDAO`, `ShowDAO`, `PaymentDAO` = interface + impl |
-| 9 | **Mixed ID types** | `Booking.bookingID`=`int`, `Payment.paymentID`=`String`, `Seat.seatID`=`String`, `Show.showID`=`String` → `Integer.parseInt()` everywhere |
-| 10 | **Controllers create controllers** | Every screen transition does `new NextController(stage, …)` |
+| # | Smell | Location | Status |
+|---|---|---|---|
+| 7 | **God Controller** (206 lines) | `PaymentController` | ⚠️ Partially — uses services but still fat (OTP, countdown, nav, UI) |
+| 8 | **Inconsistent DAO pattern** | Old package | ✅ Resolved — all new repos have ports + implementations |
+| 9 | **Mixed ID types** | Old `Model.*` types | ✅ Domain uses Long; old Model transitional |
+| 10 | **Controllers create controllers** | Every screen transition does `new NextController(stage, …)` | ❌ Still open |
 
 ### P2 — Maintainability
 
-| # | Smell |
-|---|---|
-| 11 | Typo filename: `MovieManagmentContrller.java` |
-| 12 | Duplicated UI constants (`ACCENT`, `TEXT_DARK`, …) in 21 files |
-| 13 | Dead stubs: `SeatDAOimp.getSeatsByShow()` returns `new ArrayList<>()`, `MovieHallDAO` has 5 stubs |
-| 14 | Zero test dependencies in `pom.xml` |
-| 15 | `script.sql` is UTF-16LE (should be UTF-8) |
+| # | Smell | Status |
+|---|---|---|
+| 11 | Typo filename: `MovieManagmentContrller.java` | ❌ Still open |
+| 12 | Duplicated UI constants | ✅ Fixed — `Theme.java` |
+| 13 | Dead stubs in old DAOs | ✅ Dead code |
+| 14 | Zero test dependencies | ✅ Fixed — JUnit 5, Mockito, TestContainers |
+| 15 | `script.sql` UTF-16LE | ❌ Still open |
 
 ---
 
 ## 3. AUDIT: script.sql Defects
 
-Before writing Flyway migrations, here is the precise audit of the current schema:
+*(Historical record — all schema defects addressed by Flyway V1 + V2 migrations)*
 
 ### Naming
 | Issue | Detail |
@@ -116,6 +126,34 @@ Before writing Flyway migrations, here is the precise audit of the current schem
 
 ---
 
+## 3.5 PROGRESS TRACKER
+
+### ✅ Completed
+
+| Phase | What | Delivered |
+|---|---|---|
+| 0 | Testing Foundation | JUnit 5, Mockito, TestContainers, AssertJ. 4 characterization tests + unit tests = 53 total |
+| 1 | Flyway Schema | V1 (exact script.sql copy) + V2 (BIGINT, CHECK, audit cols, indexes). `FlywayMigrator` class |
+| 2 | Domain Extraction | 7 rich domain models (User, Movie, Hall, Seat, Showtime, Booking, Payment, BookingSeat). 7 port interfaces. 3 domain services (AuthService, BookingService, PaymentService). ConnectionProvider + BCryptPasswordHasher |
+| 3 | Repositories + DI | 7 Jdbc repos targeting V2 schema. `AppContext` (DI container). Full controller DI migration (all 21 controllers). `ModelConverter` for old↔new bridging. Password hashing cutover with legacy plaintext compat |
+| 4 | Cleanup (partial) | Theme.java consolidation. Dead code stubs removed from flow. DAO/ package dead in main sources |
+
+### ❌ Remaining
+
+| Item | Priority | Notes |
+|---|---|---|
+| Transaction boundary (BookingFacade) | P0 | Last critical data-integrity hole |
+| Navigation refactor (replace `new NextController()`) | P1 | Tangled graph, hard to test |
+| Typo filename fix | P2 | `MovieManagmentContrller.java` |
+| Hardcoded DB credentials | P0 | `docker-compose.yml`, `script.sql` |
+| script.sql UTF-16LE cleanup | P2 | Convert to UTF-8 or delete |
+| Remove dead DAO/ package | P2 | Tests still reference it |
+| Remove dead Database/ package | P2 | `DatabaseConnection.java` unused by main |
+| Remove old Model/ types (views updated) | P3 | Views must adopt new domain models first |
+| Package reorganization | P3 | Move Controller/ → ui/controller/, View/ → ui/view/, Main → ui/ |
+
+---
+
 ## 4. TARGET ARCHITECTURE (To-Be)
 
 ### Hexagonal / Clean Architecture with Pragmatic Services
@@ -124,7 +162,7 @@ Before writing Flyway migrations, here is the precise audit of the current schem
 src/main/java/
 ├── domain/                        ← Innermost — zero framework deps
 │   ├── model/                     ← Rich domain models (behavior + data)
-│   │   ├── User.java              · confirmPassword(), isAdmin()
+│   │   ├── User.java              · isAdmin(), isCustomer()
 │   │   ├── Movie.java             · getFormattedDuration()
 │   │   ├── Hall.java              · isVip()
 │   │   ├── Seat.java              · isAvailable(), book(), release()
@@ -135,7 +173,7 @@ src/main/java/
 │   ├── service/                   ← Domain services (orchestration)
 │   │   ├── BookingService.java    · createBooking, cancelBooking, getHistory
 │   │   ├── PaymentService.java    · processPayment, verifyPayment, refund
-│   │   └── AuthService.java       · login, register, hashPassword, verifyPassword
+│   │   └── AuthService.java       · login, register
 │   └── port/                      ← Outbound port interfaces
 │       ├── UserRepository.java
 │       ├── MovieRepository.java
@@ -145,19 +183,16 @@ src/main/java/
 │       ├── BookingRepository.java
 │       └── PaymentRepository.java
 │
-├── application/                   ← Application layer (DTOs, orchestration)
-│   ├── dto/
-│   │   ├── BookingRequest.java
-│   │   ├── PaymentRequest.java
-│   │   └── LoginRequest.java
-│   └── service/                   ← Application services (txn management, security)
-│       ├── BookingFacade.java     · wraps BookingService + PaymentService + txn
-│       └── AuthFacade.java        · wraps AuthService + UserSession management
+├── application/                   ← Application layer (orchestration, bridging)
+│   ├── AppContext.java            ← Manual DI container (holds all repos + services)
+│   ├── ModelConverter.java        ← Bidirectional old↔new model conversion
+│   └── service/                   ← Application services (txn management)
+│       └── BookingFacade.java     ← Wraps BookingService + PaymentService + txn (TO DO)
 │
 ├── infrastructure/                ← Adapter implementations
 │   ├── persistence/
-│   │   ├── ConnectionProvider.java         ← interface (was static DatabaseConnection)
-│   │   ├── DatabaseConnectionProvider.java ← impl (wraps HikariCP)
+│   │   ├── ConnectionProvider.java
+│   │   ├── DatabaseConnectionProvider.java
 │   │   ├── JdbcUserRepository.java
 │   │   ├── JdbcMovieRepository.java
 │   │   ├── JdbcHallRepository.java
@@ -166,20 +201,24 @@ src/main/java/
 │   │   ├── JdbcBookingRepository.java
 │   │   └── JdbcPaymentRepository.java
 │   ├── security/
+│   │   ├── PasswordHasher.java
 │   │   └── BCryptPasswordHasher.java
-│   ├── config/
-│   │   └── AppConfig.java         ← loads db.properties, creates ConnectionProvider
 │   └── migration/
-│       └── db/migration/          ← Flyway migration files
-│           ├── V1__initial_schema.sql
-│           └── V2__modernize_schema.sql
+│       └── FlywayMigrator.java
 │
-└── ui/                            ← Inbound adapters (JavaFX)
-    ├── controller/                ← Thin — delegate to Application services
-    ├── view/                      ← JavaFX builders (same as current View/)
-    ├── common/
-    │   └── Theme.java             ← Single source for ACCENT, TEXT_DARK, etc.
-    └── Main.java                  ← Composition Root (manual DI)
+├── ui/                            ← Inbound adapters (JavaFX)
+│   ├── controller/                ← (TO DO: move from Controller/)
+│   ├── view/                      ← (TO DO: move from View/)
+│   ├── common/
+│   │   └── Theme.java             ← Single source for ACCENT, TEXT_DARK, etc.
+│   └── Main.java                  ← Composition Root (TO DO: move from root)
+│
+├── (old packages to delete)
+│   ├── Controller/                → ui/controller/
+│   ├── View/                      → ui/view/
+│   ├── DAO/                       → delete
+│   ├── Database/                  → delete
+│   └── Model/                     → delete (after views adopt new domain models)
 ```
 
 ### Key Architectural Decisions
@@ -193,361 +232,311 @@ src/main/java/
 | **Manual DI in Composition Root** (`Main.java`) | Zero framework overhead. Everything wired in one place. |
 | **Consistent `Long` IDs** | No more `Integer.parseInt()`. All PKs are `BIGINT` in DB → `Long` in Java. |
 | **Transactions via `BookingFacade`** | Application service manages the connection/txn lifecycle, passes to domain services. |
+| **ModelConverter as transitional bridge** | Avoids rewriting all View files in one shot. Convert at repo boundaries. |
+| **Controller/View stay in top-level packages** | Moves are cosmetic (package rename, no behavioral change). Planned for Phase 5. |
 
 ---
 
-## 5. REFACTORING STRATEGY — 4 Phases
+## 5. REFACTORING STRATEGY — Execution Phases
 
-### Phase 0: Testing Foundation
+```
+Phase 0 ──► Phase 1 ──► Phase 2 ──► Phase 3 ──► Phase 4 ──► Phase 5 ──► Phase 6 ──► Phase 7
+(tests)    (schema)     (domain)    (services)  (cleanup)   (reorg)    (txn)      (nav)
+```
+
+### Phase 0: Testing Foundation ✅ DONE
 
 **Goal:** Add test infrastructure and write characterization tests before touching production code.
 
-**Files to touch:**
-- `pom.xml`
-- `src/test/java/…` (new directory tree)
-
-**pom.xml changes — add:**
-```xml
-<dependency><groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter</artifactId><version>5.11.4</version><scope>test</scope></dependency>
-<dependency><groupId>org.mockito</groupId><artifactId>mockito-core</artifactId><version>5.14.2</version><scope>test</scope></dependency>
-<dependency><groupId>org.mockito</groupId><artifactId>mockito-junit-jupiter</artifactId><version>5.14.2</version><scope>test</scope></dependency>
-<dependency><groupId>org.testcontainers</groupId><artifactId>postgresql</artifactId><version>1.20.4</version><scope>test</scope></dependency>
-<dependency><groupId>org.testcontainers</groupId><artifactId>junit-jupiter</artifactId><version>1.20.4</version><scope>test</scope></dependency>
-<dependency><groupId>org.assertj</groupId><artifactId>assertj-core</artifactId><version>3.26.3</version><scope>test</scope></dependency>
-<dependency><groupId>org.flywaydb</groupId><artifactId>flyway-core</artifactId><version>10.18.2</version></dependency>
-<dependency><groupId>org.flywaydb</groupId><artifactId>flyway-database-postgresql</artifactId><version>10.18.2</version></dependency>
-```
-
-Also add the Flyway Maven plugin:
-```xml
-<plugin><groupId>org.flywaydb</groupId><artifactId>flyway-maven-plugin</artifactId><version>10.18.2</version></plugin>
-```
-
-**Characterization tests to write (in order):**
-1. `UserDAOimpTest` — capture current plaintext login flow (with TestContainers)
-2. `BookingDAOTest` — capture `addBooking()` + `getAllBookings()` behavior
-3. `PaymentControllerTest` — capture `processSuccessfulPayment()` flow (mock the DAOs)
-4. `LoginControllerTest` — capture role-dispatch logic (`Admin` vs `Customer`)
-
-**Testing strategy:** Write tests that pass against the *current* buggy code. These become the regression safety net for all subsequent phases.
-
-**Breaking change?** NO.
+Delivered: JUnit 5, Mockito, TestContainers, AssertJ, Flyway deps. 53 tests total (4 characterization + 5 service + 21 domain + 3 migration + rest).
 
 **Branch:** `refactor/phase-0-test-foundation`
 
 ---
 
-### Phase 1: Flyway Schema Setup + Migration
+### Phase 1: Flyway Schema Setup + Migration ✅ DONE
 
-**Goal:** Establish Flyway, convert `script.sql` to a proper V1 migration, write the V2 modernization migration, and delete the old `script.sql`.
+**Goal:** Establish Flyway, convert `script.sql` to V1, write V2 modernization.
 
-#### Step 1.1 — Convert script.sql to V1
-
-**Files created:**
-- `src/main/resources/db/migration/V1__initial_schema.sql`
-
-**Action:** Copy `script.sql` verbatim (after converting from UTF-16LE to UTF-8). Remove the `CREATE ROLE` and `GRANT` statements (those are operational, not schema). Remove seed data (will go in a separate idempotent step or be added by app). Keep only the DDL (CREATE TABLE, CREATE INDEX).
-
-#### Step 1.2 — Write V2 modernization migration
-
-**Files created:**
-- `src/main/resources/db/migration/V2__modernize_schema.sql`
-
-**SQL changes in V2:**
-
-```sql
--- 1.1: Change all SERIAL PKs to BIGINT
-ALTER TABLE "user"   ALTER COLUMN user_id   TYPE BIGINT;
-ALTER TABLE movie    ALTER COLUMN movie_id   TYPE BIGINT;
-ALTER TABLE hall     ALTER COLUMN hall_id    TYPE BIGINT;
-ALTER TABLE seat     ALTER COLUMN seat_id    TYPE BIGINT;
-ALTER TABLE showtime ALTER COLUMN show_id    TYPE BIGINT;
-ALTER TABLE booking  ALTER COLUMN booking_id TYPE BIGINT;
-ALTER TABLE payment  ALTER COLUMN payment_id TYPE BIGINT;
-
--- Also widen FK columns to match
-ALTER TABLE seat     ALTER COLUMN hall_id    TYPE BIGINT;
-ALTER TABLE showtime ALTER COLUMN movie_id   TYPE BIGINT;
-ALTER TABLE showtime ALTER COLUMN hall_id    TYPE BIGINT;
-ALTER TABLE booking  ALTER COLUMN user_id    TYPE BIGINT;
-ALTER TABLE booking  ALTER COLUMN show_id    TYPE BIGINT;
-ALTER TABLE booking_seat ALTER COLUMN booking_id TYPE BIGINT;
-ALTER TABLE booking_seat ALTER COLUMN seat_id    TYPE BIGINT;
-ALTER TABLE payment  ALTER COLUMN booking_id TYPE BIGINT;
-
--- 1.2: Add CHECK constraints for status/type columns
-ALTER TABLE "user"   ADD CONSTRAINT chk_user_role CHECK (role IN ('admin','customer'));
-ALTER TABLE booking  ADD CONSTRAINT chk_booking_status CHECK (status IN ('pending','confirmed','cancelled','no-show'));
-ALTER TABLE payment  ADD CONSTRAINT chk_payment_status CHECK (status IN ('pending','paid','failed','refunded'));
-ALTER TABLE seat     ADD CONSTRAINT chk_seat_type CHECK (seat_type IN ('regular','vip','disabled'));
-ALTER TABLE hall     ADD CONSTRAINT chk_hall_type CHECK (hall_type IN ('regular','vip','imax'));
-ALTER TABLE seat     ADD CONSTRAINT chk_seat_status CHECK (status IN ('available','booked','reserved'));
-
--- 1.3: Add NOT NULL where missing
-ALTER TABLE "user" ALTER COLUMN email SET NOT NULL;
-
--- 1.4: Add audit columns
-ALTER TABLE "user"   ADD COLUMN updated_at TIMESTAMPTZ DEFAULT NOW();
-ALTER TABLE movie    ADD COLUMN updated_at TIMESTAMPTZ DEFAULT NOW();
-ALTER TABLE hall     ADD COLUMN updated_at TIMESTAMPTZ DEFAULT NOW();
-ALTER TABLE seat     ADD COLUMN updated_at TIMESTAMPTZ DEFAULT NOW();
-ALTER TABLE showtime ADD COLUMN updated_at TIMESTAMPTZ DEFAULT NOW();
-ALTER TABLE booking  ADD COLUMN updated_at TIMESTAMPTZ DEFAULT NOW();
-ALTER TABLE payment  ADD COLUMN updated_at TIMESTAMPTZ DEFAULT NOW();
-
--- 1.5: Widen verification_code for hashes
-ALTER TABLE payment ALTER COLUMN verification_code TYPE VARCHAR(64);
-
--- 1.6: Add missing indexes
-CREATE INDEX IF NOT EXISTS idx_user_username ON "user"(username);
-CREATE INDEX IF NOT EXISTS idx_user_role ON "user"(role);
-CREATE INDEX IF NOT EXISTS idx_payment_booking ON payment(booking_id);
-```
-
-#### Step 1.3 — Add Flyway Config
-
-**Files created:**
-- `src/main/resources/flyway.conf` (or use `application.properties` with `flyway.url`, `flyway.user`, `flyway.password`)
-- `src/main/resources/application.properties` (new, to centralize config)
-
-**Action:** Configure Flyway to auto-migrate on startup via a `FlywayMigrator` class called from `Main.java`.
-
-#### Step 1.4 — Convert script.sql to UTF-8
-
-**Files modified:**
-- `script.sql` — convert to UTF-8 (or remove after V1 is verified)
-
-**Testing strategy:**
-- TestContainers test: apply `V1__initial_schema.sql`, then `V2__modernize_schema.sql`. Verify all columns, constraints, and indexes exist.
-- Verify the old `UserDAOimp` tests still pass against the migrated schema.
-
-**Breaking change?** YES — SERIAL → BIGSERIAL changes PK type. Existing data is preserved (ALTER COLUMN TYPE BIGINT is safe). New apps must use `Long` in Java.
+Delivered:
+- `V1__initial_schema.sql` — exact DDL from script.sql (UTF-8, no seed data)
+- `V2__modernize_schema.sql` — BIGINT PKs, CHECK constraints, NOT NULL, audit columns, indexes
+- `FlywayMigrator.java` — auto-migrate on startup
+- `FlywayMigrationTest` — validates both migrations + idempotency
 
 **Branch:** `refactor/phase-1-flyway-schema`
 
 ---
 
-### Phase 2: Domain Extraction + Rich Models + Repository Interfaces
+### Phase 2: Domain Extraction + Rich Models + Repository Interfaces ✅ DONE
 
-**Goal:** Build the domain layer with rich models, extract repository interfaces, and introduce `ConnectionProvider` DI — all while the existing controllers and DAOs still work.
+**Goal:** Build domain layer with rich models, repository ports, services, ConnectionProvider, PasswordHasher.
 
-#### Step 2.1 — Create Rich Domain Models
-
-**New files in `domain/model/`:**
-- `User.java` — add `boolean isAdmin()`, `boolean isCustomer()`, `boolean verifyPassword(String plaintext, PasswordHasher hasher)`
-- `Movie.java` — same fields as existing, add `getFormattedDuration()` (already exists)
-- `Hall.java` — rename from `Moviehall`, add `boolean isVip()`
-- `Seat.java` — add `void book()`, `void release()`, `boolean isAvailable()`
-- `Showtime.java` — rename from `Show`, add `boolean isPast()`, `boolean hasStarted()`
-- `Booking.java` — add `void confirm()`, `void cancel()`, `Money total()`
-- `BookingSeat.java` — new value object wrapping `(BookingId, SeatId, Money price)`
-- `Payment.java` — add `void markPaid()`, `void markFailed()`, `boolean verifyOtp(String otp)`
-
-**ID type change:** All `*ID` fields become `Long`. Old String getters become `@Deprecated` wrappers.
-
-#### Step 2.2 — Create Repository Interfaces
-
-**New files in `domain/port/`:**
-- `UserRepository.java` — `Optional<User> findByUsername(String)`, `Optional<User> findById(Long)`, `List<User> findAll()`, `User save(User)`, `void delete(Long)`
-- `MovieRepository.java` — `Optional<Movie> findById(Long)`, `List<Movie> findAll()`, `List<Movie> searchByTitle(String)`, `Movie save(Movie)`, `void delete(Long)`
-- `HallRepository.java` — `Optional<Hall> findById(Long)`, `List<Hall> findAll()`, `Hall save(Hall)`
-- `SeatRepository.java` — `List<Seat> findByHallId(Long)`, `Optional<Seat> findById(Long)`, `void updateStatus(Long seatId, String status)`
-- `ShowtimeRepository.java` — `List<Showtime> findByMovieId(Long)`, `Optional<Showtime> findById(Long)`, `List<Showtime> findByDate(LocalDate)`
-- `BookingRepository.java` — `Booking save(Booking)`, `Optional<Booking> findById(Long)`, `List<Booking> findByUserId(Long)`, `List<Booking> findAll()`, `void cancel(Long bookingId)`
-- `PaymentRepository.java` — `Payment save(Payment)`, `Optional<Payment> findById(Long)`, `Optional<Payment> findByBookingId(Long)`
-
-#### Step 2.3 — Create ConnectionProvider Interface
-
-**New file:** `infrastructure/persistence/ConnectionProvider.java`
-```java
-public interface ConnectionProvider {
-    Connection getConnection() throws SQLException;
-}
-```
-
-**Modify:** `DatabaseConnection.java` → implements `ConnectionProvider`. Old static methods remain as deprecated for backward compatibility during transition.
-
-#### Step 2.4 — Create PasswordHasher
-
-**New file:** `infrastructure/security/PasswordHasher.java`
-```java
-public interface PasswordHasher {
-    String hash(String plaintext);
-    boolean verify(String plaintext, String hash);
-}
-```
-
-**New file:** `infrastructure/security/BCryptPasswordHasher.java` (uses `org.mindrot.jbcrypt.BCrypt`)
-
-#### Step 2.5 — Create AuthService
-
-**New file:** `domain/service/AuthService.java`
-```java
-public class AuthService {
-    private final UserRepository userRepo;
-    private final PasswordHasher hasher;
-
-    public User login(String username, String plainPassword) { … }
-    public User register(String username, String plainPassword, String role, …) { … }
-}
-```
-
-#### Step 2.6 — Create BookingService + PaymentService
-
-**New file:** `domain/service/BookingService.java` — `Booking createBooking(…)`, `void cancelBooking(Long bookingId)`
-**New file:** `domain/service/PaymentService.java` — `Payment processPayment(…)`, `boolean verifyOtp(Long paymentId, String otp)`
-**New file:** `application/service/BookingFacade.java` — wraps `BookingService` + `PaymentService` in a single transaction (manages connection lifecycle)
-
-**Testing strategy:**
-- Unit-test every domain model method (pure logic, no mocks).
-- Unit-test every service with mocked repository interfaces.
-- Integration-test `BookingFacade` with TestContainers (full booking → payment flow in one txn).
-
-**Breaking change?** YES for domain models (new package, updated types). NO for the old UI — it still uses old Controller/DAO/Model classes.
+Delivered:
+- 8 domain models in `domain/model/` (with behavior)
+- 7 repository interfaces in `domain/port/`
+- 3 domain services in `domain/service/`
+- `ConnectionProvider` + `DatabaseConnectionProvider`
+- `PasswordHasher` + `BCryptPasswordHasher`
 
 **Branch:** `refactor/phase-2-domain-models`
 
 ---
 
-### Phase 3: Service/Application Layer + New Repository Implementations
+### Phase 3: Repository Implementations + Controller DI ✅ DONE
 
-**Goal:** Write the JDBC implementations of all repository interfaces (targeting the V2 schema), build the application service facades, and wire everything together with manual DI.
+**Goal:** Write 7 Jdbc repos, wire DI, migrate all controllers away from old DAOs.
 
-#### Step 3.1 — Write JDBC Repositories
+Delivered:
+- 7 Jdbc repositories in `infrastructure/persistence/`
+- `AppContext.java` — DI container holding all 7 repos + 3 services
+- All 21 controllers accept `AppContext` via constructor
+- `ModelConverter` — bidirectional conversion for all 7 entity types
+- `LoginController` + `SignUpController` → `AuthService` (BCrypt, P0 security fix)
+- `PaymentController` → `BookingService.createBooking()` + `PaymentService.processPayment()`
+- Remaining 12 controllers → injected repo calls with `ModelConverter` conversion
+- `ShowManagmentController` — raw JDBC to legacy tables replaced with repo calls
+- `PaymentRepository.findAll()` added for admin dashboard
+- 53 tests pass, main sources have zero `import DAO.*`
 
-**New files in `infrastructure/persistence/`:**
-- `JdbcUserRepository.java` — targets `"user"` table with `user_id`, `first_name`, `last_name`, `password` (will be hashed later), `role` (snake_case columns). Uses `ConnectionProvider`.
-- `JdbcMovieRepository.java` — targets `movie` table with `movie_id`, `title`, `genre`, `duration_min`, `rating`, `poster_path`, `language`, `release_date`, `description`, `is_active`.
-- `JdbcHallRepository.java` — targets `hall` table with `hall_id`, `name`, `capacity`, `hall_type`.
-- `JdbcSeatRepository.java` — targets `seat` table with `seat_id`, `hall_id`, `seat_number`, `seat_type`, `status`.
-- `JdbcShowtimeRepository.java` — targets `showtime` table with `show_id`, `movie_id`, `hall_id`, `show_date`, `show_time`, `ticket_price`.
-- `JdbcBookingRepository.java` — targets `booking` + `booking_seat` tables.
-- `JdbcPaymentRepository.java` — targets `payment` table.
+**Branch:** `refactor/phase-3-services-orchestration` → merged to `dev`
 
-All repositories use `Long` IDs and parameterized queries.
+---
 
-#### Step 3.2 — Wire Composition Root in Main.java
+### Phase 4: Infrastructure + UI Polish ✅ DONE (partial)
+
+**Goal:** Cleanup — Theme, dead stubs, System.out → SLF4J.
+
+#### 4.1 — Consolidate UI Theme ✅
+Single `ui/common/Theme.java` with all constants. Inline duplicates removed.
+
+#### 4.2 — Logger Adoption
+SLF4J loggers present in several controllers. Some `System.out.println()` remain.
+
+#### 4.3 — Dead Stubs
+Old DAO package is dead code in main sources (zero imports). Not yet deleted (tests reference it).
+
+**Remaining:**
+- Remove old DAO/ package from main sources
+- Remove old Database/ package
+- Fix typo filename `MovieManagmentContrller.java`
+- Convert/delete `script.sql`
+- Remove old Model/types after views update
+
+---
+
+### Phase 5: Package Reorganization 🔜 NEXT
+
+**Goal:** Move files to match the target architecture layout. This is purely cosmetic — no behavioral changes. All imports are updated mechanically.
+
+#### 5.1 — Move Controller/ → ui/controller/
+
+**Files to move (21):**
+```
+Controller/WelcomeController.java          → ui/controller/WelcomeController.java
+Controller/AuthChoiceController.java       → ui/controller/AuthChoiceController.java
+Controller/UsertypeController.java         → ui/controller/UsertypeController.java
+Controller/LoginController.java            → ui/controller/LoginController.java
+Controller/SignUpController.java           → ui/controller/SignUpController.java
+Controller/AdminDashboardController.java   → ui/controller/AdminDashboardController.java
+Controller/MovieManagementController.java  → ui/controller/MovieManagementController.java
+Controller/ShowManagmentController.java    → ui/controller/ShowManagmentController.java
+Controller/MoviehallManagmentController.java → ui/controller/MoviehallManagmentController.java
+Controller/SeatManagmentController.java    → ui/controller/SeatManagmentController.java
+Controller/BookingManagmentController.java → ui/controller/BookingManagmentController.java
+Controller/PaymentManagmentController.java → ui/controller/PaymentManagmentController.java
+Controller/UserManagmentController.java    → ui/controller/UserManagmentController.java
+Controller/CustomerDashboardController.java → ui/controller/CustomerDashboardController.java
+Controller/MovieBrowserController.java     → ui/controller/MovieBrowserController.java
+Controller/ShowSelectionController.java    → ui/controller/ShowSelectionController.java
+Controller/MovieHallSelectionController.java → ui/controller/MovieHallSelectionController.java
+Controller/SeatSelectionController.java    → ui/controller/SeatSelectionController.java
+Controller/PaymentController.java          → ui/controller/PaymentController.java
+Controller/TicketController.java           → ui/controller/TicketController.java
+Controller/NavigationManager.java          → ui/controller/NavigationManager.java
+```
+
+**Changes needed per file:**
+- `package Controller;` → `package ui.controller;`
+- Any cross-references to other controllers must use the new package in `import` statements
+- `import View.Xxx` → `import ui.view.Xxx` (after View/ is moved)
+
+#### 5.2 — Move View/ → ui/view/
+
+**Files to move (~21):**
+Same pattern — `package View;` → `package ui.view;`, update imports.
+
+#### 5.3 — Move Main.java → ui/Main.java
+
+**Changes:**
+- `package ui;`
+- Update `pom.xml` javafx-maven-plugin `mainClass` to `ui.Main`
+- Update references (none, it's the entry point)
+
+#### 5.4 — Delete dead packages
+
+| Package | Reason | Risk |
+|---|---|---|
+| `DAO/` | Zero imports from main sources | Low — characterization tests reference DAO classes directly by fully qualified name or via `import DAO.*`. Tests must be updated to use new repo paths, or the DAO package stays in test scope only |
+| `Database/` | `DatabaseConnection.java` unused by main sources | Low — same as DAO; tests may reference it |
+| `Model/` | **Views still reference these.** Can only delete after Phase 5.5 | High — will break compile |
+
+#### 5.5 — Update Views to use domain.models (optional, large effort)
+
+Instead of converting old→new on every controller call, update the View files to reference `domain.model.*` directly. This lets us delete the `Model/` package entirely.
+
+**Mechanical change:** Each `import Model.Movie;` → `import domain.model.Movie;`, update getter calls (`getMovieID()` → `getMovieId()`, etc.). This touches every View file and every Controller that passes models to views.
+
+**Effort estimate:** ~20 View files × ~5-10 getter renames each. 1-2 hours of mechanical work.
+
+#### 5.6 — Fix typo filename
+
+`MovieManagmentContrller.java` → `MovieManagementController.java`
+Update all references in imports and usages.
+
+#### 5.7 — Convert/delete script.sql
+
+Either convert from UTF-16LE to UTF-8 and keep as reference, or delete it (Flyway migrations are source of truth).
+
+#### 5.8 — Testing strategy
+
+- `mvn clean compile` — must succeed with zero warnings
+- All 53 tests must pass
+- Manual: `mvn javafx:run` — app must start, all screens render
+
+**Breaking change?** YES — all imports change. Controllers in new package. Full regression test required.
+
+**Branch:** `refactor/phase-5-reorg`
+
+---
+
+### Phase 6: Transaction Safety (BookingFacade) 🔜 NEXT
+
+**Goal:** Eliminate orphan bookings when payment fails after booking succeeds.
+
+#### The Problem
+
+`PaymentController` calls:
+```java
+ctx.bookingService.createBooking(...);   // opens connection A, inserts booking
+ctx.paymentService.processPayment(...);  // opens connection B, inserts payment
+```
+
+If connection B fails after connection A commits, there's an orphan booking with no payment.
+
+#### The Fix: BookingFacade
+
+**New file:** `application/service/BookingFacade.java`
+
+Shares a single JDBC connection across both operations and commits/rolls back atomically:
 
 ```java
-// Main.java — Composition Root
-public class Main extends Application {
-    @Override
-    public void start(Stage stage) {
-        AppConfig config = AppConfig.load("/db.properties");
-        ConnectionProvider connectionProvider = new DatabaseConnectionProvider(config);
-        PasswordHasher passwordHasher = new BCryptPasswordHasher();
+public class BookingFacade {
+    private final BookingService bookingService;
+    private final PaymentService paymentService;
+    private final ConnectionProvider connectionProvider;
 
-        // Run Flyway migrations
-        FlywayMigrator.migrate(config);
-
-        // Repositories
-        UserRepository userRepo = new JdbcUserRepository(connectionProvider, passwordHasher);
-        MovieRepository movieRepo = new JdbcMovieRepository(connectionProvider);
-        HallRepository hallRepo = new JdbcHallRepository(connectionProvider);
-        SeatRepository seatRepo = new JdbcSeatRepository(connectionProvider);
-        ShowtimeRepository showtimeRepo = new JdbcShowtimeRepository(connectionProvider);
-        BookingRepository bookingRepo = new JdbcBookingRepository(connectionProvider);
-        PaymentRepository paymentRepo = new JdbcPaymentRepository(connectionProvider);
-
-        // Domain Services
-        AuthService authService = new AuthService(userRepo, passwordHasher);
-        BookingService bookingService = new BookingService(bookingRepo, seatRepo);
-        PaymentService paymentService = new PaymentService(paymentRepo);
-
-        // Application Facades
-        BookingFacade bookingFacade = new BookingFacade(bookingService, paymentService, connectionProvider);
-
-        // Launch UI
-        new WelcomeController(stage, authService, bookingFacade, …);
+    public BookingResult createBookingWithPayment(Long userId, Long showId,
+            List<Long> seatIds, String paymentMethod) {
+        Connection conn = connectionProvider.getConnection();
+        try {
+            conn.setAutoCommit(false);
+            // pass the shared connection to both services (or make repos accept a connection arg)
+            Booking booking = bookingService.createBooking(userId, showId, seatIds, ...);
+            Payment payment = paymentService.processPayment(booking.getBookingId(), ...);
+            conn.commit();
+            return new BookingResult(booking, payment);
+        } catch (Exception e) {
+            conn.rollback();
+            throw e;
+        } finally {
+            conn.setAutoCommit(true);
+            conn.close();
+        }
     }
 }
 ```
 
-#### Step 3.3 — Thin Controllers
+**Challenges:**
+- Current `BookingService` and `PaymentService` don't accept a connection parameter
+- Repositories get connections from `ConnectionProvider` internally
+- Options:
+  a. Add `Connection` parameter to service/repo methods (invasive)
+  b. Add `beginTransaction()` / `commit()` / `rollback()` to `ConnectionProvider` (simpler)
+  c. Create a `TransactionTemplate` callback pattern (cleanest but more code)
 
-Update all 21 controllers to:
-1. Accept dependencies via constructor injection (no `new XxxDAOimp()`).
-2. Delegate business logic to `AuthService`, `BookingFacade`, etc.
-3. Remove duplicated UI constants → reference `Theme.java`.
-4. Replace navigation `new NextController(stage, …)` with injected service calls where possible (e.g., login success → `authService.login()` returns user → controller dispatches to next screen).
+#### Testing strategy:
+- TestContainers test: call `BookingFacade.createBookingWithPayment()`, verify both booking and payment rows exist
+- Simulate payment failure: verify booking is rolled back
 
-**Files modified:** All controllers in `ui/controller/`.
+**Breaking change?** NO — new class added, existing code only needs to use it instead of calling services separately. Old call path still works (no transaction safety).
 
-#### Step 3.4 — Password Hashing Cutover
-
-**Action:**
-- `AuthService.login()`: hash the input password, compare with stored hash using `BCryptPasswordHasher.verify()`.
-- `AuthService.register()`: hash the password before calling `userRepo.save()`.
-- Add backward compatibility: if `verify()` fails and the stored password is in plaintext (legacy), accept it, hash it, and update the record in-place.
-
-**Testing strategy:**
-- TestContainers tests for every JDBC repository (insert, select, update, delete).
-- Unit tests for thin controllers with mocked services.
-- Integration test for `BookingFacade` — verify transactional rollback on payment failure.
-
-**Breaking change?** YES — password storage changes, schema changes, controller constructors change. But the old DAO layer is still intact and working for rollback.
-
-**Branch:** `refactor/phase-3-services-orchestration`
+**Branch:** `refactor/phase-6-txn`
 
 ---
 
-### Phase 4: Infrastructure + UI Wiring + Portfolio Polish
+### Phase 7: Navigation Refactor 🔜 NEXT
 
-**Goal:** Remove old DAO package, delete dead code, fix the typo class name, consolidate UI theme, and finalize the new architecture. This is the cleanup and stabilization phase.
+**Goal:** Replace `new NextController(stage, ctx, ...)` chaining with a screen navigation service.
 
-#### Step 4.1 — Remove Old DAO Package
+#### The Problem
 
-**Files deleted:**
-- `src/main/java/DAO/` — entire package (all interfaces, implementations, concrete classes)
-- `src/main/java/Database/DatabaseConnection.java` — replaced by `ConnectionProvider` + `DatabaseConnectionProvider`
-- `src/main/java/Model/` (optional: keep as deprecated wrappers that extend new domain models)
-
-#### Step 4.2 — Rename Typo Class
-
-`MovieManagmentContrller.java` → `MovieManagementController.java`. Update all references.
-
-#### Step 4.3 — Consolidate UI Theme
-
-**New file:** `ui/common/Theme.java`
+Every screen transition:
 ```java
-public class Theme {
-    public static final String ACCENT = "#DB2777";
-    public static final String TEXT_DARK = "#1E293B";
-    public static final String TEXT_MUTED = "#64748B";
-    public static final String BORDER = "#E2E8F0";
-    public static final String SUCCESS = "#10B981";
-    public static final String DANGER = "#DC2626";
-    public static final String WARNING = "#F59E0B";
+view.btnBack.setOnAction(e -> new CustomerDashboardController(stage, ctx, currentUser));
+view.movieCard.setOnMouseClicked(e -> new ShowSelectionController(stage, ctx, currentUser, movie));
+```
+
+This creates tight coupling between controllers and makes it impossible to test navigation logic.
+
+#### The Fix: NavigationService
+
+**New file:** `ui/controller/NavigationService.java` (or integrate into existing `NavigationManager`)
+
+```java
+public class NavigationService {
+    private final Stage stage;
+    private final AppContext ctx;
+    private final Deque<BiFunction<Stage, AppContext, ?>> history = new ArrayDeque<>();
+
+    public void navigateTo(BiFunction<Stage, AppContext, Object> screenFactory) {
+        history.push(screenFactory);
+        screenFactory.apply(stage, ctx);
+    }
+
+    public void back() {
+        history.pop();
+        if (!history.isEmpty()) {
+            history.peek().apply(stage, ctx);
+        }
+    }
+
+    // Named navigation methods
+    public void toWelcome() { navigateTo(WelcomeController::new); }
+    public void toLogin() { navigateTo(LoginController::new); }
+    public void toDashboard(Customer customer) {
+        navigateTo((stage, ctx) -> new CustomerDashboardController(stage, ctx, customer));
+    }
 }
 ```
 
-Remove all `private static final String ACCENT = …` duplicated constants from 21 controllers.
+Controllers would accept `NavigationService` instead of `Stage` directly. The pattern becomes:
+```java
+// Before:
+new ShowSelectionController(stage, ctx, currentUser, movie);
 
-#### Step 4.4 — Remove Dead Code Stubs
+// After:
+nav.toShowSelection(currentUser, movie);
+```
 
-- `SeatDAOimp.getSeatsByShow()` — delete (no longer needed; `SeatRepository.findByShowtimeId()` replaces it properly)
-- `MovieHallDAO.searchMovieHallByName()`, `getMovieHallsByCapacity()`, etc. — delete
+#### Testing strategy:
+- Unit test `NavigationService` with mock screen factories
+- Verify back-stack behavior (push, pop, empty)
+- Controllers become testable with mocked navigation
 
-#### Step 4.5 — Fix Logging
+**Breaking change?** YES — every controller constructor changes (add `NavigationService` param). All 21 call sites updated.
 
-Replace all `System.out.println()` and `e.printStackTrace()` with SLF4J logger calls. Already have `logback-classic` dependency and `logback.xml` config.
-
-#### Step 4.6 — script.sql Cleanup
-
-Convert `script.sql` from UTF-16LE to UTF-8. Optionally delete it (Flyway migrations are now the source of truth), or keep it as documentation pointing to `src/main/resources/db/migration/`.
-
-#### Step 4.7 — docker-compose.yml Healthcheck
-
-Add a healthcheck for the app service (optional — only if a web server is added).
-
-**Testing strategy:**
-- Full regression suite: all Phase 0 characterization tests + all new unit/integration tests must pass.
-- `mvn clean compile` — zero warnings.
-- Manual smoke test: `mvn javafx:run` — app starts, login works, booking flow works.
-
-**Breaking change?** NO — this phase is pure deletion and cleanup. All functionality is already covered by the new architecture.
-
-**Branch:** `refactor/phase-4-infra-ui-wiring`
+**Branch:** `refactor/phase-7-nav`
 
 ---
 
@@ -555,14 +544,14 @@ Add a healthcheck for the app service (optional — only if a web server is adde
 
 | Dependency | Current | Target | Phase |
 |---|---|---|---|
-| JUnit 5 | — | 5.11.4 | 0 |
-| Mockito | — | 5.14.2 | 0 |
-| TestContainers | — | 1.20.4 | 0 |
-| AssertJ | — | 3.26.3 | 0 |
-| Flyway Core | — | 10.18.2 | 1 |
-| Flyway Postgres | — | 10.18.2 | 1 |
-| Flyway Maven Plugin | — | 10.18.2 | 1 |
-| BCrypt (jbcrypt) | — | 0.4 | 2 |
+| JUnit 5 | 5.11.4 | stay | 0 |
+| Mockito | 5.14.2 | stay | 0 |
+| TestContainers | 1.20.4 | stay | 0 |
+| AssertJ | 3.26.3 | stay | 0 |
+| Flyway Core | 10.18.2 | stay | 1 |
+| Flyway Postgres | 10.18.2 | stay | 1 |
+| Flyway Maven Plugin | 10.18.2 | stay | 1 |
+| BCrypt (jbcrypt) | 0.4 | stay | 2 |
 | PostgreSQL driver | 42.7.3 | stay | — |
 | HikariCP | 7.0.2 | stay | — |
 | Logback | 1.5.34 | stay | — |
@@ -573,53 +562,56 @@ Add a healthcheck for the app service (optional — only if a web server is adde
 
 ## 6.5 Git Workflow Rules
 
-After each phase is fully completed and all tests pass, push the branch to the remote repository with `git push -u origin <branch-name>`.
+After each phase is fully completed and all tests pass:
+1. Create feature branch from `dev`: `git checkout dev && git checkout -b refactor/phase-N-desc`
+2. Make changes, commit with descriptive messages
+3. Run full test suite: `mvn clean test`
+4. Merge back to `dev` with `--no-ff`: `git checkout dev && git merge --no-ff refactor/phase-N-desc`
+5. Delete feature branch: `git branch -d refactor/phase-N-desc`
 
 - Do **NOT** push to `main` or `master`.
-- Do **NOT** force-push (`--force`) unless I explicitly approve it.
-- All branches must be merged via a Pull Request workflow (even if you are the only contributor) — this creates a professional GitHub history.
+- Do **NOT** force-push (`--force`) without explicit approval.
+- Only push `master` to remote when stable.
 
 ---
 
 ## 7. EXECUTION ORDER
 
 ```
-Phase 0 ──► Phase 1 ──► Phase 2 ──► Phase 3 ──► Phase 4
-(tests)    (schema)     (domain)    (services)  (cleanup)
+Phase 0 ──► Phase 1 ──► Phase 2 ──► Phase 3 ──► Phase 4 ──► Phase 5 ──► Phase 6 ──► Phase 7
+(tests)    (schema)     (domain)    (services)  (cleanup)   (reorg)    (txn)      (nav)
 ```
 
 ### Why this order
 
-1. **Phase 0:** Safety net. Cannot refactor without tests.
-2. **Phase 1:** Schema comes early because the current DB schema is already broken (code queries tables that don't match `script.sql`). Fixing the schema foundation first prevents wasted work in later phases.
-3. **Phase 2:** Domain models and repository interfaces are pure abstractions — they compile against the old and new worlds. No deployment risk.
-4. **Phase 3:** Service implementations wire the new repositories (which query the V2 schema) behind the interfaces. Controllers become thin delegates. This is the highest-risk phase — mitigated by Phase 0 tests + Phase 1 migration validation.
-5. **Phase 4:** Cleanup. No behavioral changes.
+1. **Phase 0–4:** Completed. See Section 3.5 for details.
+2. **Phase 5 (Reorg):** Next because it's pure mechanical work — no logic changes. Gets the project structure matching the target architecture before any more complex work.
+3. **Phase 6 (Txn):** Critical data-integrity fix. Must come after reorg so the BookingFacade goes in the right package.
+4. **Phase 7 (Nav):** Largest API change — saves the best for last, after everything else is stable.
 
-### Deployment Between Phases
+### Deployment Risk
 
-| Phase | Deployable? | Mitigation |
+| Phase | Deployable? | Risk |
 |---|---|---|
-| 0 | Yes | Only adds test dependencies. No production code change. |
-| 1 | **With care** | V1 schema matches old `script.sql` exactly (idempotent). V2 runs ALTER TABLE — backward-compatible (only adds constraints, widens types). Old Java code still works with V2 schema because queries target `"user"`, `movie`, etc. which V1 created. |
-| 2 | Yes | New domain models + repository interfaces are side-by-side with old code. Old controllers/DAOs unchanged. |
-| 3 | **Feature-flag** | Deploy new thin controllers alongside old fat controllers. Feature-flag the new UI path. Rollback by switching flag off. |
-| 4 | Yes | Deletion of dead code only. Zero behavioral change. |
+| 0–4 | ✅ | All tested, merged to dev |
+| 5 | ✅ | Pure file moves + import changes. Full recompile + regression test |
+| 6 | ⚠️ Moderate | New BookingFacade — no existing code changes, but txn rollback could mask bugs |
+| 7 | ⚠️ Moderate | All controller constructors change — must test every screen transition |
 
 ---
 
 ## 8. SUMMARY
 
-| Metric | Current State | Target (End of Phase 4) |
-|---|---|---|
-| Architecture | Transaction Script | Hexagonal + Pragmatic Services |
-| Package structure | `Controller/`, `DAO/`, `Model/`, `View/`, `Database/` | `domain/`, `application/`, `infrastructure/`, `ui/` |
-| Test coverage | 0% | >80% (unit + integration) |
-| Password storage | Plaintext | BCrypt |
-| Transaction safety | None | `BookingFacade` with shared connection |
-| Schema management | Manual `script.sql` | Flyway (V1 + V2) |
-| Schema alignment | Broken (code ≠ schema) | Fully aligned |
-| ID types | Mixed `int`/`String` | Consistent `Long` |
-| Controller size | 50–300 lines | 15–40 lines (thin delegation) |
-| DI pattern | `new Xxx()` everywhere | Constructor injection from `Main.java` |
-| Navigation | Static stack + direct instantiation | Service-delegated |
+| Metric | Initial (Pre-Phase 0) | Current (Post-Phase 3) | Target (End of Phase 7) |
+|---|---|---|---|
+| Architecture | Transaction Script | Hybrid (old UI + new core) | Hexagonal + Pragmatic Services |
+| Package structure | `Controller/`, `DAO/`, `Model/`, `View/`, `Database/` | Same + `domain/`, `application/`, `infrastructure/`, `ui/common/` | `domain/`, `application/`, `infrastructure/`, `ui/` (old pkgs deleted) |
+| Test coverage | 0% | ~40% | >80% (unit + integration) |
+| Password storage | Plaintext | BCrypt | BCrypt |
+| Transaction safety | None | None (services called separately) | `BookingFacade` with shared connection |
+| Schema management | Manual `script.sql` | Flyway (V1 + V2) | Flyway (V1 + V2) |
+| Schema alignment | Broken (code ≠ schema) | Fully aligned (DAOs dead, new repos target Flyway) | Fully aligned |
+| ID types | Mixed `int`/`String` | Domain: Long. Views: old mixed types (bridged by ModelConverter) | Consistent `Long` everywhere |
+| Controller size | 50–300 lines | 50–300 lines (still fat, esp. PaymentController) | 15–40 lines (thin delegation to services) |
+| DI pattern | `new Xxx()` everywhere | Constructor injection via `AppContext` | Constructor injection via `AppContext` |
+| Navigation | Static stack + direct instantiation | Same (still `new NextController()`) | `NavigationService` (testable) |
