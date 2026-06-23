@@ -13,36 +13,32 @@ import java.util.Properties;
 public class DatabaseConnection {
 
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(DatabaseConnection.class);
-    private static final HikariDataSource dataSource;
+    private static HikariDataSource dataSource;
 
-    // Runs once, the first time anything calls getConnection() or
-    // touches this class - this is what replaces the old "open a new
-    // connection every call" approach with a shared pool.
-    static {
-        Properties props = loadProperties();
+    private static synchronized HikariDataSource getDataSource() {
+        if (dataSource == null) {
+            Properties props = loadProperties();
 
-        String host = props.getProperty("db.host", "localhost");
-        String port = props.getProperty("db.port", "5432");
-        String database = props.getProperty("db.name", "cinema_booking");
-        String user = props.getProperty("db.user", "java_user");
-        String password = props.getProperty("db.password", "java_pass");
+            String host = props.getProperty("db.host", "localhost");
+            String port = props.getProperty("db.port", "5432");
+            String database = props.getProperty("db.name", "cinema_booking");
+            String user = props.getProperty("db.user", "java_user");
+            String password = props.getProperty("db.password", "java_pass");
 
-        String url = "jdbc:postgresql://" + host + ":" + port + "/" + database;
+            String url = "jdbc:postgresql://" + host + ":" + port + "/" + database;
 
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(url);
-        config.setUsername(user);
-        config.setPassword(password);
-        config.setDriverClassName("org.postgresql.Driver");
-        config.setMaximumPoolSize(10);
-        config.setMinimumIdle(2);
-        config.setPoolName("CinemaBookingPool");
+            HikariConfig config = new HikariConfig();
+            config.setJdbcUrl(url);
+            config.setUsername(user);
+            config.setPassword(password);
+            config.setDriverClassName("org.postgresql.Driver");
+            config.setMaximumPoolSize(10);
+            config.setMinimumIdle(2);
+            config.setPoolName("CinemaBookingPool");
 
-        // PostgreSQL-specific: disable auto-commit if you want to
-        // manage transactions manually, or leave it as default true
-        // config.setAutoCommit(false);
-
-        dataSource = new HikariDataSource(config);
+            dataSource = new HikariDataSource(config);
+        }
+        return dataSource;
     }
 
     // Reads db.properties from the classpath (src/main/resources/db.properties).
@@ -71,7 +67,11 @@ public class DatabaseConnection {
     // connection returns it to the pool instead of actually closing the
     // socket, so no DAO code needs to change.
     public static Connection getConnection() throws SQLException {
-        return dataSource.getConnection();
+        return getDataSource().getConnection();
+    }
+
+    static HikariDataSource getDataSourceField() {
+        return dataSource;
     }
 
     public static void printDatabaseInfo() {
@@ -99,10 +99,10 @@ public class DatabaseConnection {
         }
     }
 
-    // Graceful shutdown - call this when your app exits
     public static void closePool() {
-        if (dataSource != null && !dataSource.isClosed()) {
-            dataSource.close();
+        HikariDataSource ds = dataSource;
+        if (ds != null && !ds.isClosed()) {
+            ds.close();
         }
     }
 }
