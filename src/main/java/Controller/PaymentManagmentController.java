@@ -1,20 +1,19 @@
 package Controller;
 import application.AppContext;
-import DAO.PaymentDAO;
-import DAO.PaymentDAOimp;
+import application.ModelConverter;
 import Model.Payment;
 import View.PaymentManagment;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import java.util.stream.Collectors;
 
 public class PaymentManagmentController {
     private final PaymentManagment view;
     private final Stage stage;
     private final AppContext ctx;
     private final AdminDashboardController dashboard;
-    private final PaymentDAO paymentDAO = new PaymentDAOimp();
     private final ObservableList<Payment> list = FXCollections.observableArrayList();
 
     public PaymentManagmentController(Stage stage, AppContext ctx, AdminDashboardController dashboard) {
@@ -34,7 +33,7 @@ public class PaymentManagmentController {
 
     private void refreshData() {
         list.clear();
-        list.addAll(paymentDAO.getAllPayments());
+        list.addAll(ctx.paymentRepo.findAll().stream().map(ModelConverter::toOldPayment).collect(Collectors.toList()));
         view.paymentTable.setItems(list);
 
         // Realtime structural calculation metrics aggregation

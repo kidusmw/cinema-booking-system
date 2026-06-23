@@ -2,7 +2,8 @@ package Controller;
 
 import Controller.CustomerDashboardController;
 import Controller.ShowSelectionController;
-import DAO.MovieDAO;
+import application.ModelConverter;
+import java.util.stream.Collectors;
 import Model.Customer;
 import Model.Movie;
 import application.AppContext;
@@ -29,7 +30,6 @@ public class MovieBrowserController{
     private Stage stage;
     private Customer currentUser;
     private AppContext ctx;
-    private final MovieDAO movieDAO = new MovieDAO();
     private ObservableList<Movie> movies;
 
     public MovieBrowserController(Stage stage, AppContext ctx, Customer currentUser) {
@@ -49,7 +49,7 @@ public class MovieBrowserController{
     }
 
     private void loadMovies() {
-        List<Movie> movieList = movieDAO.getAllMovies();
+        List<Movie> movieList = ctx.movieRepo.findAll().stream().map(ModelConverter::toOldMovie).collect(Collectors.toList());
         movies = FXCollections.observableArrayList(movieList);
         view.movieContainer.getChildren().clear();
 

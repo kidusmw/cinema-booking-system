@@ -1,7 +1,7 @@
 package Controller;
 
-import DAO.SeatDAO;
-import DAO.SeatDAOimp;
+import application.ModelConverter;
+import java.util.stream.Collectors;
 import Model.*;
 import View.SeatSelectionPage;
 import application.AppContext;
@@ -26,8 +26,6 @@ public class SeatSelectionController {
     private Moviehall selectedHall;
     private boolean isVIP;
     private AppContext ctx;
-    private final SeatDAO seatDAO = new SeatDAOimp();
-
     private final Set<String> selectedSeats = new LinkedHashSet<>();
     private List<Seat> allSeats;
     private double seatPrice;
@@ -63,7 +61,7 @@ public class SeatSelectionController {
 
     private void loadSeats() {
         view.seatGrid.getChildren().clear();
-        allSeats = seatDAO.getSeatsByHall(selectedHall.getId());
+        allSeats = ctx.seatRepo.findByHallId(Long.parseLong(selectedHall.getId())).stream().map(ModelConverter::toOldSeat).collect(Collectors.toList());
 
         if (allSeats.isEmpty()) {
             Label noSeats = new Label("No seats available. Please ensure seats are generated for this hall.");

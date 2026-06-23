@@ -1,7 +1,7 @@
 package Controller;
 
 import application.AppContext;
-import DAO.MovieHallDAO;
+import application.ModelConverter;
 import Model.Moviehall;
 import View.MovieHallManagmentPage;
 import javafx.collections.FXCollections;
@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class MoviehallManagmentController {
 
@@ -24,7 +25,6 @@ public class MoviehallManagmentController {
     private Stage stage;
     private final AppContext ctx;
     private final AdminDashboardController dashboard;
-    private final MovieHallDAO hallDAO = new MovieHallDAO();
     private ObservableList<Moviehall> hallList;
 
     public MoviehallManagmentController(Stage stage, AppContext ctx, AdminDashboardController dashboard) {
@@ -53,7 +53,7 @@ public class MoviehallManagmentController {
 
     private void loadHalls() {
         try {
-            List<Moviehall> halls = hallDAO.getAllMovieHalls();
+            List<Moviehall> halls = ctx.hallRepo.findAll().stream().map(ModelConverter::toOldHall).collect(Collectors.toList());
             hallList = FXCollections.observableArrayList(halls);
             view.hallTable.setItems(hallList);
             System.out.println("✅ Loaded " + halls.size() + " halls into table");
@@ -84,13 +84,9 @@ public class MoviehallManagmentController {
         Optional<Moviehall> result = dialog.showAndWait();
 
         result.ifPresent(hall -> {
-            boolean success = hallDAO.addMovieHall(hall);
-            if (success) {
-                showAlert("Success", "Hall added successfully!");
-                loadHalls();
-            } else {
-                showAlert("Error", "Failed to add hall.");
-            }
+            ctx.hallRepo.save(ModelConverter.toDomainHall(hall));
+            showAlert("Success", "Hall added successfully!");
+            loadHalls();
         });
     }
 
@@ -108,13 +104,9 @@ public class MoviehallManagmentController {
             // FIXED: Changed .getId(...) to .setId(...)
             hall.setId(selected.getId());
 
-            boolean success = hallDAO.updateMovieHall(hall);
-            if (success) {
-                showAlert("Success", "Hall updated successfully!");
-                loadHalls();
-            } else {
-                showAlert("Error", "Failed to update hall.");
-            }
+            ctx.hallRepo.save(ModelConverter.toDomainHall(hall));
+            showAlert("Success", "Hall updated successfully!");
+            loadHalls();
         });
     }
     private void handleDeleteHall() {
@@ -131,13 +123,9 @@ public class MoviehallManagmentController {
 
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean success = hallDAO.deleteMovieHall(selected.getId());
-            if (success) {
-                showAlert("Success", "Hall deleted successfully!");
-                loadHalls();
-            } else {
-                showAlert("Error", "Failed to delete hall.");
-            }
+            ctx.hallRepo.delete(Long.parseLong(selected.getId()));
+            showAlert("Success", "Hall deleted successfully!");
+            loadHalls();
         }
     }
     private void handleBack() {

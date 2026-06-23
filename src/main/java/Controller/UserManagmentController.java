@@ -1,8 +1,7 @@
 package Controller;
 
 import application.AppContext;
-import DAO.UserDAO;
-import DAO.UserDAOimp;
+import application.ModelConverter;
 import Model.User;
 import View.UserManagmentPage;
 import javafx.collections.FXCollections;
@@ -12,6 +11,7 @@ import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class UserManagmentController {
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(UserManagmentController.class);
@@ -19,7 +19,6 @@ public class UserManagmentController {
     private final Stage stage;
     private final AppContext ctx;
     private final AdminDashboardController dashboard;
-    private final UserDAO userDAO = new UserDAOimp();
     private ObservableList<User> userList = FXCollections.observableArrayList();
 
     public UserManagmentController(Stage stage, AppContext ctx, AdminDashboardController dashboard) {
@@ -53,7 +52,7 @@ public class UserManagmentController {
     }
     private void loadUsers() {
         try {
-            List<User> users = userDAO.getAllUsers();
+            List<User> users = ctx.userRepo.findAll().stream().map(ModelConverter::toOldUser).collect(Collectors.toList());
             if (users == null || users.isEmpty()) {
                 log.warn("Database query executed but returned 0 records.");
             }
@@ -102,13 +101,9 @@ public class UserManagmentController {
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             selected.setRole(selectedRole);
-            boolean success = userDAO.updateUser(selected);
-            if (success) {
-                showAlert("Success", "User security role altered smoothly!");
-                loadUsers(); // Dynamic real-time window table reload
-            } else {
-                showAlert("SQL Execution Failure", "Database rejected update statement. Validate connection parameters.");
-            }
+            ctx.userRepo.save(ModelConverter.toDomainUser(selected));
+            showAlert("Success", "User security role altered smoothly!");
+            loadUsers();
         }
     }
     private void handleDeleteUser() {
@@ -125,13 +120,9 @@ public class UserManagmentController {
 
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean success = userDAO.deleteUser(selected.getUserID());
-            if (success) {
-                showAlert("Success", "User account wiped successfully.");
-                loadUsers();
-            } else {
-                showAlert("SQL Error", "Could not complete account deletion. Active transaction dependencies found.");
-            }
+            ctx.userRepo.delete((long) selected.getUserID());
+            showAlert("Success", "User account wiped successfully.");
+            loadUsers();
         }
     }
     private void handleBack() {

@@ -4,9 +4,8 @@ import Model.Movie;
 import Model.Show;
 import Model.Moviehall;
 import View.MovieHallSelectionPage;
-import DAO.MovieHallDAO;
-import DAO.SeatDAO;
-import DAO.SeatDAOimp;
+import application.ModelConverter;
+import java.util.stream.Collectors;
 import application.AppContext;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -30,8 +29,6 @@ public class MovieHallSelectionController {
     private Movie selectedMovie;
     private Show selectedShow;
     private AppContext ctx;
-    private final MovieHallDAO hallDAO = new MovieHallDAO();
-    private final SeatDAO seatDAO = new SeatDAOimp();
     private static final String WHITE = "#FFFFFF";
 
     public MovieHallSelectionController(Stage stage, AppContext ctx, Customer currentUser, Movie selectedMovie, Show selectedShow) {
@@ -53,7 +50,7 @@ public class MovieHallSelectionController {
     }
     private void loadHalls() {
         view.hallsContainer.getChildren().clear();
-        List<Moviehall> halls = hallDAO.getAllMovieHalls();
+        List<Moviehall> halls = ctx.hallRepo.findAll().stream().map(ModelConverter::toOldHall).collect(Collectors.toList());
         if (halls.isEmpty()) {
             Label noHalls = new Label("🏛️ No halls available");
             noHalls.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 14));

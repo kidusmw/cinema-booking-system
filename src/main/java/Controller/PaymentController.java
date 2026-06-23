@@ -1,8 +1,6 @@
 package Controller;
 
-import DAO.BookingDAO;
-import DAO.PaymentDAO;
-import DAO.PaymentDAOimp;
+import java.util.stream.Collectors;
 import Model.*;
 import View.PaymentPage;
 import application.AppContext;
@@ -39,14 +37,10 @@ public class PaymentController {
     private double totalAmount;
     private boolean isVIP;
     private AppContext ctx;
-    private final PaymentDAO paymentDAO = new PaymentDAOimp();
-    private final BookingDAO bookingDAO = new BookingDAO();
     private Timeline countdownTimer;
     private int secondsRemaining = 120;
     private String generatedOTP;
     private int failedAttempts = 0;
-    Booking booking = new Booking();
-    Payment payment = new Payment();
 
 
 
@@ -159,7 +153,7 @@ public class PaymentController {
     private void verifyPayment() {
         if (view.otpField.getText().trim().equals(generatedOTP)) {
             countdownTimer.stop();
-            processSuccessfulPayment(booking,payment);
+            processSuccessfulPayment();
         } else {
             failedAttempts++;
             view.errorLabel.setText("Invalid OTP. Attempts: " + failedAttempts);
@@ -167,25 +161,18 @@ public class PaymentController {
         }
     }
 
-    private void processSuccessfulPayment(Booking booking, Payment payment) {
-
-        boolean bookingSuccess = bookingDAO.addBooking(booking);
-
-        if (bookingSuccess) {
-            // 2. Set the ID (Assuming the booking object now has the generated ID)
-            payment.setBookingID(booking.getBookingID());
-
-            // 3. CRITICAL: Add this line to call the DAO
-            PaymentDAO paymentDAO = new PaymentDAOimp();
-            boolean paymentSuccess = paymentDAO.addPayment(payment);
-
-            if (paymentSuccess) {
-                showSuccessAndTicket();
-            } else {
-                log.error("Payment record failed to save");
-            }
-        } else {
-            log.error("Booking failed to save");
+    private void processSuccessfulPayment() {
+        try {
+            List<String> seatIds = selectedSeatIds;
+            List<Long> domainSeatIds = seatIds.stream().map(Long::parseLong).collect(Collectors.toList());
+            double total = totalAmount;
+            Long userId = (long) currentUser.getUserID();
+            Long showId = Long.parseLong(selectedShow.getShowID());
+            domain.model.Booking domainBooking = ctx.bookingService.createBooking(userId, showId, domainSeatIds, total);
+            domain.model.Payment domainPayment = ctx.paymentService.processPayment(domainBooking.getBookingId(), total, "CARD");
+            showSuccessAndTicket();
+        } catch (Exception e) {
+            log.error("Payment processing failed", e);
         }
     }
 

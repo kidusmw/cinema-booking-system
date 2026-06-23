@@ -1,7 +1,6 @@
 package Controller;
 
-import DAO.ShowDAO;
-import DAO.ShowDAOimp;
+import application.ModelConverter;
 import Model.Show;
 import Model.Movie;
 import Model.Customer;
@@ -31,7 +30,6 @@ public class ShowSelectionController {
     private Customer currentUser;
     private Movie selectedMovie;
     private AppContext ctx;
-    private final ShowDAO showDAO = new ShowDAOimp();
     private List<Show> movieShows;
 
     private static final String ACCENT = "#DB2777";
@@ -68,7 +66,7 @@ public class ShowSelectionController {
     private void loadShows() {
         view.showCardsContainer.getChildren().clear();
         view.dateButtonsContainer.getChildren().clear();
-        movieShows = showDAO.getShowsByMovie(selectedMovie.getMovieID());
+        movieShows = ctx.showtimeRepo.findByMovieId(Long.parseLong(selectedMovie.getMovieID())).stream().map(ModelConverter::toOldShowtime).collect(Collectors.toList());
 
         if (movieShows.isEmpty()) {
             Label noShows = new Label("🎬 No shows available for this movie yet.");
