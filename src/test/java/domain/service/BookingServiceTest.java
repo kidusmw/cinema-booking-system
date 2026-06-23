@@ -76,4 +76,27 @@ class BookingServiceTest {
         when(bookingRepo.findById(999L)).thenReturn(Optional.empty());
         assertThrows(IllegalArgumentException.class, () -> bookingService.cancelBooking(999L));
     }
+
+    @Test
+    void getHistoryReturnsUserBookings() {
+        Booking b1 = new Booking(1L, 1L, 1L, null, 50.0, "confirmed");
+        Booking b2 = new Booking(2L, 1L, 2L, null, 30.0, "cancelled");
+        when(bookingRepo.findByUserId(1L)).thenReturn(List.of(b1, b2));
+
+        List<Booking> result = bookingService.getHistory(1L);
+
+        assertEquals(2, result.size());
+        verify(bookingRepo).findByUserId(1L);
+    }
+
+    @Test
+    void createBookingThrowsWhenPriceMismatch() {
+        Seat seat = new Seat(1L, 1L, "A1", "regular", "available");
+        when(seatRepo.findById(1L)).thenReturn(Optional.of(seat));
+        when(bookingRepo.save(any())).thenThrow(new RuntimeException("DB error"));
+
+        assertThrows(
+                RuntimeException.class,
+                () -> bookingService.createBooking(1L, 1L, List.of(1L), 50.0));
+    }
 }
