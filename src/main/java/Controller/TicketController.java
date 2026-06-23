@@ -2,6 +2,7 @@ package Controller;
 
 import Model.*;
 import View.TicketPage;
+import application.AppContext;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -21,15 +22,16 @@ public class TicketController {
     private List<String> selectedSeatIds;
     private double totalAmount;
     private List<String> bookingIds;
-    private static final String ACCENT = "#DB2777";
+    private AppContext ctx;
     private static final String TEXT_DARK = "#1E293B";
     private static final String TEXT_MUTED = "#64748B";
     private static final String BORDER = "#E2E8F0";
     private static final String WHITE = "#FFFFFF";
     private static final String BG = "#FAFAFA";
 
-    public TicketController(Stage stage, Customer currentUser, Movie selectedMovie, Show selectedShow, Moviehall selectedHall, List<String> selectedSeatIds, double totalAmount, List<String> bookingIds) {
+    public TicketController(Stage stage, AppContext ctx, Customer currentUser, Movie selectedMovie, Show selectedShow, Moviehall selectedHall, List<String> selectedSeatIds, double totalAmount, List<String> bookingIds) {
         this.stage = stage;
+        this.ctx = ctx;
         this.currentUser = currentUser;
         this.selectedMovie = selectedMovie;
         this.selectedShow = selectedShow;
@@ -52,11 +54,11 @@ public class TicketController {
         });
 
         view.btnHome.setOnAction(e -> {
-            new CustomerDashboardController(stage, currentUser);
+            new CustomerDashboardController(stage, ctx, currentUser);
         });
 
         view.btnMyBookings.setOnAction(e -> {
-            new CustomerDashboardController(stage, currentUser);
+            new CustomerDashboardController(stage, ctx, currentUser);
         });
     }
 

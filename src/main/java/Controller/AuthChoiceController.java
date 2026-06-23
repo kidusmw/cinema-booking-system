@@ -1,6 +1,7 @@
 package Controller;
 
 import View.AuthChoice;
+import application.AppContext;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -8,7 +9,7 @@ public class AuthChoiceController {
     private Stage stage;
     private AuthChoice view;
     private String role;
-    public AuthChoiceController(Stage stage, String role) {
+    public AuthChoiceController(Stage stage, AppContext ctx, String role) {
         this.stage = stage;
         this.role = role;
         this.view = new AuthChoice();
@@ -18,17 +19,17 @@ public class AuthChoiceController {
 
         view.btnBack.setOnAction(e -> {
             NavigationManager.pop();
-            new UsertypeController(stage);
+            new UsertypeController(stage, ctx);
         });
 
         view.btnLogin.setOnAction(e -> {
             NavigationManager.push("auth");
-            new LoginController(stage, role);
+            new LoginController(stage, ctx, role);
         });
 
         view.btnSignUp.setOnAction(e -> {
             NavigationManager.push("auth");
-            new SignUpController(stage, role);
+            new SignUpController(stage, ctx, role);
         });
     }
 }

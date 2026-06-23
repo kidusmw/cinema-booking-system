@@ -1,8 +1,7 @@
 package Controller;
 
-import DAO.MovieHallDAO;
-import DAO.SeatDAO;
-import DAO.SeatDAOimp;
+import application.AppContext;
+import application.ModelConverter;
 import Model.Moviehall;
 import Model.Seat;
 import View.SeatManagmentPage;
@@ -14,19 +13,20 @@ import javafx.stage.Stage;
 import javafx.scene.Parent;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class SeatManagmentController {
 
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(SeatManagmentController.class);
     private SeatManagmentPage view;
     private Stage stage;
+    private final AppContext ctx;
     private final AdminDashboardController dashboard;
-    private final MovieHallDAO hallDAO = new MovieHallDAO();
-    private final SeatDAO seatDAO = new SeatDAOimp();
     private Moviehall selectedHall;
 
-    public SeatManagmentController(Stage stage, AdminDashboardController dashboard) {
+    public SeatManagmentController(Stage stage, AppContext ctx, AdminDashboardController dashboard) {
         this.stage = stage;
+        this.ctx = ctx;
         this.dashboard = dashboard;
         this.view = new SeatManagmentPage();
         loadHalls();
@@ -49,7 +49,7 @@ public class SeatManagmentController {
 
     private void loadHalls() {
         try {
-            List<Moviehall> halls = hallDAO.getAllMovieHalls();
+            List<Moviehall> halls = ctx.hallRepo.findAll().stream().map(ModelConverter::toOldHall).collect(Collectors.toList());
             if (halls != null) view.hallDropdown.setItems(FXCollections.observableArrayList(halls));
         } catch (Exception e) { log.error("Operation failed", e); }
     }
@@ -61,7 +61,7 @@ public class SeatManagmentController {
     private void loadSeatsForSelectedHall() {
         if (selectedHall == null) return;
         try {
-            List<Seat> seats = seatDAO.getSeatsByHall((selectedHall.getId()));
+            List<Seat> seats = ctx.seatRepo.findByHallId(Long.parseLong(selectedHall.getId())).stream().map(ModelConverter::toOldSeat).collect(Collectors.toList());
             view.seatTable.setItems(FXCollections.observableArrayList(seats));
             view.statsLabel.setText("📊 Total Seats: " + seats.size());
         } catch (Exception e) { log.error("Operation failed", e); }
@@ -83,11 +83,7 @@ public class SeatManagmentController {
                 seat.setStatus("AVAILABLE");
                 seat.setMovieHallID(hallID);
 
-                // CRITICAL: Call the DAO and verify success
-                boolean success = seatDAO.addSeat(seat);
-                if (!success) {
-                    log.error("DAO failed to add seat index {}", i);
-                }
+                ctx.seatRepo.save(ModelConverter.toDomainSeat(seat));
             }
             System.out.println("DEBUG: Generation loop finished.");
             loadSeatsForSelectedHall();
@@ -100,14 +96,17 @@ public class SeatManagmentController {
     private void handleDeleteAllSeats() {
         if (selectedHall == null) return;
         try {
-            List<Seat> seats = seatDAO.getSeatsByHall((selectedHall.getId()));
-            for (Seat s : seats) seatDAO.deleteSeat(s.getSeatID());
+            List<domain.model.Seat> seats = ctx.seatRepo.findByHallId(Long.parseLong(selectedHall.getId()));
+            for (domain.model.Seat s : seats) {
+                s.setStatus("deleted");
+                ctx.seatRepo.save(s);
+            }
             loadSeatsForSelectedHall();
         } catch (Exception e) { log.error("Operation failed", e); }
     }
 
     private void handleBack() {
-        new AdminDashboardController(stage, dashboard.getAdminName());
+        new AdminDashboardController(stage, ctx, dashboard.getAdminName());
     }
 
     private void showAlert(String title, String content) {

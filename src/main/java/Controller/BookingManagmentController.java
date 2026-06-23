@@ -1,6 +1,7 @@
 package Controller;
 
-import DAO.BookingDAO;
+import application.AppContext;
+import application.ModelConverter;
 import Model.Booking;
 import View.BookingManagmentPage;
 import javafx.collections.FXCollections;
@@ -8,17 +9,19 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import java.util.stream.Collectors;
 
 public class BookingManagmentController {
 
     private BookingManagmentPage view;
     private Stage stage;
+    private final AppContext ctx;
     private final AdminDashboardController dashboard;
-    private final BookingDAO bookingDAO = new BookingDAO();
     private ObservableList<Booking> masterList;
 
-    public BookingManagmentController(Stage stage, AdminDashboardController dashboard) {
+    public BookingManagmentController(Stage stage, AppContext ctx, AdminDashboardController dashboard) {
         this.stage = stage;
+        this.ctx = ctx;
         this.dashboard = dashboard;
         this.view = new BookingManagmentPage();
 
@@ -38,7 +41,7 @@ public class BookingManagmentController {
     }
 
     private void loadTableData() {
-        this.masterList = FXCollections.observableArrayList(bookingDAO.getAllBookings());
+        this.masterList = FXCollections.observableArrayList(ctx.bookingRepo.findAll().stream().map(ModelConverter::toOldBooking).collect(Collectors.toList()));
         view.bookingTable.setItems(masterList);
         System.out.println("✅ Data Loaded: " + masterList.size() + " bookings.");
     }
@@ -63,10 +66,9 @@ public class BookingManagmentController {
             showAlert("No Selection", "Please select a booking to cancel.");
             return;
         }
-        if (bookingDAO.cancelBooking(selected.getBookingID())) {
-            showAlert("Success", "Booking Cancelled");
-            loadTableData();
-        }
+        ctx.bookingService.cancelBooking((long) selected.getBookingID());
+        showAlert("Success", "Booking Cancelled");
+        loadTableData();
     }
 
     private void handleBack() {

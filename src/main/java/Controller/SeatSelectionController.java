@@ -1,9 +1,10 @@
 package Controller;
 
-import DAO.SeatDAO;
-import DAO.SeatDAOimp;
+import application.ModelConverter;
+import java.util.stream.Collectors;
 import Model.*;
 import View.SeatSelectionPage;
+import application.AppContext;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -24,8 +25,7 @@ public class SeatSelectionController {
     private Show selectedShow;
     private Moviehall selectedHall;
     private boolean isVIP;
-    private final SeatDAO seatDAO = new SeatDAOimp();
-
+    private AppContext ctx;
     private final Set<String> selectedSeats = new LinkedHashSet<>();
     private List<Seat> allSeats;
     private double seatPrice;
@@ -35,9 +35,10 @@ public class SeatSelectionController {
     private static final String BOOKED_COLOR = "#EF4444";
     private static final String SELECTED_COLOR = "#DB2777";
 
-    public SeatSelectionController(Stage stage, Customer currentUser, Movie selectedMovie,
+    public SeatSelectionController(Stage stage, AppContext ctx, Customer currentUser, Movie selectedMovie,
                                    Show selectedShow, Moviehall selectedHall, boolean isVIP) {
         this.stage = stage;
+        this.ctx = ctx;
         this.currentUser = currentUser;
         this.selectedMovie = selectedMovie;
         this.selectedShow = selectedShow;
@@ -54,13 +55,13 @@ public class SeatSelectionController {
         view.showInfoLabel.setText("🕐 " + selectedShow.getShowTime() + "  |  📅 " + selectedShow.getShowDate());
         view.priceLabel.setText(String.format("%.0f Birr per seat", seatPrice));
         loadSeats();
-        view.btnBack.setOnAction(e -> new MovieHallSelectionController(stage, currentUser, selectedMovie, selectedShow));
+        view.btnBack.setOnAction(e -> new MovieHallSelectionController(stage, ctx, currentUser, selectedMovie, selectedShow));
         view.btnProceed.setOnAction(e -> proceedToPayment());
     }
 
     private void loadSeats() {
         view.seatGrid.getChildren().clear();
-        allSeats = seatDAO.getSeatsByHall(selectedHall.getId());
+        allSeats = ctx.seatRepo.findByHallId(Long.parseLong(selectedHall.getId())).stream().map(ModelConverter::toOldSeat).collect(Collectors.toList());
 
         if (allSeats.isEmpty()) {
             Label noSeats = new Label("No seats available. Please ensure seats are generated for this hall.");
@@ -144,7 +145,7 @@ public class SeatSelectionController {
 
     private void proceedToPayment() {
         if (selectedSeats.isEmpty()) return;
-        new PaymentController(stage, currentUser, selectedMovie, selectedShow, selectedHall, new ArrayList<>(selectedSeats), seatPrice);
+        new PaymentController(stage, ctx, currentUser, selectedMovie, selectedShow, selectedHall, new ArrayList<>(selectedSeats), seatPrice);
     }
 
     private void showAlert(String title, String content) {

@@ -1,16 +1,14 @@
 package Controller;
 
-import DAO.ShowDAO;
-import DAO.ShowDAOimp;
+import application.AppContext;
+import application.ModelConverter;
 import Model.Show;
 import View.ShowManagementPage;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,8 +22,8 @@ public class ShowManagmentController {
 
     private final ShowManagementPage view;
     private final Stage stage;
+    private final AppContext ctx;
     private final AdminDashboardController dashboard;
-    private final ShowDAO showDAO = new ShowDAOimp();
     private ObservableList<Show> showList;
     private final Map<String, String> movieMap = new HashMap<>();
     private final Map<String, String> hallMap = new HashMap<>();
@@ -34,9 +32,11 @@ public class ShowManagmentController {
 
     public ShowManagmentController(
         Stage stage,
+        AppContext ctx,
         AdminDashboardController dashboard
     ) {
         this.stage = stage;
+        this.ctx = ctx;
         this.dashboard = dashboard;
         this.view = new ShowManagementPage();
         loadLiveDatabaseDropdownMaps();
@@ -69,41 +69,25 @@ public class ShowManagmentController {
         movieMapById.clear();
         hallMapById.clear();
 
-        String movieQuery = "SELECT Movie_ID, Title FROM dbo.Movie_";
-        String hallQuery = "SELECT Movie_hall_ID, Name FROM dbo.Movie_Hall_";
+        List<domain.model.Movie> movies = ctx.movieRepo.findAll();
+        for (domain.model.Movie m : movies) {
+            String id = String.valueOf(m.getMovieId());
+            String title = m.getTitle();
+            movieMap.put(title, id);
+            movieMapById.put(id, title);
+        }
 
-        try (Connection conn = Database.DatabaseConnection.getConnection()) {
-            try (
-                PreparedStatement ps = conn.prepareStatement(movieQuery);
-                ResultSet rs = ps.executeQuery()
-            ) {
-                while (rs.next()) {
-                    String id = rs.getString("Movie_ID");
-                    String title = rs.getString("Title");
-                    movieMap.put(title, id);
-                    movieMapById.put(id, title);
-                }
-            }
-            try (
-                PreparedStatement ps = conn.prepareStatement(hallQuery);
-                ResultSet rs = ps.executeQuery()
-            ) {
-                while (rs.next()) {
-                    String id = rs.getString("Movie_hall_ID");
-                    String name = rs.getString("Name");
-                    hallMap.put(name, id);
-                    hallMapById.put(id, name);
-                }
-            }
-        } catch (Exception ex) {
-            System.out.println(
-                "Error pulling database references: " + ex.getMessage()
-            );
+        List<domain.model.Hall> halls = ctx.hallRepo.findAll();
+        for (domain.model.Hall h : halls) {
+            String id = String.valueOf(h.getHallId());
+            String name = h.getName();
+            hallMap.put(name, id);
+            hallMapById.put(id, name);
         }
     }
 
     private void loadShows() {
-        List<Show> shows = showDAO.getAllShows();
+        List<Show> shows = ctx.showtimeRepo.findAll().stream().map(ModelConverter::toOldShowtime).collect(Collectors.toList());
         for (Show show : shows) {
             if (
                 show.getMovieID() != null &&
@@ -150,12 +134,8 @@ public class ShowManagmentController {
         Optional<Show> result = dialog.showAndWait();
 
         result.ifPresent(show -> {
-            boolean success = showDAO.addShow(show);
-            if (success) {
-                loadShows();
-            } else {
-                showAlert("Database Error", "Failed to add show.");
-            }
+            ctx.showtimeRepo.save(ModelConverter.toDomainShowtime(show));
+            loadShows();
         });
     }
 
@@ -168,11 +148,8 @@ public class ShowManagmentController {
 
         result.ifPresent(show -> {
             show.setShowID(selected.getShowID());
-            if (showDAO.updateShow(show)) {
-                loadShows();
-            } else {
-                showAlert("Database Error", "Failed to write changes.");
-            }
+            ctx.showtimeRepo.save(ModelConverter.toDomainShowtime(show));
+            loadShows();
         });
     }
 
@@ -187,11 +164,8 @@ public class ShowManagmentController {
 
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            if (showDAO.deleteShow(selected.getShowID())) {
-                loadShows();
-            } else {
-                showAlert("Conflict", "Cannot clear show. Tickets assigned.");
-            }
+            ctx.showtimeRepo.delete(Long.parseLong(selected.getShowID()));
+            loadShows();
         }
     }
 

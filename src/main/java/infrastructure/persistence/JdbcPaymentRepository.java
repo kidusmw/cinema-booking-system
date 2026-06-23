@@ -4,6 +4,8 @@ import domain.model.Payment;
 import domain.port.PaymentRepository;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class JdbcPaymentRepository implements PaymentRepository {
@@ -74,6 +76,20 @@ public class JdbcPaymentRepository implements PaymentRepository {
             throw new RuntimeException("Failed to find payment by id", e);
         }
         return Optional.empty();
+    }
+
+    @Override
+    public List<Payment> findAll() {
+        String sql = "SELECT * FROM payment ORDER BY payment_id DESC";
+        List<Payment> list = new ArrayList<>();
+        try (Connection conn = connectionProvider.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) list.add(mapRow(rs));
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to find all payments", e);
+        }
+        return list;
     }
 
     @Override

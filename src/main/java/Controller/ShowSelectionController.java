@@ -1,11 +1,11 @@
 package Controller;
 
-import DAO.ShowDAO;
-import DAO.ShowDAOimp;
+import application.ModelConverter;
 import Model.Show;
 import Model.Movie;
 import Model.Customer;
 import View.ShowSelectionPage;
+import application.AppContext;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -29,21 +29,18 @@ public class ShowSelectionController {
     private Stage stage;
     private Customer currentUser;
     private Movie selectedMovie;
-    private final ShowDAO showDAO = new ShowDAOimp();
+    private AppContext ctx;
     private List<Show> movieShows;
 
     private static final String ACCENT = "#DB2777";
-    private static final String HOVER = "#EC4899";
     private static final String TEXT_DARK = "#1E293B";
     private static final String TEXT_MUTED = "#64748B";
     private static final String BORDER = "#E2E8F0";
     private static final String WHITE = "#FFFFFF";
-    private static final String BG = "#FAFAFA";
-    private static final String BG_LIGHT = "#F8FAFC";
-    private static final String SUCCESS = "#10B981";
 
-    public ShowSelectionController(Stage stage, Customer currentUser, Movie selectedMovie) {
+    public ShowSelectionController(Stage stage, AppContext ctx, Customer currentUser, Movie selectedMovie) {
         this.stage = stage;
+        this.ctx = ctx;
         this.currentUser = currentUser;
         this.selectedMovie = selectedMovie;
         this.view = new ShowSelectionPage();
@@ -62,14 +59,14 @@ public class ShowSelectionController {
 
         loadShows();
         view.btnBack.setOnAction(e -> {
-            new MovieBrowserController(stage, currentUser);
+            new MovieBrowserController(stage, ctx, currentUser);
         });
     }
 
     private void loadShows() {
         view.showCardsContainer.getChildren().clear();
         view.dateButtonsContainer.getChildren().clear();
-        movieShows = showDAO.getShowsByMovie(selectedMovie.getMovieID());
+        movieShows = ctx.showtimeRepo.findByMovieId(Long.parseLong(selectedMovie.getMovieID())).stream().map(ModelConverter::toOldShowtime).collect(Collectors.toList());
 
         if (movieShows.isEmpty()) {
             Label noShows = new Label("🎬 No shows available for this movie yet.");
@@ -197,7 +194,7 @@ public class ShowSelectionController {
                         "-fx-cursor: hand;"
         );
         bookBtn.setOnAction(e -> {
-            new MovieHallSelectionController(stage, currentUser, selectedMovie, show);
+            new MovieHallSelectionController(stage, ctx, currentUser, selectedMovie, show);
         });
 
         HBox bottomRow = new HBox();

@@ -1,4 +1,5 @@
 import Controller.WelcomeController;
+import application.AppContext;
 import domain.port.*;
 import domain.service.AuthService;
 import domain.service.BookingService;
@@ -33,7 +34,13 @@ public class Main extends Application {
         BookingService bookingService = new BookingService(bookingRepo, seatRepo);
         PaymentService paymentService = new PaymentService(paymentRepo);
 
-        new WelcomeController(stage);
+        AppContext ctx = new AppContext(
+            userRepo, movieRepo, hallRepo, seatRepo,
+            showtimeRepo, bookingRepo, paymentRepo,
+            authService, bookingService, paymentService
+        );
+
+        new WelcomeController(stage, ctx);
     }
 
     public static void main(String[] args) {

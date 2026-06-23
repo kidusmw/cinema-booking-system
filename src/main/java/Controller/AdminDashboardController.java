@@ -1,9 +1,7 @@
 package Controller;
 
-import DAO.MovieHallDAO;
-import Model.Moviehall;
 import View.AdminDashboardPage;
-import Controller.WelcomeController;
+import application.AppContext;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
@@ -15,24 +13,22 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import javafx.scene.layout.BorderPane;
-import java.util.List;
-import javafx.scene.Parent;
 import static ui.common.Theme.*;
+
 public class AdminDashboardController {
 
     private AdminDashboardPage view;
     private Stage stage;
     private String adminName;
-
-
+    private AppContext ctx;
 
     public Parent getView() {
         return view.getView();
     }
 
-    public AdminDashboardController(Stage stage, String adminName) {
+    public AdminDashboardController(Stage stage, AppContext ctx, String adminName) {
         this.stage = stage;
+        this.ctx = ctx;
         this.adminName = adminName;
         this.view = new AdminDashboardPage();
 
@@ -45,7 +41,7 @@ public class AdminDashboardController {
 
         view.btnLogout.setOnAction(e -> {
             NavigationManager.clear();
-            new WelcomeController(stage);
+            new WelcomeController(stage, ctx);
         });
 
         view.btnDashboard.setOnAction(e -> showDashboard());
@@ -81,10 +77,10 @@ public class AdminDashboardController {
 
         HBox statsBox = new HBox(20);
         statsBox.getChildren().addAll(
-                createStatCard("🎬", "Total Movies", "11", ACCENT),
-                createStatCard("🎫", "Total Bookings", "15", "#10B981"),
-                createStatCard("💰", "Revenue", "0.00birr", "#F59E0B"),
-                createStatCard("👥", "Total Users", "9", "#8B5CF6")
+                createStatCard("Movies", "Total Movies", "11", ACCENT),
+                createStatCard("Bookings", "Total Bookings", "15", "#10B981"),
+                createStatCard("Revenue", "Revenue", "0.00birr", "#F59E0B"),
+                createStatCard("Users", "Total Users", "9", "#8B5CF6")
         );
 
         dashboardContent.getChildren().addAll(title, statsBox);
@@ -93,42 +89,42 @@ public class AdminDashboardController {
 
     private void showMovies() {
         setActiveMenu(view.btnMovies);
-        new MovieManagementController(stage, this);
+        new MovieManagementController(stage, ctx, this);
     }
 
     private void showShows() {
         setActiveMenu(view.btnShows);
-        ShowManagmentController c = new ShowManagmentController(stage, this);
+        ShowManagmentController c = new ShowManagmentController(stage, ctx, this);
         injectView(c.getRootView());
     }
 
     private void showHalls() {
         setActiveMenu(view.btnHalls);
-        MoviehallManagmentController c = new MoviehallManagmentController(stage, this);
+        MoviehallManagmentController c = new MoviehallManagmentController(stage, ctx, this);
         injectView(c.getRootView());
     }
 
     private void showSeats() {
         setActiveMenu(view.btnSeats);
-        SeatManagmentController c = new SeatManagmentController(stage, this);
+        SeatManagmentController c = new SeatManagmentController(stage, ctx, this);
         injectView(c.getRootView());
     }
 
     private void showBookings() {
         setActiveMenu(view.btnBookings);
-        BookingManagmentController c = new BookingManagmentController(stage, this);
+        BookingManagmentController c = new BookingManagmentController(stage, ctx, this);
         injectView(c.getRootView());
     }
 
     private void showPayments() {
         setActiveMenu(view.btnPayments);
-        PaymentManagmentController c = new PaymentManagmentController(stage, this);
+        PaymentManagmentController c = new PaymentManagmentController(stage, ctx, this);
         injectView(c.getRootView());
     }
 
     private void showUsers() {
         setActiveMenu(view.btnUsers);
-        UserManagmentController c = new UserManagmentController(stage, this);
+        UserManagmentController c = new UserManagmentController(stage, ctx, this);
         injectView(c.getRootView());
     }
     private void setActiveMenu(Button activeBtn) {

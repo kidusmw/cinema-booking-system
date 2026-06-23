@@ -1,4 +1,5 @@
 package Controller;
+import application.AppContext;
 import View.MovieManagemnetPage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,21 +13,21 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.List;
-import java.util.Optional;
+import application.ModelConverter;
 import Model.Movie;
-import DAO.MovieDAO;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 public class MovieManagementController {
     private MovieManagemnetPage view;
     private Stage stage;
+    private AppContext ctx;
     private AdminDashboardController dashboard; // Kept to navigate back
-    private final MovieDAO movieDAO = new MovieDAO();
     private ObservableList<Movie> movieList;
 
-    public MovieManagementController(Stage stage, AdminDashboardController dashboard) {
+    public MovieManagementController(Stage stage, AppContext ctx, AdminDashboardController dashboard) {
         this.stage = stage;
+        this.ctx = ctx;
         this.dashboard = dashboard;
         view = new MovieManagemnetPage();
 
@@ -62,11 +63,11 @@ public class MovieManagementController {
     }
 
     private void handleBackToDashboard() {
-            new AdminDashboardController(stage, dashboard.getAdminName());
+            new AdminDashboardController(stage, ctx, dashboard.getAdminName());
         }
 
         private void loadMovies() {
-        List<Movie> movies = movieDAO.getAllMovies();
+        List<Movie> movies = ctx.movieRepo.findAll().stream().map(ModelConverter::toOldMovie).collect(Collectors.toList());
         movieList = FXCollections.observableArrayList(movies);
         view.movieTable.setItems(movieList);
     }
@@ -92,13 +93,9 @@ public class MovieManagementController {
         Optional<Movie> result = dialog.showAndWait();
 
         result.ifPresent(movie -> {
-            boolean success = movieDAO.addMovie(movie);
-            if (success) {
-                showAlert("Success", "Movie added successfully!");
-                loadMovies();
-            } else {
-                showAlert("Error", "Failed to add movie.");
-            }
+            ctx.movieRepo.save(ModelConverter.toDomainMovie(movie));
+            showAlert("Success", "Movie added successfully!");
+            loadMovies();
         });
     }
 
@@ -114,13 +111,9 @@ public class MovieManagementController {
 
         result.ifPresent(movie -> {
             movie.setMovieID(selected.getMovieID());
-            boolean success = movieDAO.updateMovie(movie);
-            if (success) {
-                showAlert("Success", "Movie updated successfully!");
-                loadMovies();
-            } else {
-                showAlert("Error", "Failed to update movie.");
-            }
+            ctx.movieRepo.save(ModelConverter.toDomainMovie(movie));
+            showAlert("Success", "Movie updated successfully!");
+            loadMovies();
         });
     }
 
@@ -138,13 +131,9 @@ public class MovieManagementController {
 
         Optional<ButtonType> result = confirm.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            boolean success = movieDAO.deleteMovieByName(selected.getTitle());
-            if (success) {
-                showAlert("Success", "Movie deleted successfully!");
-                loadMovies();
-            } else {
-                showAlert("Error", "Failed to delete movie.");
-            }
+            ctx.movieRepo.findAll().stream().filter(m -> m.getTitle().equals(selected.getTitle())).findFirst().ifPresent(m -> ctx.movieRepo.delete(m.getMovieId()));
+            showAlert("Success", "Movie deleted successfully!");
+            loadMovies();
         }
     }
 
