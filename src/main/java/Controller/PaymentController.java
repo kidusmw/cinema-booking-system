@@ -1,7 +1,6 @@
 package Controller;
 
 import DAO.BookingDAO;
-import DAO.BookingDAOimp;
 import DAO.PaymentDAO;
 import DAO.PaymentDAOimp;
 import Model.*;
@@ -37,7 +36,7 @@ public class PaymentController {
     private double totalAmount;
     private boolean isVIP;
     private final PaymentDAO paymentDAO = new PaymentDAOimp();
-    private final BookingDAO bookingDAO = new BookingDAOimp();
+    private final BookingDAO bookingDAO = new BookingDAO();
     private Timeline countdownTimer;
     private int secondsRemaining = 120;
     private String generatedOTP;

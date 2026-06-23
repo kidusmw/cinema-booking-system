@@ -1,7 +1,6 @@
 package Controller;
 
 import DAO.MovieHallDAO;
-import DAO.MoviehallDAOimp;
 import Model.Moviehall;
 import View.MovieHallManagmentPage;
 import javafx.collections.FXCollections;
@@ -22,7 +21,7 @@ public class MoviehallManagmentController {
     private MovieHallManagmentPage view;
     private Stage stage;
     private final AdminDashboardController dashboard;
-    private final MovieHallDAO hallDAO = new MoviehallDAOimp();
+    private final MovieHallDAO hallDAO = new MovieHallDAO();
     private ObservableList<Moviehall> hallList;
 
     public MoviehallManagmentController(Stage stage, AdminDashboardController dashboard) {

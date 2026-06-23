@@ -3,7 +3,6 @@ package Controller;
 import Controller.CustomerDashboardController;
 import Controller.ShowSelectionController;
 import DAO.MovieDAO;
-import DAO.MovieDAOimp;
 import Model.Customer;
 import Model.Movie;
 import View.MovieBrowserpage;
@@ -28,7 +27,7 @@ public class MovieBrowserController{
     private MovieBrowserpage view;
     private Stage stage;
     private Customer currentUser;
-    private final MovieDAO movieDAO = new MovieDAOimp();
+    private final MovieDAO movieDAO = new MovieDAO();
     private ObservableList<Movie> movies;
 
     public MovieBrowserController(Stage stage, Customer currentUser) {

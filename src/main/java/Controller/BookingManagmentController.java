@@ -1,7 +1,6 @@
 package Controller;
 
 import DAO.BookingDAO;
-import DAO.BookingDAOimp;
 import Model.Booking;
 import View.BookingManagmentPage;
 import javafx.collections.FXCollections;
@@ -15,7 +14,7 @@ public class BookingManagmentController {
     private BookingManagmentPage view;
     private Stage stage;
     private final AdminDashboardController dashboard;
-    private final BookingDAO bookingDAO = new BookingDAOimp();
+    private final BookingDAO bookingDAO = new BookingDAO();
     private ObservableList<Booking> masterList;
 
     public BookingManagmentController(Stage stage, AdminDashboardController dashboard) {
