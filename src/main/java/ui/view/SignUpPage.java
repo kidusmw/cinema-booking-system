@@ -10,7 +10,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import static ui.common.Theme.*;
 
-public class SingUpPage {
+public class SignUpPage {
 
     public TextField firstNameField;
     public TextField lastNameField;

@@ -3,7 +3,7 @@ package ui.controller;
 import ui.model.Admin;
 import ui.model.Customer;
 import ui.model.User;
-import ui.view.Loginpage;
+import ui.view.LoginPage;
 import application.AppContext;
 import application.ModelConverter;
 import javafx.scene.Scene;
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public class LoginController {
     private final AppContext ctx;
-    private Loginpage view;
+    private LoginPage view;
     private String expectedRole;
     private Stage stage;
     private NavigationManager nav;
@@ -22,7 +22,7 @@ public class LoginController {
         this.ctx = ctx;
         this.nav = nav;
         this.expectedRole = role;
-        view = new Loginpage();
+        view = new LoginPage();
         Scene scene = new Scene(view.getView(), 900, 650);
         stage.setTitle("Sign in - CinemaBook");
         stage.setScene(scene);

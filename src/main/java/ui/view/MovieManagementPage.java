@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import static ui.common.Theme.*;
 
-public class MovieManagemnetPage {
+public class MovieManagementPage {
     public TableView<ui.model.Movie> movieTable;
     public TextField searchField;
     public Button btnAddMovie;

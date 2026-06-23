@@ -1,6 +1,6 @@
 package ui.controller;
 import application.AppContext;
-import ui.view.MovieManagemnetPage;
+import ui.view.MovieManagementPage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 public class MovieManagementController {
-    private MovieManagemnetPage view;
+    private MovieManagementPage view;
     private Stage stage;
     private AppContext ctx;
     private NavigationManager nav;
@@ -31,7 +31,7 @@ public class MovieManagementController {
         this.ctx = ctx;
         this.nav = nav;
         this.dashboard = dashboard;
-        view = new MovieManagemnetPage();
+        view = new MovieManagementPage();
 
         Scene scene = new Scene(view.getView(), 1200, 750);
         stage.setTitle("Manage Movies - CinemaBook Admin");

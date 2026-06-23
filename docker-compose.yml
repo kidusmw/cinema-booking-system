@@ -10,7 +10,6 @@ services:
       - "5432:5432"
     volumes:
       - cinema-db-data:/var/lib/postgresql/data
-      - ./script.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
     deploy:
       resources:
         limits:

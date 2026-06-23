@@ -9,7 +9,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import static ui.common.Theme.*;
 
-public class MovieBrowserpage{
+public class MovieBrowserPage {
 
     public Button btnBack;
     public TextField searchField;
@@ -20,7 +20,7 @@ public class MovieBrowserpage{
     private static final String WHITE = "#FFFFFF";
     private static final String BG = "#FAFAFA";
 
-    public MovieBrowserpage() {
+    public MovieBrowserPage() {
         try {
             createUI();
         } catch (Exception e) {
