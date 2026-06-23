@@ -9,6 +9,7 @@ public class Booking {
     private Long userId;
     private Long showId;
     private LocalDateTime bookingDate;
+    private String movieName;
     private double amount;
     private String bookingStatus;
     private List<BookingSeat> seats = new ArrayList<>();
@@ -61,6 +62,9 @@ public class Booking {
 
     public LocalDateTime getBookingDate() { return bookingDate; }
     public void setBookingDate(LocalDateTime bookingDate) { this.bookingDate = bookingDate; }
+
+    public String getMovieName() { return movieName; }
+    public void setMovieName(String movieName) { this.movieName = movieName; }
 
     public double getAmount() { return amount; }
     public void setAmount(double amount) { this.amount = amount; }
