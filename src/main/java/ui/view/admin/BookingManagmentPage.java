@@ -1,13 +1,13 @@
 package ui.view.admin;
 
 import domain.model.Booking;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
-@SuppressWarnings({"unchecked", "deprecation"})
 public class BookingManagmentPage {
 
     public TableView<Booking> bookingTable;
@@ -48,7 +48,7 @@ public class BookingManagmentPage {
         VBox.setVgrow(bookingTable, Priority.ALWAYS);
 
         // 1. Booking ID
-        TableColumn<Booking, Integer> idCol = new TableColumn<>("ID");
+        TableColumn<Booking, Long> idCol = new TableColumn<>("ID");
         idCol.setCellValueFactory(new PropertyValueFactory<>("bookingId"));
 
         // 2. User Name
@@ -59,16 +59,16 @@ public class BookingManagmentPage {
                                 "User #" + cellData.getValue().getUserId()));
 
         // 3. Date (with formatter)
-        TableColumn<Booking, Date> dateCol = new TableColumn<>("Date");
+        TableColumn<Booking, LocalDateTime> dateCol = new TableColumn<>("Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<>("bookingDate"));
         dateCol.setCellFactory(
                 col ->
-                        new TableCell<Booking, Date>() {
-                            private final SimpleDateFormat format =
-                                    new SimpleDateFormat("yyyy-MM-dd");
+                        new TableCell<Booking, LocalDateTime>() {
+                            private final DateTimeFormatter format =
+                                    DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
                             @Override
-                            protected void updateItem(Date item, boolean empty) {
+                            protected void updateItem(LocalDateTime item, boolean empty) {
                                 super.updateItem(item, empty);
                                 if (empty || item == null) {
                                     setText(null);
@@ -90,8 +90,10 @@ public class BookingManagmentPage {
         TableColumn<Booking, String> showCol = new TableColumn<>("Show ID");
         showCol.setCellValueFactory(new PropertyValueFactory<>("showId"));
 
-        bookingTable.getColumns().addAll(idCol, customerCol, dateCol, movieCol, statusCol, showCol);
-        bookingTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        bookingTable
+                .getColumns()
+                .addAll(List.of(idCol, customerCol, dateCol, movieCol, statusCol, showCol));
+        bookingTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_LAST_COLUMN);
         bookingTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         // Action Buttons

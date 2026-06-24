@@ -1,12 +1,12 @@
 package ui.view.admin;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
-@SuppressWarnings("unchecked")
 public class MovieManagementPage {
     public TableView<domain.model.Movie> movieTable;
     public TextField searchField;
@@ -16,8 +16,10 @@ public class MovieManagementPage {
     public Button btnRefresh;
     public Button btnBack;
 
-    public VBox getView() {
-        VBox root = new VBox();
+    private VBox root;
+
+    public MovieManagementPage() {
+        root = new VBox();
         root.getStyleClass().add("page");
         root.getStyleClass().add("p-30");
         root.getStyleClass().add("gap-20");
@@ -61,7 +63,7 @@ public class MovieManagementPage {
         movieTable.setPlaceholder(new Label("No movies found. Click 'Add Movie' to create one."));
 
         VBox.setVgrow(movieTable, Priority.ALWAYS);
-        TableColumn<domain.model.Movie, String> idCol = new TableColumn<>("Movie ID");
+        TableColumn<domain.model.Movie, Long> idCol = new TableColumn<>("Movie ID");
         idCol.setCellValueFactory(new PropertyValueFactory<>("movieId"));
         idCol.getStyleClass().add("w-80");
         TableColumn<domain.model.Movie, String> titleCol = new TableColumn<>("Title");
@@ -79,7 +81,7 @@ public class MovieManagementPage {
         TableColumn<domain.model.Movie, String> langCol = new TableColumn<>("Language");
         langCol.setCellValueFactory(new PropertyValueFactory<>("language"));
         langCol.getStyleClass().add("w-100");
-        TableColumn<domain.model.Movie, Date> dateCol = new TableColumn<>("Release Date");
+        TableColumn<domain.model.Movie, LocalDate> dateCol = new TableColumn<>("Release Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<>("releaseDate"));
         dateCol.getStyleClass().add("w-110");
         TableColumn<domain.model.Movie, String> posterCol = new TableColumn<>("Poster Path");
@@ -110,22 +112,20 @@ public class MovieManagementPage {
                                 if (empty || item == null) {
                                     setText(null);
                                 } else {
-                                    int rawMinutes = item.intValue();
-                                    int hours = rawMinutes / 60;
-                                    int mins = rawMinutes % 60;
-
+                                    int hours = item / 60;
+                                    int mins = item % 60;
                                     setText(hours + "h " + mins + "m");
                                 }
                             }
                         });
         dateCol.setCellFactory(
                 col ->
-                        new TableCell<domain.model.Movie, Date>() {
-                            private final SimpleDateFormat format =
-                                    new SimpleDateFormat("yyyy-MM-dd");
+                        new TableCell<domain.model.Movie, LocalDate>() {
+                            private final DateTimeFormatter format =
+                                    DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
                             @Override
-                            protected void updateItem(Date item, boolean empty) {
+                            protected void updateItem(LocalDate item, boolean empty) {
                                 super.updateItem(item, empty);
                                 if (empty || item == null) {
                                     setText(null);
@@ -137,19 +137,22 @@ public class MovieManagementPage {
         movieTable
                 .getColumns()
                 .addAll(
-                        idCol,
-                        titleCol,
-                        genreCol,
-                        durationCol,
-                        ratingCol,
-                        langCol,
-                        dateCol,
-                        posterCol,
-                        descCol);
+                        List.of(
+                                idCol,
+                                titleCol,
+                                genreCol,
+                                durationCol,
+                                ratingCol,
+                                langCol,
+                                dateCol,
+                                posterCol,
+                                descCol));
         movieTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
         movieTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         root.getChildren().addAll(header, toolbar, movieTable);
+    }
 
+    public VBox getView() {
         return root;
     }
 

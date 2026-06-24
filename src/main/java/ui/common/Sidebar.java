@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 public class Sidebar extends VBox {
 
     private final Button[] menuButtons;
+    private final Button logoutButton;
     private Runnable logoutHandler;
 
     public Sidebar(String sectionLabel, String... menuItems) {
@@ -45,11 +46,11 @@ public class Sidebar extends VBox {
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
 
-        Button logout = new Button("\uD83D\uDEAA  Logout");
-        logout.setPrefWidth(Double.MAX_VALUE);
-        logout.getStyleClass().add("h-40");
-        logout.getStyleClass().add("logout-button");
-        logout.setOnAction(
+        logoutButton = new Button("\uD83D\uDEAA  Logout");
+        logoutButton.setPrefWidth(Double.MAX_VALUE);
+        logoutButton.getStyleClass().add("h-40");
+        logoutButton.getStyleClass().add("logout-button");
+        logoutButton.setOnAction(
                 e -> {
                     if (logoutHandler != null) {
                         logoutHandler.run();
@@ -59,7 +60,15 @@ public class Sidebar extends VBox {
         getChildren().add(brandBox);
         getChildren().add(section);
         getChildren().addAll(menuButtons);
-        getChildren().addAll(spacer, logout);
+        getChildren().addAll(spacer, logoutButton);
+    }
+
+    public Button getMenuButton(int index) {
+        return menuButtons[index];
+    }
+
+    public Button getLogoutButton() {
+        return logoutButton;
     }
 
     public void setOnMenuClick(Consumer<String> handler) {

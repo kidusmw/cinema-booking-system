@@ -13,23 +13,23 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ui.controller.common.NavigationManager;
 import ui.view.admin.MovieManagementPage;
 
 public class MovieManagementController {
     private static final Logger log = LoggerFactory.getLogger(MovieManagementController.class);
     private MovieManagementPage view;
     private AppContext ctx;
-    private NavigationManager nav;
+    private Stage stage;
     private AdminDashboardController dashboard;
     private ObservableList<Movie> movieList;
 
     public MovieManagementController(
-            AppContext ctx, NavigationManager nav, AdminDashboardController dashboard) {
+            AppContext ctx, Stage stage, AdminDashboardController dashboard) {
         this.ctx = ctx;
-        this.nav = nav;
+        this.stage = stage;
         this.dashboard = dashboard;
         view = new MovieManagementPage();
 
@@ -242,7 +242,7 @@ public class MovieManagementController {
                             .addAll(
                                     new FileChooser.ExtensionFilter(
                                             "Image Files", "*.png", "*.jpg", "*.jpeg", "*.webp"));
-                    java.io.File selectedFile = fileChooser.showOpenDialog(nav.getStage());
+                    java.io.File selectedFile = fileChooser.showOpenDialog(stage);
                     if (selectedFile != null) {
                         posterField.setText(selectedFile.getAbsolutePath());
                     }

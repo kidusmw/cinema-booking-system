@@ -34,16 +34,16 @@ public class AdminDashboardPage {
                         "\uD83D\uDCB3  Payments",
                         "\uD83D\uDC65  Users");
 
-        btnDashboard = (Button) sidebar.getChildren().get(2);
-        btnMovies = (Button) sidebar.getChildren().get(3);
-        btnShows = (Button) sidebar.getChildren().get(4);
-        btnHalls = (Button) sidebar.getChildren().get(5);
-        btnSeats = (Button) sidebar.getChildren().get(6);
-        btnBookings = (Button) sidebar.getChildren().get(7);
-        btnPayments = (Button) sidebar.getChildren().get(8);
-        btnUsers = (Button) sidebar.getChildren().get(9);
+        btnDashboard = sidebar.getMenuButton(0);
+        btnMovies = sidebar.getMenuButton(1);
+        btnShows = sidebar.getMenuButton(2);
+        btnHalls = sidebar.getMenuButton(3);
+        btnSeats = sidebar.getMenuButton(4);
+        btnBookings = sidebar.getMenuButton(5);
+        btnPayments = sidebar.getMenuButton(6);
+        btnUsers = sidebar.getMenuButton(7);
 
-        btnLogout = (Button) sidebar.getChildren().get(sidebar.getChildren().size() - 1);
+        btnLogout = sidebar.getLogoutButton();
 
         HBox topBar = new HBox();
         topBar.getStyleClass().add("align-center-left");
