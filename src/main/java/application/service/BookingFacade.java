@@ -49,7 +49,9 @@ public class BookingFacade {
         } catch (Exception e) {
             if (conn != null) {
                 try {
-                    conn.rollback();
+                    if (!conn.isClosed()) {
+                        conn.rollback();
+                    }
                 } catch (SQLException rollbackEx) {
                     log.warn("Rollback failed after transaction error", rollbackEx);
                 }
@@ -58,8 +60,10 @@ public class BookingFacade {
         } finally {
             if (conn != null) {
                 try {
-                    conn.setAutoCommit(true);
-                    conn.close();
+                    if (!conn.isClosed()) {
+                        conn.setAutoCommit(true);
+                        conn.close();
+                    }
                 } catch (SQLException closeEx) {
                     log.warn("Failed to close connection after transaction", closeEx);
                 }
