@@ -54,7 +54,7 @@ public class SeatSelectionController {
         view.hallNameLabel.setText("🏛️ " + selectedHall.getName());
         view.showInfoLabel.setText(
                 "🕐 " + selectedShow.getShowTime() + "  |  📅 " + selectedShow.getShowDate());
-        view.priceLabel.setText(String.format("%.0f Birr per seat", seatPrice));
+        view.priceLabel.setText(String.format("%.0f Birr per seat", Double.valueOf(seatPrice)));
         loadSeats();
         view.btnBack.setOnAction(e -> nav.back());
         view.btnProceed.setOnAction(e -> proceedToPayment());
@@ -142,7 +142,7 @@ public class SeatSelectionController {
         int count = selectedSeats.size();
         double total = count * seatPrice;
         view.selectedCountLabel.setText(count + " seat" + (count != 1 ? "s" : "") + " selected");
-        view.totalAmountLabel.setText(String.format("%.2f Birr", total));
+        view.totalAmountLabel.setText(String.format("%.2f Birr", Double.valueOf(total)));
         view.btnProceed.setDisable(count == 0);
         view.btnProceed.setOpacity(count == 0 ? 0.5 : 1.0);
     }
@@ -173,7 +173,7 @@ public class SeatSelectionController {
                                 seatPrice));
     }
 
-    private void showAlert(String title, String content) {
+    private static void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);

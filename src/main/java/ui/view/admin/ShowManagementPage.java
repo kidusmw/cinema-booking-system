@@ -117,7 +117,7 @@ public class ShowManagementPage {
         return root;
     }
 
-    private Button createActionButton(String text, String cssClass) {
+    private static Button createActionButton(String text, String cssClass) {
         Button btn = new Button(text);
         btn.getStyleClass().add("h-38");
         btn.getStyleClass().add(cssClass);

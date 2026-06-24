@@ -106,7 +106,7 @@ public class MovieBrowserController {
         Label duration = new Label("⏱ " + hours + "h " + mins + "m");
         duration.getStyleClass().add("movie-duration");
 
-        Label rating = new Label("⭐ " + String.format("%.1f", movie.getRating()));
+        Label rating = new Label("⭐ " + String.format("%.1f", Double.valueOf(movie.getRating())));
         rating.getStyleClass().add("movie-rating");
 
         meta.getChildren().addAll(genre, duration, rating);
@@ -124,7 +124,7 @@ public class MovieBrowserController {
         return card;
     }
 
-    private Image createPlaceholderImage(String title) {
+    private static Image createPlaceholderImage(String title) {
         javafx.scene.canvas.Canvas canvas = new javafx.scene.canvas.Canvas(280, 350);
         javafx.scene.canvas.GraphicsContext gc = canvas.getGraphicsContext2D();
         // Canvas exception: cannot use CSS

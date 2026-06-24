@@ -110,8 +110,10 @@ public class MovieManagementPage {
                                 if (empty || item == null) {
                                     setText(null);
                                 } else {
-                                    int hours = item / 60;
-                                    int mins = item % 60;
+                                    int rawMinutes = item.intValue();
+                                    int hours = rawMinutes / 60;
+                                    int mins = rawMinutes % 60;
+
                                     setText(hours + "h " + mins + "m");
                                 }
                             }
@@ -151,14 +153,14 @@ public class MovieManagementPage {
         return root;
     }
 
-    private Button createPrimaryButton(String text) {
+    private static Button createPrimaryButton(String text) {
         Button btn = new Button(text);
         btn.getStyleClass().add("h-38");
         btn.getStyleClass().add("primary-button-small");
         return btn;
     }
 
-    private Button createSecondaryButton(String text) {
+    private static Button createSecondaryButton(String text) {
         Button btn = new Button(text);
         btn.getStyleClass().add("h-38");
         btn.getStyleClass().add("secondary-button");

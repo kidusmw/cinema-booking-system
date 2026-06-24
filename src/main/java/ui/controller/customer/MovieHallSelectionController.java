@@ -109,7 +109,7 @@ public class MovieHallSelectionController {
         VBox priceBox = new VBox(2);
         double price = hall.isVip() ? 120.00 : 50.00;
 
-        Label priceValue = new Label(String.format("%.2f Birr", price));
+        Label priceValue = new Label(String.format("%.2f Birr", Double.valueOf(price)));
         priceValue.getStyleClass().add("hall-price");
 
         Label priceLabel = new Label("Per Seat");
@@ -154,7 +154,7 @@ public class MovieHallSelectionController {
                                 isVIP));
     }
 
-    private boolean isVIPHall(Hall hall) {
+    private static boolean isVIPHall(Hall hall) {
         if (hall.getName() == null) return false;
         String name = hall.getName().toUpperCase();
         return name.contains("VIP");

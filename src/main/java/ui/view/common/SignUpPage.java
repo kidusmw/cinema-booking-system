@@ -88,7 +88,7 @@ public class SignUpPage {
         return root;
     }
 
-    private TextField createTextField(String prompt) {
+    private static TextField createTextField(String prompt) {
         TextField field = new TextField();
         field.setPromptText(prompt);
         field.getStyleClass().add("h-40");

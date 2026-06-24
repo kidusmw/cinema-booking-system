@@ -31,10 +31,9 @@ public class UserTypePage {
         cardsBox.getStyleClass().add("align-center");
 
         VBox adminCard =
-                createRoleCard(
-                        "👨‍💼", "Administrator", "Manage movies, shows, and bookings", false);
+                createRoleCard("👨‍💼", "Administrator", "Manage movies, shows, and bookings");
 
-        VBox customerCard = createRoleCard("🎬", "User", "Browse and book movie tickets", true);
+        VBox customerCard = createRoleCard("🎬", "User", "Browse and book movie tickets");
         btnAdmin = new Button("Continue as User");
         btnCustomer = new Button("Continue as User");
 
@@ -54,7 +53,7 @@ public class UserTypePage {
         return root;
     }
 
-    private VBox createRoleCard(String emoji, String title, String description, boolean isPrimary) {
+    private static VBox createRoleCard(String emoji, String title, String description) {
         VBox card = new VBox(15);
         card.getStyleClass().add("align-center");
         card.getStyleClass().add("p-30-25");
@@ -75,7 +74,7 @@ public class UserTypePage {
         return card;
     }
 
-    private void stylePrimaryButton(Button btn) {
+    private static void stylePrimaryButton(Button btn) {
         btn.getStyleClass().add("primary-button");
         btn.getStyleClass().add("w-180");
         btn.getStyleClass().add("h-38");

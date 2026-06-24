@@ -77,13 +77,14 @@ public class Seat {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
+        if (super.equals(o)) return true;
         if (!(o instanceof Seat seat)) return false;
         return Objects.equals(seatId, seat.seatId);
     }
 
     @Override
     public int hashCode() {
+        super.hashCode();
         return Objects.hashCode(seatId);
     }
 }

@@ -39,7 +39,7 @@ public class BookingManagmentController {
                 FXCollections.observableArrayList(
                         ctx.bookingRepo.findAll().stream().collect(Collectors.toList()));
         view.bookingTable.setItems(masterList);
-        log.info("Data Loaded: {} bookings.", masterList.size());
+        log.info("Data Loaded: {} bookings.", Integer.valueOf(masterList.size()));
     }
 
     private void filterBookings(String searchText) {
@@ -73,7 +73,7 @@ public class BookingManagmentController {
         dashboard.showDashboard();
     }
 
-    private void showAlert(String title, String content) {
+    private static void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setContentText(content);

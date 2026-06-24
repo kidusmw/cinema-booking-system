@@ -17,6 +17,8 @@ public class FlywayMigrator {
                         .load();
 
         var result = flyway.migrate();
-        log.info("Flyway migration applied {} migration(s)", result.migrationsExecuted);
+        log.info(
+                "Flyway migration applied {} migration(s)",
+                Integer.valueOf(result.migrationsExecuted));
     }
 }

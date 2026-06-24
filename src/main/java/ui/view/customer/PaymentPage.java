@@ -139,7 +139,7 @@ public class PaymentPage {
         fade.play();
     }
 
-    private TextField createReadOnlyField(String prompt) {
+    private static TextField createReadOnlyField(String prompt) {
         TextField field = new TextField();
         field.setPromptText(prompt);
         field.getStyleClass().add("h-40");
@@ -147,7 +147,7 @@ public class PaymentPage {
         return field;
     }
 
-    private Label addLabel(String text) {
+    private static Label addLabel(String text) {
         Label lbl = new Label(text);
         lbl.getStyleClass().add("caption");
         return lbl;

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Label;
@@ -90,7 +91,7 @@ public class PaymentController {
         totalLabel.getStyleClass().add("section-title");
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-        Label totalValue = new Label(String.format("%.2f Birr", totalAmount));
+        Label totalValue = new Label(String.format("%.2f Birr", Double.valueOf(totalAmount)));
         totalValue.getStyleClass().addAll("price-large", "text-accent");
         totalBox.getChildren().addAll(totalLabel, spacer, totalValue);
         summary.getChildren().add(totalBox);
@@ -114,7 +115,7 @@ public class PaymentController {
 
     private void startCountdown() {
         countdownTimer = new Timeline();
-        countdownTimer.setCycleCount(Timeline.INDEFINITE);
+        countdownTimer.setCycleCount(Animation.INDEFINITE);
 
         KeyFrame keyFrame =
                 new KeyFrame(
@@ -135,7 +136,8 @@ public class PaymentController {
     private void updateCountdownDisplay() {
         int minutes = secondsRemaining / 60;
         int seconds = secondsRemaining % 60;
-        view.timerLabel.setText(String.format("%02d:%02d", minutes, seconds));
+        view.timerLabel.setText(
+                String.format("%02d:%02d", Integer.valueOf(minutes), Integer.valueOf(seconds)));
 
         if (secondsRemaining <= 30) {
             view.timerLabel.getStyleClass().add("text-danger");

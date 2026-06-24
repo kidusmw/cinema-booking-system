@@ -28,7 +28,7 @@ public class NavigationManager {
 
     public void go(Runnable restoreCurrent, Runnable showNext) {
         backStack.push(restoreCurrent);
-        log.debug("Navigating forward (stack size: {})", backStack.size());
+        log.debug("Navigating forward (stack size: {})", Integer.valueOf(backStack.size()));
         showNext.run();
     }
 
@@ -40,7 +40,9 @@ public class NavigationManager {
 
     public void back() {
         if (!backStack.isEmpty()) {
-            log.debug("Navigating back (stack size before pop: {})", backStack.size());
+            log.debug(
+                    "Navigating back (stack size before pop: {})",
+                    Integer.valueOf(backStack.size()));
             backStack.pop().run();
         } else {
             log.warn("Attempted to navigate back with empty stack");

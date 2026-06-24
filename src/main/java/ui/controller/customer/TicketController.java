@@ -100,7 +100,7 @@ public class TicketController {
         } else {
             view.bookingIdLabel.setText("N/A");
         }
-        view.totalLabel.setText(String.format("%.2f ETB", totalAmount));
+        view.totalLabel.setText(String.format("%.2f ETB", Double.valueOf(totalAmount)));
         SimpleDateFormat timeFormat = new SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a");
         view.bookedOnLabel.setText(timeFormat.format(new java.util.Date()));
     }

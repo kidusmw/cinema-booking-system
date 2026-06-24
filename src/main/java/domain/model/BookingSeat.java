@@ -41,13 +41,14 @@ public class BookingSeat {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
+        if (super.equals(o)) return true;
         if (!(o instanceof BookingSeat that)) return false;
         return Objects.equals(bookingId, that.bookingId) && Objects.equals(seatId, that.seatId);
     }
 
     @Override
     public int hashCode() {
+        super.hashCode();
         return Objects.hash(bookingId, seatId);
     }
 }

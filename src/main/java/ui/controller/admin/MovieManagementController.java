@@ -56,7 +56,7 @@ public class MovieManagementController {
                 });
     }
 
-    private void showAlert(String title, String content) {
+    private static void showAlert(String title, String content) {
         javafx.scene.control.Alert alert =
                 new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -212,7 +212,7 @@ public class MovieManagementController {
                             try {
                                 return LocalDate.parse(
                                         text, java.time.format.DateTimeFormatter.ofPattern(format));
-                            } catch (java.time.format.DateTimeParseException ignored) {
+                            } catch (java.time.format.DateTimeParseException _ignored) {
                                 // Try next format
                             }
                         }
@@ -285,7 +285,8 @@ public class MovieManagementController {
                                                         java.time.format.DateTimeFormatter
                                                                 .ofPattern(format));
                                         break;
-                                    } catch (Exception ignored) {
+                                    } catch (Exception _ignored) {
+                                        // continue to next format
                                     }
                                 }
                                 if (parsedDate != null) {
@@ -301,7 +302,7 @@ public class MovieManagementController {
                             String rText = ratingField.getText().trim();
                             try {
                                 movie.setRating(Double.parseDouble(rText));
-                            } catch (NumberFormatException nfe) {
+                            } catch (NumberFormatException _nfe) {
                                 movie.setRating(0.0);
                             }
 
@@ -324,7 +325,7 @@ public class MovieManagementController {
                             }
 
                             return movie;
-                        } catch (NumberFormatException e) {
+                        } catch (NumberFormatException _e) {
                             showAlert("Invalid Input", "Duration must be a valid number.");
                             return null;
                         }

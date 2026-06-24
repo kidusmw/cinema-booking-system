@@ -134,7 +134,7 @@ public class AdminDashboardController {
         activeBtn.getStyleClass().add("sidebar-btn-active");
     }
 
-    private VBox createStatCard(String icon, String label, String value, String colorClass) {
+    private static VBox createStatCard(String icon, String label, String value, String colorClass) {
         VBox card = new VBox(8);
         card.getStyleClass().add("align-center-left");
         card.getStyleClass().add("p-20");

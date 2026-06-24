@@ -29,7 +29,7 @@ public class JdbcPaymentRepository implements PaymentRepository {
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps =
                         conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setLong(1, payment.getBookingId());
+            ps.setLong(1, payment.getBookingId().longValue());
             ps.setDouble(2, payment.getTotalAmount());
             ps.setString(3, payment.getStatus());
             ps.setString(4, payment.getOtp());
@@ -41,7 +41,7 @@ public class JdbcPaymentRepository implements PaymentRepository {
                             : null);
             ps.executeUpdate();
             try (ResultSet keys = ps.getGeneratedKeys()) {
-                if (keys.next()) payment.setPaymentId(keys.getLong(1));
+                if (keys.next()) payment.setPaymentId(Long.valueOf(keys.getLong(1)));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to insert payment", e);
@@ -54,12 +54,12 @@ public class JdbcPaymentRepository implements PaymentRepository {
                 "UPDATE payment SET booking_id=?, total_amount=?, status=?, verification_code=?, payment_method=? WHERE payment_id=?";
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, payment.getBookingId());
+            ps.setLong(1, payment.getBookingId().longValue());
             ps.setDouble(2, payment.getTotalAmount());
             ps.setString(3, payment.getStatus());
             ps.setString(4, payment.getOtp());
             ps.setString(5, payment.getPaymentMethod());
-            ps.setLong(6, payment.getPaymentId());
+            ps.setLong(6, payment.getPaymentId().longValue());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to update payment", e);
@@ -72,7 +72,7 @@ public class JdbcPaymentRepository implements PaymentRepository {
         String sql = "SELECT * FROM payment WHERE payment_id = ?";
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, id);
+            ps.setLong(1, id.longValue());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) return Optional.of(mapRow(rs));
             }
@@ -101,7 +101,7 @@ public class JdbcPaymentRepository implements PaymentRepository {
         String sql = "SELECT * FROM payment WHERE booking_id = ?";
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, bookingId);
+            ps.setLong(1, bookingId.longValue());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) return Optional.of(mapRow(rs));
             }
@@ -111,11 +111,11 @@ public class JdbcPaymentRepository implements PaymentRepository {
         return Optional.empty();
     }
 
-    private Payment mapRow(ResultSet rs) throws SQLException {
+    private static Payment mapRow(ResultSet rs) throws SQLException {
         Payment payment =
                 new Payment(
-                        rs.getLong("payment_id"),
-                        rs.getLong("booking_id"),
+                        Long.valueOf(rs.getLong("payment_id")),
+                        Long.valueOf(rs.getLong("booking_id")),
                         rs.getDouble("total_amount"),
                         rs.getString("status"),
                         rs.getString("verification_code"),

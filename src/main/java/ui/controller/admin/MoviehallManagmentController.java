@@ -49,7 +49,7 @@ public class MoviehallManagmentController {
             List<Hall> halls = ctx.hallRepo.findAll().stream().collect(Collectors.toList());
             hallList = FXCollections.observableArrayList(halls);
             view.hallTable.setItems(hallList);
-            log.info("Loaded {} halls into table", halls.size());
+            log.info("Loaded {} halls into table", Integer.valueOf(halls.size()));
         } catch (Exception e) {
             log.error("Failed to load halls", e);
             showAlert("Error", "Failed to load halls: " + e.getMessage());
@@ -179,7 +179,7 @@ public class MoviehallManagmentController {
                             hall.setName(nameField.getText().trim());
                             hall.setCapacity(Integer.parseInt(capacityField.getText().trim()));
                             return hall;
-                        } catch (NumberFormatException e) {
+                        } catch (NumberFormatException _e) {
                             showAlert("Invalid Input", "Capacity and Price must be numbers.");
                             return null;
                         }
@@ -190,7 +190,7 @@ public class MoviehallManagmentController {
         return dialog;
     }
 
-    private void showAlert(String title, String content) {
+    private static void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);

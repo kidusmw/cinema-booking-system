@@ -46,7 +46,8 @@ public class ShowSelectionController {
 
         view.movieTitle.setText(selectedMovie.getTitle());
         view.movieGenre.setText(selectedMovie.getGenre());
-        view.movieRating.setText("⭐ " + String.format("%.1f", selectedMovie.getRating()));
+        view.movieRating.setText(
+                "⭐ " + String.format("%.1f", Double.valueOf(selectedMovie.getRating())));
         int hours = selectedMovie.getDuration() / 60;
         int mins = selectedMovie.getDuration() % 60;
         view.movieDuration.setText("⏱ " + hours + "h " + mins + "m");
@@ -180,7 +181,7 @@ public class ShowSelectionController {
         return card;
     }
 
-    private String formatDateLabel(LocalDate date) {
+    private static String formatDateLabel(LocalDate date) {
         LocalDate today = LocalDate.now();
         if (date.equals(today)) {
             return "Today";

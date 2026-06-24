@@ -94,7 +94,7 @@ public class CustomerDashboardPage {
         return root;
     }
 
-    private Button createActionCard(String icon, String title, String description) {
+    private static Button createActionCard(String icon, String title, String description) {
         Button btn = new Button();
         btn.setPrefSize(220, 130);
         btn.getStyleClass().add("card");

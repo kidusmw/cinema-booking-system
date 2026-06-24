@@ -72,11 +72,11 @@ public class SeatSelectionPage {
         screenLabel = new Label("🎬 SCREEN");
         screenBox.getChildren().addAll(screen, screenLabel);
 
-        VBox seatContainer = new VBox(20);
-        seatContainer.getStyleClass().add("card");
+        VBox seatsVBox = new VBox(20);
+        seatsVBox.getStyleClass().add("card");
         seatGrid = new VBox(8);
         seatGrid.getStyleClass().add("align-center");
-        seatContainer.getChildren().add(seatGrid);
+        seatsVBox.getChildren().add(seatGrid);
 
         HBox bottomBar = new HBox(20);
         bottomBar.getStyleClass().add("card");
@@ -93,10 +93,10 @@ public class SeatSelectionPage {
         btnProceed.getStyleClass().add("primary-button");
 
         bottomBar.getChildren().addAll(summaryBox, bottomSpacer, btnProceed);
-        root.getChildren().addAll(topBar, infoBar, legend, screenBox, seatContainer, bottomBar);
+        root.getChildren().addAll(topBar, infoBar, legend, screenBox, seatsVBox, bottomBar);
     }
 
-    private HBox createLegendItem(String styleClass, String label) {
+    private static HBox createLegendItem(String styleClass, String label) {
         HBox item = new HBox(8);
         Rectangle rect = new Rectangle(20, 20);
         rect.getStyleClass().add(styleClass);

@@ -13,13 +13,9 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ui.view.admin.ShowManagementPage;
 
 public class ShowManagmentController {
-    private static final Logger log = LoggerFactory.getLogger(ShowManagmentController.class);
-
     private final ShowManagementPage view;
     private final AppContext ctx;
     private final AdminDashboardController dashboard;
@@ -232,7 +228,7 @@ public class ShowManagmentController {
                 dialogButton -> {
                     if (dialogButton == saveButtonType) {
                         Showtime show = new Showtime();
-                        show.setShowId(Long.parseLong(showIDField.getText().trim()));
+                        show.setShowId(Long.valueOf(showIDField.getText().trim()));
 
                         String selectedTitle = movieComboBox.getValue();
                         String selectedHallName = hallComboBox.getValue();
@@ -240,8 +236,8 @@ public class ShowManagmentController {
                         show.setMovieName(selectedTitle);
                         show.setHallName(selectedHallName);
 
-                        show.setMovieId(Long.parseLong(movieMap.get(selectedTitle)));
-                        show.setHallId(Long.parseLong(hallMap.get(selectedHallName)));
+                        show.setMovieId(Long.valueOf(movieMap.get(selectedTitle)));
+                        show.setHallId(Long.valueOf(hallMap.get(selectedHallName)));
 
                         if (datePicker.getValue() != null) {
                             show.setShowDate(datePicker.getValue());
@@ -255,7 +251,7 @@ public class ShowManagmentController {
         return dialog;
     }
 
-    private void showAlert(String title, String content) {
+    private static void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);

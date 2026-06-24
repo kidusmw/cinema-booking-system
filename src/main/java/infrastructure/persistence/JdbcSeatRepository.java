@@ -20,7 +20,7 @@ public class JdbcSeatRepository implements SeatRepository {
         List<Seat> seats = new ArrayList<>();
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, hallId);
+            ps.setLong(1, hallId.longValue());
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) seats.add(mapRow(rs));
             }
@@ -35,7 +35,7 @@ public class JdbcSeatRepository implements SeatRepository {
         String sql = "SELECT * FROM seat WHERE seat_id = ?";
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, id);
+            ps.setLong(1, id.longValue());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) return Optional.of(mapRow(rs));
             }
@@ -51,7 +51,7 @@ public class JdbcSeatRepository implements SeatRepository {
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, status);
-            ps.setLong(2, seatId);
+            ps.setLong(2, seatId.longValue());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to update seat status", e);
@@ -73,13 +73,13 @@ public class JdbcSeatRepository implements SeatRepository {
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps =
                         conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setLong(1, seat.getHallId());
+            ps.setLong(1, seat.getHallId().longValue());
             ps.setString(2, seat.getSeatNumber());
             ps.setString(3, seat.getSeatType());
             ps.setString(4, seat.getStatus());
             ps.executeUpdate();
             try (ResultSet keys = ps.getGeneratedKeys()) {
-                if (keys.next()) seat.setSeatId(keys.getLong(1));
+                if (keys.next()) seat.setSeatId(Long.valueOf(keys.getLong(1)));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to insert seat", e);
@@ -92,11 +92,11 @@ public class JdbcSeatRepository implements SeatRepository {
                 "UPDATE seat SET hall_id=?, seat_number=?, seat_type=?, status=? WHERE seat_id=?";
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, seat.getHallId());
+            ps.setLong(1, seat.getHallId().longValue());
             ps.setString(2, seat.getSeatNumber());
             ps.setString(3, seat.getSeatType());
             ps.setString(4, seat.getStatus());
-            ps.setLong(5, seat.getSeatId());
+            ps.setLong(5, seat.getSeatId().longValue());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to update seat", e);
@@ -104,10 +104,10 @@ public class JdbcSeatRepository implements SeatRepository {
         return seat;
     }
 
-    private Seat mapRow(ResultSet rs) throws SQLException {
+    private static Seat mapRow(ResultSet rs) throws SQLException {
         return new Seat(
-                rs.getLong("seat_id"),
-                rs.getLong("hall_id"),
+                Long.valueOf(rs.getLong("seat_id")),
+                Long.valueOf(rs.getLong("hall_id")),
                 rs.getString("seat_number"),
                 rs.getString("seat_type"),
                 rs.getString("status"));

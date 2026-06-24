@@ -70,7 +70,7 @@ public class SignUpController {
         }
     }
 
-    private String capitalize(String str) {
+    private static String capitalize(String str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
@@ -79,7 +79,7 @@ public class SignUpController {
         view.errorLabel.setVisible(true);
     }
 
-    private void showInfo(String title, String content) {
+    private static void showInfo(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setContentText(content);

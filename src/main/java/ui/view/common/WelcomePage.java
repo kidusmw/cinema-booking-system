@@ -125,7 +125,7 @@ public class WelcomePage {
         return root;
     }
 
-    private VBox createFeatureCard(String icon, String title, String description) {
+    private static VBox createFeatureCard(String icon, String title, String description) {
         VBox card = new VBox(8);
         card.getStyleClass().add("align-center");
         card.getStyleClass().add("p-24-20");

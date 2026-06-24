@@ -54,10 +54,10 @@ public final class WindowManager {
         log.info(
                 "Opened window [{}] — {}x{} (screen: {}x{})",
                 pageTitle,
-                (int) finalWidth,
-                (int) finalHeight,
-                (int) bounds.getWidth(),
-                (int) bounds.getHeight());
+                Integer.valueOf((int) finalWidth),
+                Integer.valueOf((int) finalHeight),
+                Integer.valueOf((int) bounds.getWidth()),
+                Integer.valueOf((int) bounds.getHeight()));
     }
 
     private static double clamp(double value, double min, double max) {

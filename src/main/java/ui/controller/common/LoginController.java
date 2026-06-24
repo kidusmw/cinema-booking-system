@@ -60,7 +60,7 @@ public class LoginController {
         }
     }
 
-    private String capitalize(String str) {
+    private static String capitalize(String str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 }

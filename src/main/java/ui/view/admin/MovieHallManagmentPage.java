@@ -103,7 +103,7 @@ public class MovieHallManagmentPage {
         return root;
     }
 
-    private Button createStyledButton(String text, String cssClass) {
+    private static Button createStyledButton(String text, String cssClass) {
         Button btn = new Button(text);
         btn.getStyleClass().add("h-38");
         btn.getStyleClass().add(cssClass);

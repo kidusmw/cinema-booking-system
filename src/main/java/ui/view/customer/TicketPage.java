@@ -101,17 +101,17 @@ public class TicketPage {
         HBox dateTimeRow = new HBox(30);
         dateTimeRow.getStyleClass().add("align-center-left");
 
-        VBox dateBox = createDetailBox("📅 DATE & TIME", "dateTime");
+        VBox dateBox = createDetailBox("📅 DATE & TIME");
         dateTimeLabel = (Label) dateBox.getChildren().get(1);
         dateTimeRow.getChildren().add(dateBox);
 
         // Hall row
-        VBox hallBox = createDetailBox("🏛️ HALL", "hall");
+        VBox hallBox = createDetailBox("🏛️ HALL");
         hallLabel = (Label) hallBox.getChildren().get(1);
         dateTimeRow.getChildren().add(hallBox);
 
         // Seats
-        VBox seatsBox = createDetailBox("💺 SEATS", "seats");
+        VBox seatsBox = createDetailBox("💺 SEATS");
         seatsLabel = (Label) seatsBox.getChildren().get(1);
         dateTimeRow.getChildren().add(seatsBox);
 
@@ -123,21 +123,21 @@ public class TicketPage {
         HBox bottomInfo = new HBox(30);
         bottomInfo.getStyleClass().add("align-center-left");
 
-        VBox customerBox = createDetailBox("👤 CUSTOMER", "customer");
+        VBox customerBox = createDetailBox("👤 CUSTOMER");
         customerLabel = (Label) customerBox.getChildren().get(1);
         bottomInfo.getChildren().add(customerBox);
 
-        VBox bookingBox = createDetailBox("🎫 BOOKING ID", "booking");
+        VBox bookingBox = createDetailBox("🎫 BOOKING ID");
         bookingIdLabel = (Label) bookingBox.getChildren().get(1);
         bottomInfo.getChildren().add(bookingBox);
 
-        VBox totalBox = createDetailBox("💰 TOTAL", "total");
+        VBox totalBox = createDetailBox("💰 TOTAL");
         totalLabel = (Label) totalBox.getChildren().get(1);
         totalLabel.getStyleClass().add("price-label");
         bottomInfo.getChildren().add(totalBox);
 
         // Booked on
-        VBox bookedOnBox = createDetailBox("📅 BOOKED ON", "bookedOn");
+        VBox bookedOnBox = createDetailBox("📅 BOOKED ON");
         bookedOnLabel = (Label) bookedOnBox.getChildren().get(1);
         bookedOnLabel.getStyleClass().add("caption");
 
@@ -187,7 +187,7 @@ public class TicketPage {
         root.getChildren().addAll(successLabel, subMessage, ticket, actionButtons);
     }
 
-    private VBox createDetailBox(String label, String type) {
+    private static VBox createDetailBox(String label) {
         VBox box = new VBox(3);
         Label lbl = new Label(label);
         lbl.getStyleClass().add("caption");
