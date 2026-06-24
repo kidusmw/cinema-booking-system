@@ -3,8 +3,8 @@ package ui.controller.common;
 import application.AppContext;
 import domain.model.User;
 import java.util.Optional;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
+import ui.common.WindowManager;
 import ui.controller.admin.AdminDashboardController;
 import ui.controller.customer.CustomerDashboardController;
 import ui.view.common.LoginPage;
@@ -22,11 +22,7 @@ public class LoginController {
         this.nav = nav;
         this.expectedRole = role;
         view = new LoginPage();
-        Scene scene = new Scene(view.getView(), 900, 650);
-        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
-        stage.setTitle("Sign in - CinemaBook");
-        stage.setScene(scene);
-        stage.show();
+        WindowManager.configureStage(stage, "Sign in - CinemaBook", view.getView(), 900, 650);
 
         view.roleLabel.setText("Sign in as " + capitalize(role));
         view.loginBtn.setOnAction(e -> handleLogin());

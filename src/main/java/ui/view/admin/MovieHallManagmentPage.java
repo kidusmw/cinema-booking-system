@@ -1,11 +1,11 @@
 package ui.view.admin;
 
 import domain.model.Hall;
-import javafx.geometry.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
+@SuppressWarnings({"unchecked", "deprecation"})
 public class MovieHallManagmentPage {
 
     public TableView<Hall> hallTable;
@@ -37,9 +37,9 @@ public class MovieHallManagmentPage {
     private void createUI() {
         root = new VBox(20);
         root.getStyleClass().add("page");
-        root.setPadding(new Insets(30));
+        root.getStyleClass().add("p-30");
         HBox header = new HBox(15);
-        header.setAlignment(Pos.CENTER_LEFT);
+        header.getStyleClass().add("align-center-left");
 
         VBox titleBox = new VBox(5);
         Label title = new Label("🏛️ Hall Management");
@@ -58,11 +58,11 @@ public class MovieHallManagmentPage {
 
         header.getChildren().addAll(titleBox, spacer, btnBack);
         HBox toolbar = new HBox(10);
-        toolbar.setAlignment(Pos.CENTER_LEFT);
+        toolbar.getStyleClass().add("align-center-left");
         searchField = new TextField();
         searchField.setPromptText("🔍  Search by name...");
-        searchField.setPrefHeight(40);
-        searchField.setPrefWidth(400);
+        searchField.getStyleClass().add("h-40");
+        searchField.getStyleClass().add("w-400");
         searchField.getStyleClass().add("search-field");
 
         Region toolbarSpacer = new Region();
@@ -74,25 +74,26 @@ public class MovieHallManagmentPage {
         hallTable.getStyleClass().add("table-view");
         VBox.setVgrow(hallTable, Priority.ALWAYS);
         idCol = new TableColumn<>("Hall ID");
-        idCol.setCellValueFactory(new PropertyValueFactory<>("MovieHallID"));
-        idCol.setPrefWidth(100);
+        idCol.setCellValueFactory(new PropertyValueFactory<>("hallId"));
+        idCol.getStyleClass().add("w-100");
 
         nameCol = new TableColumn<>("Hall Name");
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        nameCol.setPrefWidth(300);
+        nameCol.getStyleClass().add("w-300");
 
         capacityCol = new TableColumn<>("Capacity");
         capacityCol.setCellValueFactory(new PropertyValueFactory<>("capacity"));
-        capacityCol.setPrefWidth(150);
+        capacityCol.getStyleClass().add("w-150");
 
         hallTable.getColumns().addAll(idCol, nameCol, capacityCol);
         hallTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        hallTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         btnEdit = createStyledButton("✏️  Edit", "secondary-button");
         btnDelete = createStyledButton("🗑️  Delete", "danger-button");
         btnRefresh = createStyledButton("🔄  Refresh", "secondary-button");
 
         HBox actionRow = new HBox(10);
-        actionRow.setAlignment(Pos.CENTER_RIGHT);
+        actionRow.getStyleClass().add("align-center-right");
         actionRow.getChildren().addAll(btnEdit, btnDelete, btnRefresh);
 
         root.getChildren().addAll(header, toolbar, hallTable, actionRow);
@@ -104,7 +105,7 @@ public class MovieHallManagmentPage {
 
     private Button createStyledButton(String text, String cssClass) {
         Button btn = new Button(text);
-        btn.setPrefHeight(38);
+        btn.getStyleClass().add("h-38");
         btn.getStyleClass().add(cssClass);
         return btn;
     }

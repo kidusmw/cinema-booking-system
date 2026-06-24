@@ -1,10 +1,9 @@
 package ui.view.admin;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import ui.common.Sidebar;
 
 public class AdminDashboardPage {
     public VBox contentArea;
@@ -16,66 +15,39 @@ public class AdminDashboardPage {
     public Button btnPayments;
     public Button btnUsers;
     public Button btnLogout;
-    public Button btnSeats; // ✅ NEW
+    public Button btnSeats;
     public Label welcomeLabel;
 
     public BorderPane getView() {
-
         BorderPane root = new BorderPane();
         root.getStyleClass().add("page");
-        VBox sidebar = new VBox(5);
-        sidebar.getStyleClass().add("sidebar");
-        sidebar.setPadding(new Insets(20, 12, 20, 12));
-        HBox brandBox = new HBox(8);
-        brandBox.setAlignment(Pos.CENTER_LEFT);
-        brandBox.setPadding(new Insets(0, 0, 20, 8));
 
-        StackPane logo = new StackPane();
-        logo.setPrefSize(32, 32);
-        logo.getStyleClass().add("logo-badge");
-        Label logoIcon = new Label("🎬");
-        logo.getChildren().add(logoIcon);
+        Sidebar sidebar =
+                new Sidebar(
+                        "ADMIN PANEL",
+                        "\uD83D\uDCCA  Dashboard",
+                        "\uD83C\uDFAC  Movies",
+                        "\uD83D\uDD50  Shows",
+                        "\uD83C\uDFDB\uFE0F  Halls",
+                        "\uD83D\uDCBA  Seats",
+                        "\uD83C\uDFAB  Bookings",
+                        "\uD83D\uDCB3  Payments",
+                        "\uD83D\uDC65  Users");
 
-        Label brand = new Label("CinemaBook");
-        brand.getStyleClass().add("section-title");
+        btnDashboard = (Button) sidebar.getChildren().get(2);
+        btnMovies = (Button) sidebar.getChildren().get(3);
+        btnShows = (Button) sidebar.getChildren().get(4);
+        btnHalls = (Button) sidebar.getChildren().get(5);
+        btnSeats = (Button) sidebar.getChildren().get(6);
+        btnBookings = (Button) sidebar.getChildren().get(7);
+        btnPayments = (Button) sidebar.getChildren().get(8);
+        btnUsers = (Button) sidebar.getChildren().get(9);
 
-        brandBox.getChildren().addAll(logo, brand);
-        Label menuLabel = new Label("ADMIN PANEL");
-        menuLabel.getStyleClass().add("muted-text");
-        menuLabel.setPadding(new Insets(10, 8, 10, 8));
-        btnDashboard = createMenuButton("📊  Dashboard");
-        btnMovies = createMenuButton("🎬  Movies");
-        btnShows = createMenuButton("🕐  Shows");
-        btnHalls = createMenuButton("🏛️  Halls");
-        btnBookings = createMenuButton("🎫  Bookings");
-        btnPayments = createMenuButton("💳  Payments");
-        btnUsers = createMenuButton("👥  Users");
+        btnLogout = (Button) sidebar.getChildren().get(sidebar.getChildren().size() - 1);
 
-        btnSeats = createMenuButton("💺  Seats");
-        Region spacer = new Region();
-        VBox.setVgrow(spacer, Priority.ALWAYS);
-        btnLogout = new Button("🚪  Logout");
-        btnLogout.setPrefWidth(Double.MAX_VALUE);
-        btnLogout.setPrefHeight(40);
-        btnLogout.getStyleClass().add("logout-button");
-
-        sidebar.getChildren()
-                .addAll(
-                        brandBox,
-                        menuLabel,
-                        btnDashboard,
-                        btnMovies,
-                        btnShows,
-                        btnHalls,
-                        btnSeats,
-                        btnBookings,
-                        btnPayments,
-                        btnUsers,
-                        spacer,
-                        btnLogout);
         HBox topBar = new HBox();
-        topBar.setAlignment(Pos.CENTER_LEFT);
-        topBar.setPadding(new Insets(20, 30, 20, 30));
+        topBar.getStyleClass().add("align-center-left");
+        topBar.getStyleClass().add("p-20-30");
         topBar.getStyleClass().add("top-bar");
 
         welcomeLabel = new Label("Welcome, User");
@@ -84,10 +56,10 @@ public class AdminDashboardPage {
         Region topSpacer = new Region();
         HBox.setHgrow(topSpacer, Priority.ALWAYS);
         HBox adminBadge = new HBox(8);
-        adminBadge.setAlignment(Pos.CENTER);
-        adminBadge.setPadding(new Insets(6, 12, 6, 12));
+        adminBadge.getStyleClass().add("align-center");
+        adminBadge.getStyleClass().add("p-6-12");
         adminBadge.getStyleClass().add("badge");
-        Label adminIcon = new Label("👨‍💼");
+        Label adminIcon = new Label("\uD83D\uDC68\u200D\uD83D\uDCBC");
         Label adminText = new Label("Administrator");
         adminText.getStyleClass().addAll("caption", "text-accent");
         adminBadge.getChildren().addAll(adminIcon, adminText);
@@ -102,14 +74,5 @@ public class AdminDashboardPage {
         root.setCenter(mainArea);
 
         return root;
-    }
-
-    private Button createMenuButton(String text) {
-        Button btn = new Button(text);
-        btn.setPrefWidth(Double.MAX_VALUE);
-        btn.setPrefHeight(40);
-        btn.getStyleClass().add("menu-button");
-
-        return btn;
     }
 }

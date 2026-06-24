@@ -7,12 +7,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.text.*;
 import javafx.stage.Stage;
+import ui.common.WindowManager;
 import ui.controller.common.NavigationManager;
 import ui.view.admin.MovieHallManagmentPage;
 
@@ -21,22 +19,17 @@ public class MoviehallManagmentController {
     private static final org.slf4j.Logger log =
             org.slf4j.LoggerFactory.getLogger(MoviehallManagmentController.class);
     private MovieHallManagmentPage view;
-    private Stage stage;
     private final AppContext ctx;
     private final NavigationManager nav;
     private ObservableList<Hall> hallList;
 
     public MoviehallManagmentController(Stage stage, AppContext ctx, NavigationManager nav) {
-        this.stage = stage;
         this.ctx = ctx;
         this.nav = nav;
         this.view = new MovieHallManagmentPage();
 
-        Scene scene = new Scene(view.getView(), 1100, 700);
-        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
-        stage.setTitle("Hall Management - CinemaBook User");
-        stage.setScene(scene);
-        stage.show();
+        WindowManager.configureStage(
+                stage, "Hall Management - CinemaBook User", view.getView(), 1100, 700);
 
         view.btnBack.setOnAction(e -> handleBack());
         loadHalls();
@@ -148,7 +141,7 @@ public class MoviehallManagmentController {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(12);
-        grid.setPadding(new Insets(20, 150, 10, 10));
+        grid.getStyleClass().add("p-20-150-10-10");
 
         TextField nameField = new TextField();
         nameField.setPromptText("e.g., Screen 1, VIP Lounge");

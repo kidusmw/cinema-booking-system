@@ -2,10 +2,12 @@ package ui.view.admin;
 
 import domain.model.Hall;
 import domain.model.Seat;
-import javafx.geometry.*;
 import javafx.scene.control.*;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
+@SuppressWarnings("unchecked")
 public class SeatManagmentPage {
     public TableView<Seat> seatTable;
     public ComboBox<Hall> hallDropdown;
@@ -26,9 +28,9 @@ public class SeatManagmentPage {
     private void createUI() {
         root = new VBox(20);
         root.getStyleClass().add("page");
-        root.setPadding(new Insets(30));
+        root.getStyleClass().add("p-30");
         HBox header = new HBox(15);
-        header.setAlignment(Pos.CENTER_LEFT);
+        header.getStyleClass().add("align-center-left");
         VBox titleBox = new VBox(5);
         Label title = new Label("💺 Seat Management");
         title.getStyleClass().add("title");
@@ -39,13 +41,13 @@ public class SeatManagmentPage {
         header.getChildren().addAll(titleBox, spacer, btnBack);
 
         VBox selectorCard = new VBox(15);
-        selectorCard.setPadding(new Insets(20));
+        selectorCard.getStyleClass().add("p-20");
         selectorCard.getStyleClass().add("card");
 
         hallDropdown = new ComboBox<>();
         hallDropdown.setPromptText("-- Choose a hall --");
-        hallDropdown.setPrefWidth(400);
-        hallDropdown.setPrefHeight(40);
+        hallDropdown.getStyleClass().add("w-400");
+        hallDropdown.getStyleClass().add("h-40");
         hallDropdown.setFocusTraversable(true); // FIX: Ensure focus
         hallDropdown.setMouseTransparent(false); // FIX: Ensure clickability
 
@@ -55,12 +57,12 @@ public class SeatManagmentPage {
                 .getChildren()
                 .addAll(new Label("Select Hall:"), hallDropdown, hallInfoLabel, statsLabel);
         VBox generateCard = new VBox(15);
-        generateCard.setPadding(new Insets(20));
+        generateCard.getStyleClass().add("p-20");
         generateCard.getStyleClass().add("card");
 
         seatCountField = new TextField();
         seatCountField.setPromptText("e.g., 50");
-        seatCountField.setPrefWidth(150);
+        seatCountField.getStyleClass().add("w-150");
         seatCountField.setFocusTraversable(true); // FIX: Ensure focus
         seatCountField.setMouseTransparent(false); // FIX: Ensure clickability
 
@@ -73,12 +75,17 @@ public class SeatManagmentPage {
         HBox toolbar = new HBox(10, btnRefresh, btnDelete);
         seatTable = new TableView<>();
         VBox.setVgrow(seatTable, Priority.ALWAYS);
-        seatTable
-                .getColumns()
-                .addAll(
-                        new TableColumn<>("Seat ID"),
-                        new TableColumn<>("Number"),
-                        new TableColumn<>("Type"));
+        TableColumn<domain.model.Seat, Long> seatIdCol = new TableColumn<>("Seat ID");
+        seatIdCol.setCellValueFactory(new PropertyValueFactory<>("seatId"));
+        seatIdCol.getStyleClass().add("w-100");
+        TableColumn<domain.model.Seat, String> seatNumCol = new TableColumn<>("Number");
+        seatNumCol.setCellValueFactory(new PropertyValueFactory<>("seatNumber"));
+        seatNumCol.getStyleClass().add("w-150");
+        TableColumn<domain.model.Seat, String> seatTypeCol = new TableColumn<>("Type");
+        seatTypeCol.setCellValueFactory(new PropertyValueFactory<>("seatType"));
+        seatTypeCol.getStyleClass().add("w-150");
+        seatTable.getColumns().addAll(seatIdCol, seatNumCol, seatTypeCol);
+        seatTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         root.getChildren().addAll(header, selectorCard, generateCard, toolbar, seatTable);
     }

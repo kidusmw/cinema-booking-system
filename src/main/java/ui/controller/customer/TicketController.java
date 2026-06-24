@@ -4,17 +4,14 @@ import application.AppContext;
 import domain.model.*;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.scene.text.*;
 import javafx.stage.Stage;
+import ui.common.WindowManager;
 import ui.controller.common.NavigationManager;
 import ui.view.customer.TicketPage;
 
 public class TicketController {
     private TicketPage view;
-    private Stage stage;
     private User currentUser;
     private Movie selectedMovie;
     private Showtime selectedShow;
@@ -22,13 +19,6 @@ public class TicketController {
     private List<String> selectedSeatIds;
     private double totalAmount;
     private List<String> bookingIds;
-    private AppContext ctx;
-    private NavigationManager nav;
-    private static final String TEXT_DARK = "#1E293B";
-    private static final String TEXT_MUTED = "#64748B";
-    private static final String BORDER = "#E2E8F0";
-    private static final String WHITE = "#FFFFFF";
-    private static final String BG = "#FAFAFA";
 
     public TicketController(
             Stage stage,
@@ -41,9 +31,6 @@ public class TicketController {
             List<String> selectedSeatIds,
             double totalAmount,
             List<String> bookingIds) {
-        this.stage = stage;
-        this.ctx = ctx;
-        this.nav = nav;
         this.currentUser = currentUser;
         this.selectedMovie = selectedMovie;
         this.selectedShow = selectedShow;
@@ -53,11 +40,7 @@ public class TicketController {
         this.bookingIds = bookingIds;
         this.view = new TicketPage();
 
-        Scene scene = new Scene(view.getView(), 900, 800);
-        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
-        stage.setTitle("Your Ticket - CinemaBook");
-        stage.setScene(scene);
-        stage.show();
+        WindowManager.configureStage(stage, "Your Ticket - CinemaBook", view.getView(), 900, 800);
         populateTicket();
         view.btnDownload.setOnAction(
                 e -> {

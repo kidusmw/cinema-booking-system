@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -176,7 +175,7 @@ public class ShowManagmentController {
         GridPane grid = new GridPane();
         grid.setHgap(12);
         grid.setVgap(12);
-        grid.setPadding(new Insets(20, 40, 10, 20));
+        grid.getStyleClass().add("p-20-40-10-20");
 
         TextField showIDField = new TextField();
         if (existing != null) showIDField.setText(String.valueOf(existing.getShowId()));

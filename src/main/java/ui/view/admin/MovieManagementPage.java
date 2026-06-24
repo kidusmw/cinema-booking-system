@@ -2,12 +2,11 @@ package ui.view.admin;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
+@SuppressWarnings("unchecked")
 public class MovieManagementPage {
     public TableView<domain.model.Movie> movieTable;
     public TextField searchField;
@@ -20,13 +19,13 @@ public class MovieManagementPage {
     public VBox getView() {
         VBox root = new VBox();
         root.getStyleClass().add("page");
-        root.setPadding(new Insets(30));
-        root.setSpacing(20);
+        root.getStyleClass().add("p-30");
+        root.getStyleClass().add("gap-20");
 
         HBox header = new HBox(15);
-        header.setAlignment(Pos.CENTER_LEFT);
+        header.getStyleClass().add("align-center-left");
         btnBack = createSecondaryButton("⬅  Back");
-        btnBack.setPrefWidth(90);
+        btnBack.getStyleClass().add("w-90");
 
         VBox titleBox = new VBox(5);
         Label title = new Label("Movie Management");
@@ -42,11 +41,11 @@ public class MovieManagementPage {
         btnAddMovie = createPrimaryButton("➕  Add Movie");
         header.getChildren().addAll(btnBack, titleBox, spacer, btnAddMovie);
         HBox toolbar = new HBox(10);
-        toolbar.setAlignment(Pos.CENTER_LEFT);
+        toolbar.getStyleClass().add("align-center-left");
         searchField = new TextField();
         searchField.setPromptText("🔍 Search by title or genre...");
-        searchField.setPrefHeight(38);
-        searchField.setPrefWidth(350);
+        searchField.getStyleClass().add("h-38");
+        searchField.getStyleClass().add("w-350");
         searchField.getStyleClass().add("search-field");
 
         Region toolbarSpacer = new Region();
@@ -63,32 +62,32 @@ public class MovieManagementPage {
 
         VBox.setVgrow(movieTable, Priority.ALWAYS);
         TableColumn<domain.model.Movie, String> idCol = new TableColumn<>("Movie ID");
-        idCol.setCellValueFactory(new PropertyValueFactory<>("movieID"));
-        idCol.setPrefWidth(80);
+        idCol.setCellValueFactory(new PropertyValueFactory<>("movieId"));
+        idCol.getStyleClass().add("w-80");
         TableColumn<domain.model.Movie, String> titleCol = new TableColumn<>("Title");
         titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
-        titleCol.setPrefWidth(180);
+        titleCol.getStyleClass().add("w-180");
         TableColumn<domain.model.Movie, String> genreCol = new TableColumn<>("Genre");
         genreCol.setCellValueFactory(new PropertyValueFactory<>("genre"));
-        genreCol.setPrefWidth(110);
+        genreCol.getStyleClass().add("w-110");
         TableColumn<domain.model.Movie, Integer> durationCol = new TableColumn<>("Duration");
         durationCol.setCellValueFactory(new PropertyValueFactory<>("duration"));
-        durationCol.setPrefWidth(100);
+        durationCol.getStyleClass().add("w-100");
         TableColumn<domain.model.Movie, Double> ratingCol = new TableColumn<>("Rating");
         ratingCol.setCellValueFactory(new PropertyValueFactory<>("rating"));
-        ratingCol.setPrefWidth(80);
+        ratingCol.getStyleClass().add("w-80");
         TableColumn<domain.model.Movie, String> langCol = new TableColumn<>("Language");
         langCol.setCellValueFactory(new PropertyValueFactory<>("language"));
-        langCol.setPrefWidth(100);
+        langCol.getStyleClass().add("w-100");
         TableColumn<domain.model.Movie, Date> dateCol = new TableColumn<>("Release Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<>("releaseDate"));
-        dateCol.setPrefWidth(110);
+        dateCol.getStyleClass().add("w-110");
         TableColumn<domain.model.Movie, String> posterCol = new TableColumn<>("Poster Path");
         posterCol.setCellValueFactory(new PropertyValueFactory<>("posterPath"));
-        posterCol.setPrefWidth(150);
+        posterCol.getStyleClass().add("w-150");
         TableColumn<domain.model.Movie, String> descCol = new TableColumn<>("Description");
         descCol.setCellValueFactory(new PropertyValueFactory<>("description"));
-        descCol.setPrefWidth(200);
+        descCol.getStyleClass().add("w-200");
         ratingCol.setCellFactory(
                 col ->
                         new TableCell<domain.model.Movie, Double>() {
@@ -146,6 +145,7 @@ public class MovieManagementPage {
                         posterCol,
                         descCol);
         movieTable.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+        movieTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         root.getChildren().addAll(header, toolbar, movieTable);
 
         return root;
@@ -153,14 +153,14 @@ public class MovieManagementPage {
 
     private Button createPrimaryButton(String text) {
         Button btn = new Button(text);
-        btn.setPrefHeight(38);
+        btn.getStyleClass().add("h-38");
         btn.getStyleClass().add("primary-button-small");
         return btn;
     }
 
     private Button createSecondaryButton(String text) {
         Button btn = new Button(text);
-        btn.setPrefHeight(38);
+        btn.getStyleClass().add("h-38");
         btn.getStyleClass().add("secondary-button");
         return btn;
     }

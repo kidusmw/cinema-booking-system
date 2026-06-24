@@ -1,9 +1,9 @@
 package ui.controller.common;
 
 import application.AppContext;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import ui.common.WindowManager;
 import ui.view.common.SignUpPage;
 
 public class SignUpController {
@@ -19,11 +19,8 @@ public class SignUpController {
         this.nav = nav;
         this.role = role;
         view = new SignUpPage();
-        Scene scene = new Scene(view.getView(), 800, 700);
-        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
-        stage.setTitle("Create Account - CinemaBook");
-        stage.setScene(scene);
-        stage.show();
+        WindowManager.configureStage(
+                stage, "Create Account - CinemaBook", view.getView(), 800, 700);
         view.roleLabel.setText("Sign up as " + capitalize(role));
 
         view.signUpBtn.setOnAction(e -> handleSignUp());

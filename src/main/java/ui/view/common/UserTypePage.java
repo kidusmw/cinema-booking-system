@@ -1,9 +1,5 @@
 package ui.view.common;
 
-import static ui.common.Theme.*;
-
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
@@ -18,21 +14,21 @@ public class UserTypePage {
         BorderPane root = new BorderPane();
         root.getStyleClass().add("page");
         HBox topBar = new HBox();
-        topBar.setPadding(new Insets(20, 30, 20, 30));
+        topBar.getStyleClass().add("p-20-30");
 
         btnBack = new Button("← Back");
         btnBack.getStyleClass().add("back-button");
         topBar.getChildren().add(btnBack);
         VBox centerBox = new VBox(30);
-        centerBox.setAlignment(Pos.CENTER);
-        centerBox.setPadding(new Insets(40));
+        centerBox.getStyleClass().add("align-center");
+        centerBox.getStyleClass().add("p-40");
         Label title = new Label("Choose your account type");
         title.getStyleClass().add("title");
 
         Label subtitle = new Label("Select how you want to continue");
         subtitle.getStyleClass().add("muted-text");
         HBox cardsBox = new HBox(25);
-        cardsBox.setAlignment(Pos.CENTER);
+        cardsBox.getStyleClass().add("align-center");
 
         VBox adminCard =
                 createRoleCard(
@@ -60,10 +56,10 @@ public class UserTypePage {
 
     private VBox createRoleCard(String emoji, String title, String description, boolean isPrimary) {
         VBox card = new VBox(15);
-        card.setAlignment(Pos.CENTER);
-        card.setPadding(new Insets(30, 25, 30, 25));
-        card.setPrefWidth(240);
-        card.setPrefHeight(280);
+        card.getStyleClass().add("align-center");
+        card.getStyleClass().add("p-30-25");
+        card.getStyleClass().add("w-240");
+        card.getStyleClass().add("h-280");
         card.getStyleClass().add("card");
         Label emojiLabel = new Label(emoji);
         emojiLabel.getStyleClass().add("icon-emoji");
@@ -81,7 +77,7 @@ public class UserTypePage {
 
     private void stylePrimaryButton(Button btn) {
         btn.getStyleClass().add("primary-button");
-        btn.setPrefWidth(180);
-        btn.setPrefHeight(38);
+        btn.getStyleClass().add("w-180");
+        btn.getStyleClass().add("h-38");
     }
 }

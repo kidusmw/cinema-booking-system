@@ -1,19 +1,12 @@
 package ui.controller.admin;
 
-import static ui.common.Theme.*;
-
 import application.AppContext;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ui.common.WindowManager;
 import ui.controller.common.NavigationManager;
 import ui.controller.common.WelcomeController;
 import ui.view.admin.AdminDashboardPage;
@@ -24,11 +17,6 @@ public class AdminDashboardController {
     private Stage stage;
     private String adminName;
     private AppContext ctx;
-
-    public Parent getView() {
-        return view.getView();
-    }
-
     private NavigationManager nav;
 
     public AdminDashboardController(
@@ -38,12 +26,8 @@ public class AdminDashboardController {
         this.nav = nav;
         this.adminName = adminName;
         this.view = new AdminDashboardPage();
-
-        Scene scene = new Scene(view.getView(), 1200, 750);
-        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
-        stage.setTitle("User Dashboard - CinemaBook");
-        stage.setScene(scene);
-        stage.show();
+        WindowManager.configureStage(
+                stage, "Admin Dashboard - CinemaBook", view.getView(), 1200, 750);
 
         view.welcomeLabel.setText("Welcome, " + adminName);
 
@@ -74,19 +58,18 @@ public class AdminDashboardController {
         view.contentArea.getChildren().clear();
 
         VBox dashboardContent = new VBox(20);
-        dashboardContent.setPadding(new Insets(30));
+        dashboardContent.getStyleClass().add("p-30");
 
         Label title = new Label("Dashboard Overview");
-        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 24));
-        title.setTextFill(Color.web(TEXT_DARK));
+        title.getStyleClass().add("title");
 
         HBox statsBox = new HBox(20);
         statsBox.getChildren()
                 .addAll(
-                        createStatCard("Movies", "Total Movies", "11", ACCENT),
-                        createStatCard("Bookings", "Total Bookings", "15", "#10B981"),
-                        createStatCard("Revenue", "Revenue", "0.00birr", "#F59E0B"),
-                        createStatCard("Users", "Total Users", "9", "#8B5CF6"));
+                        createStatCard("Movies", "Total Movies", "11", "accent"),
+                        createStatCard("Bookings", "Total Bookings", "15", "success"),
+                        createStatCard("Revenue", "Revenue", "0.00birr", "warning"),
+                        createStatCard("Users", "Total Users", "9", "purple"));
 
         dashboardContent.getChildren().addAll(title, statsBox);
         view.contentArea.getChildren().add(dashboardContent);
@@ -143,47 +126,32 @@ public class AdminDashboardController {
         };
 
         for (Button btn : allButtons) {
-            if (btn == activeBtn) {
-                btn.setStyle(
-                        "-fx-background-color: "
-                                + ACCENT
-                                + "; -fx-text-fill: white; -fx-background-radius: 8; -fx-alignment: center-left; -fx-cursor: hand;");
-            } else {
-                btn.setStyle(
-                        "-fx-background-color: transparent; -fx-text-fill: "
-                                + TEXT_MUTED
-                                + "; -fx-background-radius: 8; -fx-alignment: center-left; -fx-cursor: hand;");
-            }
+            btn.getStyleClass().remove("sidebar-btn-active");
         }
+        activeBtn.getStyleClass().add("sidebar-btn-active");
     }
 
-    private VBox createStatCard(String icon, String label, String value, String color) {
+    private VBox createStatCard(String icon, String label, String value, String colorClass) {
         VBox card = new VBox(8);
-        card.setAlignment(Pos.CENTER_LEFT);
-        card.setPadding(new Insets(20));
-        card.setPrefWidth(220);
-        card.setStyle(
-                "-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: "
-                        + BORDER
-                        + "; -fx-border-radius: 12; -fx-border-width: 1;");
-        card.setEffect(new DropShadow(5, Color.rgb(0, 0, 0, 0.04)));
+        card.getStyleClass().add("align-center-left");
+        card.getStyleClass().add("p-20");
+        card.getStyleClass().add("w-220");
+        card.getStyleClass().add("stat-card");
 
         Label iconLabel = new Label(icon);
-        iconLabel.setFont(Font.font(24));
+        iconLabel.getStyleClass().add("stat-icon");
 
         Label valueLabel = new Label(value);
-        valueLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 28));
-        valueLabel.setTextFill(Color.web(color));
+        valueLabel.getStyleClass().addAll("stat-value", "text-" + colorClass);
 
         Label nameLabel = new Label(label);
-        nameLabel.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 12));
-        nameLabel.setTextFill(Color.web(TEXT_MUTED));
+        nameLabel.getStyleClass().add("stat-label");
 
         card.getChildren().addAll(iconLabel, valueLabel, nameLabel);
         return card;
     }
 
-    public Parent getRootView() {
+    public javafx.scene.Parent getRootView() {
         return view.getView();
     }
 }

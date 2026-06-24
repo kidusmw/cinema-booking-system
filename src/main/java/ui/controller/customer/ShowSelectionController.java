@@ -8,21 +8,15 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.*;
 import javafx.stage.Stage;
+import ui.common.WindowManager;
 import ui.controller.common.NavigationManager;
 import ui.view.customer.ShowSelectionPage;
 
 public class ShowSelectionController {
 
-    private static final org.slf4j.Logger log =
-            org.slf4j.LoggerFactory.getLogger(ShowSelectionController.class);
     private ShowSelectionPage view;
     private Stage stage;
     private User currentUser;
@@ -30,12 +24,6 @@ public class ShowSelectionController {
     private AppContext ctx;
     private NavigationManager nav;
     private List<Showtime> movieShows;
-
-    private static final String ACCENT = "#DB2777";
-    private static final String TEXT_DARK = "#1E293B";
-    private static final String TEXT_MUTED = "#64748B";
-    private static final String BORDER = "#E2E8F0";
-    private static final String WHITE = "#FFFFFF";
 
     public ShowSelectionController(
             Stage stage,
@@ -50,11 +38,8 @@ public class ShowSelectionController {
         this.selectedMovie = selectedMovie;
         this.view = new ShowSelectionPage();
 
-        Scene scene = new Scene(view.getView(), 1100, 700);
-        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
-        stage.setTitle("Select Showtime - " + selectedMovie.getTitle());
-        stage.setScene(scene);
-        stage.show();
+        WindowManager.configureStage(
+                stage, "Select Showtime - " + selectedMovie.getTitle(), view.getView(), 1100, 700);
 
         view.movieTitle.setText(selectedMovie.getTitle());
         view.movieGenre.setText(selectedMovie.getGenre());
@@ -76,8 +61,7 @@ public class ShowSelectionController {
 
         if (movieShows.isEmpty()) {
             Label noShows = new Label("🎬 No shows available for this movie yet.");
-            noShows.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 14));
-            noShows.setTextFill(Color.web(TEXT_MUTED));
+            noShows.getStyleClass().add("empty-text");
             view.showCardsContainer.getChildren().add(noShows);
             return;
         }
@@ -94,7 +78,7 @@ public class ShowSelectionController {
     private void createDateButtons(Set<LocalDate> uniqueDates) {
 
         Button allBtn = createDateButton("All Dates", null);
-        allBtn.setStyle(getDateButtonStyle(true));
+        allBtn.getStyleClass().add("date-button-active");
         view.dateButtonsContainer.getChildren().add(allBtn);
 
         for (LocalDate date : uniqueDates) {
@@ -107,18 +91,18 @@ public class ShowSelectionController {
     private Button createDateButton(String label, String dateValue) {
         Button btn = new Button(label);
         btn.setUserData(dateValue);
-        btn.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 12));
-        btn.setPrefHeight(36);
-        btn.setStyle(getDateButtonStyle(false));
+        btn.getStyleClass().add("date-button");
+        btn.getStyleClass().add("h-36");
         btn.setOnAction(
                 e -> {
-                    // Reset all buttons
                     for (javafx.scene.Node node : view.dateButtonsContainer.getChildren()) {
                         if (node instanceof Button) {
-                            ((Button) node).setStyle(getDateButtonStyle(false));
+                            ((Button) node).getStyleClass().removeAll("date-button-active");
+                            ((Button) node).getStyleClass().add("date-button");
                         }
                     }
-                    btn.setStyle(getDateButtonStyle(true));
+                    btn.getStyleClass().removeAll("date-button");
+                    btn.getStyleClass().add("date-button-active");
                     displayShowsForDate(dateValue);
                 });
         return btn;
@@ -141,8 +125,7 @@ public class ShowSelectionController {
 
         if (filteredShows.isEmpty()) {
             Label noShows = new Label("No shows for selected date");
-            noShows.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
-            noShows.setTextFill(Color.web(TEXT_MUTED));
+            noShows.getStyleClass().add("empty-text");
             view.showCardsContainer.getChildren().add(noShows);
             return;
         }
@@ -153,64 +136,23 @@ public class ShowSelectionController {
 
     private VBox createShowCard(Showtime show) {
         VBox card = new VBox(10);
-        card.setPadding(new Insets(15, 20, 15, 20));
-        card.setStyle(
-                "-fx-background-color: "
-                        + WHITE
-                        + ";"
-                        + "-fx-border-color: "
-                        + BORDER
-                        + ";"
-                        + "-fx-border-radius: 10;"
-                        + "-fx-background-radius: 10;"
-                        + "-fx-cursor: hand;");
-        card.setOnMouseEntered(
-                e ->
-                        card.setStyle(
-                                "-fx-background-color: #FCE7F3;"
-                                        + "-fx-border-color: "
-                                        + ACCENT
-                                        + ";"
-                                        + "-fx-border-radius: 10;"
-                                        + "-fx-background-radius: 10;"
-                                        + "-fx-cursor: hand;"));
-        card.setOnMouseExited(
-                e ->
-                        card.setStyle(
-                                "-fx-background-color: "
-                                        + WHITE
-                                        + ";"
-                                        + "-fx-border-color: "
-                                        + BORDER
-                                        + ";"
-                                        + "-fx-border-radius: 10;"
-                                        + "-fx-background-radius: 10;"
-                                        + "-fx-cursor: hand;"));
+        card.getStyleClass().add("p-15-20");
+        card.getStyleClass().add("card-sm");
         HBox topRow = new HBox(15);
-        topRow.setAlignment(Pos.CENTER_LEFT);
+        topRow.getStyleClass().add("align-center-left");
 
         Label dateLabel = new Label("📅 " + show.getShowDate().toString());
-        dateLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 13));
-        dateLabel.setTextFill(Color.web(TEXT_DARK));
+        dateLabel.getStyleClass().add("show-date-label");
 
         Label timeLabel = new Label("🕐 " + show.getShowTime());
-        timeLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
-        timeLabel.setTextFill(Color.web(ACCENT));
+        timeLabel.getStyleClass().add("show-time-label");
 
         topRow.getChildren().addAll(dateLabel, timeLabel);
         Label hallLabel = new Label("🏛️ Hall: " + show.getHallId());
-        hallLabel.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 12));
-        hallLabel.setTextFill(Color.web(TEXT_MUTED));
+        hallLabel.getStyleClass().add("show-hall-label");
         Button bookBtn = new Button("Book Seats →");
-        bookBtn.setFont(Font.font("Segoe UI", FontWeight.BOLD, 12));
-        bookBtn.setPrefHeight(32);
-        bookBtn.setTextFill(Color.WHITE);
-        bookBtn.setStyle(
-                "-fx-background-color: "
-                        + ACCENT
-                        + ";"
-                        + "-fx-background-radius: 6;"
-                        + "-fx-cursor: hand;");
+        bookBtn.getStyleClass().add("h-32");
+        bookBtn.getStyleClass().add("primary-button-small");
         bookBtn.setOnAction(
                 e ->
                         nav.go(
@@ -233,33 +175,6 @@ public class ShowSelectionController {
 
         card.getChildren().addAll(topRow, bottomRow);
         return card;
-    }
-
-    private String getDateButtonStyle(boolean active) {
-        if (active) {
-            return "-fx-background-color: "
-                    + ACCENT
-                    + ";"
-                    + "-fx-text-fill: white;"
-                    + "-fx-background-radius: 18;"
-                    + "-fx-cursor: hand;"
-                    + "-fx-padding: 8 16;"
-                    + "-fx-font-weight: bold;";
-        } else {
-            return "-fx-background-color: "
-                    + WHITE
-                    + ";"
-                    + "-fx-text-fill: "
-                    + TEXT_DARK
-                    + ";"
-                    + "-fx-border-color: "
-                    + BORDER
-                    + ";"
-                    + "-fx-border-radius: 18;"
-                    + "-fx-background-radius: 18;"
-                    + "-fx-cursor: hand;"
-                    + "-fx-padding: 8 16;";
-        }
     }
 
     private String formatDateLabel(LocalDate date) {

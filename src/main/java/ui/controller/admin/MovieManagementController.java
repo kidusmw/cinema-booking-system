@@ -8,13 +8,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import ui.common.WindowManager;
 import ui.controller.common.NavigationManager;
 import ui.view.admin.MovieManagementPage;
 
@@ -31,11 +30,8 @@ public class MovieManagementController {
         this.nav = nav;
         view = new MovieManagementPage();
 
-        Scene scene = new Scene(view.getView(), 1200, 750);
-        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
-        stage.setTitle("Manage Movies - CinemaBook User");
-        stage.setScene(scene);
-        stage.show();
+        WindowManager.configureStage(
+                stage, "Manage Movies - CinemaBook User", view.getView(), 1200, 750);
 
         loadMovies();
 
@@ -157,7 +153,7 @@ public class MovieManagementController {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
-        grid.setPadding(new Insets(20, 50, 10, 10));
+        grid.getStyleClass().add("p-20-50-10-10");
 
         TextField titleField = new TextField();
         titleField.setPromptText("Title");

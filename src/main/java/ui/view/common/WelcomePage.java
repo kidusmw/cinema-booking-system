@@ -1,9 +1,5 @@
 package ui.view.common;
 
-import static ui.common.Theme.*;
-
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -22,11 +18,11 @@ public class WelcomePage {
         BorderPane root = new BorderPane();
         root.getStyleClass().add("page");
         HBox topBar = new HBox();
-        topBar.setAlignment(Pos.CENTER_LEFT);
-        topBar.setPadding(new Insets(20, 40, 20, 40));
+        topBar.getStyleClass().add("align-center-left");
+        topBar.getStyleClass().add("p-20-40");
         topBar.getStyleClass().add("top-bar");
         HBox brandBox = new HBox(8);
-        brandBox.setAlignment(Pos.CENTER_LEFT);
+        brandBox.getStyleClass().add("align-center-left");
 
         StackPane logo = new StackPane();
         logo.setPrefSize(32, 32);
@@ -52,8 +48,8 @@ public class WelcomePage {
 
         topBar.getChildren().addAll(brandBox, spacer, menu);
         VBox heroBox = new VBox(20);
-        heroBox.setAlignment(Pos.CENTER);
-        heroBox.setPadding(new Insets(60, 40, 40, 40));
+        heroBox.getStyleClass().add("align-center");
+        heroBox.getStyleClass().add("p-60-40");
 
         Label eyebrow = new Label("CINEMA BOOKING SYSTEM");
         eyebrow.getStyleClass().add("badge");
@@ -68,11 +64,11 @@ public class WelcomePage {
         subtitle.getStyleClass().add("muted-text");
         subtitle.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         enterBtn = new Button("Get Started  →");
-        enterBtn.setPrefWidth(200);
-        enterBtn.setPrefHeight(48);
+        enterBtn.getStyleClass().add("w-200");
+        enterBtn.getStyleClass().add("h-48");
         enterBtn.getStyleClass().add("primary-button");
         HBox trustBox = new HBox(20);
-        trustBox.setAlignment(Pos.CENTER);
+        trustBox.getStyleClass().add("align-center");
         Label trust1 = new Label("✓ Secure booking");
         Label trust2 = new Label("✓ Instant confirmation");
         Label trust3 = new Label("✓ Easy refunds");
@@ -83,8 +79,8 @@ public class WelcomePage {
 
         heroBox.getChildren().addAll(eyebrow, title, subtitle, enterBtn, trustBox);
         HBox featuresBox = new HBox(25);
-        featuresBox.setAlignment(Pos.CENTER);
-        featuresBox.setPadding(new Insets(0, 40, 60, 40));
+        featuresBox.getStyleClass().add("align-center");
+        featuresBox.getStyleClass().add("p-0-40-60-40");
 
         featuresBox
                 .getChildren()
@@ -94,7 +90,7 @@ public class WelcomePage {
                         createFeatureCard("🎫", "Instant Booking", "Get tickets in seconds"));
 
         VBox mainContent = new VBox(20, heroBox, featuresBox);
-        mainContent.setAlignment(Pos.CENTER);
+        mainContent.getStyleClass().add("align-center");
 
         root.setTop(topBar);
         root.setCenter(mainContent);
@@ -131,9 +127,9 @@ public class WelcomePage {
 
     private VBox createFeatureCard(String icon, String title, String description) {
         VBox card = new VBox(8);
-        card.setAlignment(Pos.CENTER);
-        card.setPadding(new Insets(24, 20, 24, 20));
-        card.setPrefWidth(180);
+        card.getStyleClass().add("align-center");
+        card.getStyleClass().add("p-24-20");
+        card.getStyleClass().add("w-180");
         card.getStyleClass().add("card");
 
         Label iconLabel = new Label(icon);

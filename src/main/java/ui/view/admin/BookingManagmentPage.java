@@ -3,11 +3,11 @@ package ui.view.admin;
 import domain.model.Booking;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javafx.geometry.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
+@SuppressWarnings({"unchecked", "deprecation"})
 public class BookingManagmentPage {
 
     public TableView<Booking> bookingTable;
@@ -25,11 +25,11 @@ public class BookingManagmentPage {
     private void createUI() {
         root = new VBox(20);
         root.getStyleClass().add("page");
-        root.setPadding(new Insets(30));
+        root.getStyleClass().add("p-30");
 
         // Header
         HBox header = new HBox(15);
-        header.setAlignment(Pos.CENTER_LEFT);
+        header.getStyleClass().add("align-center-left");
         Label title = new Label("🎟️ Booking Management");
         title.getStyleClass().add("title");
 
@@ -49,11 +49,14 @@ public class BookingManagmentPage {
 
         // 1. Booking ID
         TableColumn<Booking, Integer> idCol = new TableColumn<>("ID");
-        idCol.setCellValueFactory(new PropertyValueFactory<>("bookingID"));
+        idCol.setCellValueFactory(new PropertyValueFactory<>("bookingId"));
 
         // 2. User Name
         TableColumn<Booking, String> customerCol = new TableColumn<>("User");
-        customerCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        customerCol.setCellValueFactory(
+                cellData ->
+                        new javafx.beans.property.SimpleStringProperty(
+                                "User #" + cellData.getValue().getUserId()));
 
         // 3. Date (with formatter)
         TableColumn<Booking, Date> dateCol = new TableColumn<>("Date");
@@ -85,10 +88,11 @@ public class BookingManagmentPage {
 
         // 6. Show ID - FIXED: was TableColumn<Booking, Integer> but showID is a String in the model
         TableColumn<Booking, String> showCol = new TableColumn<>("Show ID");
-        showCol.setCellValueFactory(new PropertyValueFactory<>("showID"));
+        showCol.setCellValueFactory(new PropertyValueFactory<>("showId"));
 
         bookingTable.getColumns().addAll(idCol, customerCol, dateCol, movieCol, statusCol, showCol);
         bookingTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        bookingTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         // Action Buttons
         btnCancelBooking = new Button("❌ Cancel Booking");

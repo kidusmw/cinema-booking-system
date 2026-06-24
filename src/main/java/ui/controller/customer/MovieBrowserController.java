@@ -8,17 +8,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.*;
 import javafx.stage.Stage;
+import ui.common.WindowManager;
 import ui.controller.common.NavigationManager;
 import ui.view.customer.MovieBrowserPage;
 
@@ -37,11 +33,8 @@ public class MovieBrowserController {
         this.nav = nav;
         this.currentUser = currentUser;
         this.view = new MovieBrowserPage();
-        Scene scene = new Scene(view.getView(), 1200, 750);
-        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
-        stage.setTitle("Browse Movies - CinemaBook");
-        stage.setScene(scene);
-        stage.show();
+        WindowManager.configureStage(
+                stage, "Browse Movies - CinemaBook", view.getView(), 1200, 750);
         loadMovies();
         view.btnBack.setOnAction(e -> nav.back());
         view.searchField.textProperty().addListener((obs, old, newVal) -> filterMovies(newVal));
@@ -74,32 +67,8 @@ public class MovieBrowserController {
 
     private VBox createMovieCard(Movie movie) {
         VBox card = new VBox(0);
-        card.setPrefWidth(280);
-        card.setStyle(
-                "-fx-background-color: white;"
-                        + "-fx-background-radius: 12;"
-                        + "-fx-border-color: #E2E8F0;"
-                        + "-fx-border-radius: 12;"
-                        + "-fx-cursor: hand;"
-                        + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 2);");
-        card.setOnMouseEntered(
-                e ->
-                        card.setStyle(
-                                "-fx-background-color: white;"
-                                        + "-fx-background-radius: 12;"
-                                        + "-fx-border-color: #DB2777;"
-                                        + "-fx-border-radius: 12;"
-                                        + "-fx-cursor: hand;"
-                                        + "-fx-effect: dropshadow(gaussian, rgba(219,39,119,0.2), 15, 0, 0, 4);"));
-        card.setOnMouseExited(
-                e ->
-                        card.setStyle(
-                                "-fx-background-color: white;"
-                                        + "-fx-background-radius: 12;"
-                                        + "-fx-border-color: #E2E8F0;"
-                                        + "-fx-border-radius: 12;"
-                                        + "-fx-cursor: hand;"
-                                        + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 10, 0, 0, 2);"));
+        card.getStyleClass().add("w-280");
+        card.getStyleClass().add("card");
         ImageView poster = new ImageView();
         poster.setFitWidth(280);
         poster.setFitHeight(350);
@@ -116,31 +85,25 @@ public class MovieBrowserController {
             poster.setImage(createPlaceholderImage(movie.getTitle()));
         }
         VBox info = new VBox(8);
-        info.setPadding(new Insets(15));
+        info.getStyleClass().add("p-15");
 
         Label title = new Label(movie.getTitle());
-        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
-        title.setTextFill(Color.web("#1E293B"));
+        title.getStyleClass().add("movie-title");
         title.setWrapText(true);
 
         HBox meta = new HBox(10);
-        meta.setAlignment(Pos.CENTER_LEFT);
+        meta.getStyleClass().add("align-center-left");
 
         Label genre = new Label(movie.getGenre());
-        genre.setFont(Font.font("Segoe UI", 11));
-        genre.setTextFill(Color.WHITE);
-        genre.setStyle(
-                "-fx-background-color: #DB2777; -fx-background-radius: 12; -fx-padding: 3 10;");
+        genre.getStyleClass().addAll("movie-genre", "text-white");
 
         int hours = movie.getDuration() / 60;
         int mins = movie.getDuration() % 60;
         Label duration = new Label("⏱ " + hours + "h " + mins + "m");
-        duration.setFont(Font.font("Segoe UI", 11));
-        duration.setTextFill(Color.web("#64748B"));
+        duration.getStyleClass().add("movie-duration");
 
         Label rating = new Label("⭐ " + String.format("%.1f", movie.getRating()));
-        rating.setFont(Font.font("Segoe UI", FontWeight.BOLD, 11));
-        rating.setTextFill(Color.web("#F59E0B"));
+        rating.getStyleClass().add("movie-rating");
 
         meta.getChildren().addAll(genre, duration, rating);
         info.getChildren().addAll(title, meta);
@@ -160,15 +123,18 @@ public class MovieBrowserController {
     private Image createPlaceholderImage(String title) {
         javafx.scene.canvas.Canvas canvas = new javafx.scene.canvas.Canvas(280, 350);
         javafx.scene.canvas.GraphicsContext gc = canvas.getGraphicsContext2D();
+        // Canvas exception: cannot use CSS
         gc.setFill(javafx.scene.paint.Color.web("#DB2777"));
         gc.fillRect(0, 0, 280, 350);
         gc.setFill(javafx.scene.paint.Color.WHITE);
+        // Canvas exception: cannot use CSS
         gc.setFont(javafx.scene.text.Font.font("Arial", javafx.scene.text.FontWeight.BOLD, 20));
         gc.setTextAlign(javafx.scene.text.TextAlignment.CENTER);
         gc.fillText(
                 title != null && title.length() > 20 ? title.substring(0, 20) + "..." : title,
                 140,
                 175);
+        // Canvas exception: cannot use CSS
         gc.setFont(javafx.scene.text.Font.font(60));
         gc.fillText("🎬", 140, 100);
 

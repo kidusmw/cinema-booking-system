@@ -1,40 +1,27 @@
 package ui.controller.customer;
 
-import static ui.common.Theme.*;
-
 import application.AppContext;
 import domain.model.User;
 import java.util.List;
-import javafx.geometry.*;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.scene.text.*;
 import javafx.stage.Stage;
+import ui.common.WindowManager;
 import ui.controller.common.NavigationManager;
 import ui.controller.common.WelcomeController;
 import ui.view.customer.CustomerDashboardPage;
 
 public class CustomerDashboardController {
     private CustomerDashboardPage view;
-    private Stage stage;
     private User currentUser;
     private AppContext ctx;
-    private NavigationManager nav;
 
     public CustomerDashboardController(
             Stage stage, AppContext ctx, NavigationManager nav, User currentUser) {
-        this.stage = stage;
         this.ctx = ctx;
-        this.nav = nav;
         this.currentUser = currentUser;
         this.view = new CustomerDashboardPage();
 
-        Scene scene = new Scene(view.getView(), 1200, 750);
-        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
-        stage.setTitle("CinemaBook - User");
-        stage.setScene(scene);
-        stage.show();
+        WindowManager.configureStage(stage, "CinemaBook - User", view.getView(), 1200, 750);
         view.welcomeLabel.setText("Welcome, " + currentUser.getFirstName() + "!");
         view.btnBrowseMovies.setOnAction(
                 e ->
