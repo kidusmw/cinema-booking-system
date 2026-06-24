@@ -11,11 +11,14 @@ import java.util.stream.Collectors;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ui.common.WindowManager;
 import ui.controller.common.NavigationManager;
 import ui.view.customer.ShowSelectionPage;
 
 public class ShowSelectionController {
+    private static final Logger log = LoggerFactory.getLogger(ShowSelectionController.class);
 
     private ShowSelectionPage view;
     private Stage stage;
@@ -38,8 +41,8 @@ public class ShowSelectionController {
         this.selectedMovie = selectedMovie;
         this.view = new ShowSelectionPage();
 
-        WindowManager.configureStage(
-                stage, "Select Showtime - " + selectedMovie.getTitle(), view.getView(), 1100, 700);
+        WindowManager.configure(stage, "Select Showtime", view.getView());
+        log.info("Opening Select Showtime page");
 
         view.movieTitle.setText(selectedMovie.getTitle());
         view.movieGenre.setText(selectedMovie.getGenre());

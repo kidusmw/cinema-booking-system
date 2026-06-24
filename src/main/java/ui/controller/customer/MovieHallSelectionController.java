@@ -14,11 +14,14 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ui.common.WindowManager;
 import ui.controller.common.NavigationManager;
 import ui.view.customer.MovieHallSelectionPage;
 
 public class MovieHallSelectionController {
+    private static final Logger log = LoggerFactory.getLogger(MovieHallSelectionController.class);
     private MovieHallSelectionPage view;
     private Stage stage;
     private User currentUser;
@@ -41,8 +44,8 @@ public class MovieHallSelectionController {
         this.selectedMovie = selectedMovie;
         this.selectedShow = selectedShow;
         this.view = new MovieHallSelectionPage();
-        WindowManager.configureStage(
-                stage, "Select Hall - " + selectedMovie.getTitle(), view.getView(), 1100, 700);
+        WindowManager.configure(stage, "Select Hall", view.getView());
+        log.info("Opening Select Hall page");
         view.showInfoLabel.setText(
                 "🕐 " + selectedShow.getShowTime() + "  |  📅 " + selectedShow.getShowDate());
         loadHalls();

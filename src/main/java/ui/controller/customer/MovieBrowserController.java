@@ -14,11 +14,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ui.common.WindowManager;
 import ui.controller.common.NavigationManager;
 import ui.view.customer.MovieBrowserPage;
 
 public class MovieBrowserController {
+
+    private static final Logger log = LoggerFactory.getLogger(MovieBrowserController.class);
     private MovieBrowserPage view;
     private Stage stage;
     private User currentUser;
@@ -33,8 +37,7 @@ public class MovieBrowserController {
         this.nav = nav;
         this.currentUser = currentUser;
         this.view = new MovieBrowserPage();
-        WindowManager.configureStage(
-                stage, "Browse Movies - CinemaBook", view.getView(), 1200, 750);
+        WindowManager.configure(stage, "Browse Movies", view.getView());
         loadMovies();
         view.btnBack.setOnAction(e -> nav.back());
         view.searchField.textProperty().addListener((obs, old, newVal) -> filterMovies(newVal));
@@ -79,6 +82,7 @@ public class MovieBrowserController {
             try {
                 poster.setImage(new Image(new File(posterPath).toURI().toString()));
             } catch (Exception e) {
+                log.error("Failed to load poster for movie [{}]", movie.getTitle(), e);
                 poster.setImage(createPlaceholderImage(movie.getTitle()));
             }
         } else {

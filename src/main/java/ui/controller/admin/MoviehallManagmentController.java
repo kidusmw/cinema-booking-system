@@ -28,8 +28,8 @@ public class MoviehallManagmentController {
         this.nav = nav;
         this.view = new MovieHallManagmentPage();
 
-        WindowManager.configureStage(
-                stage, "Hall Management - CinemaBook User", view.getView(), 1100, 700);
+        WindowManager.configure(stage, "Hall Management", view.getView());
+        log.info("Opening Hall Management page");
 
         view.btnBack.setOnAction(e -> handleBack());
         loadHalls();

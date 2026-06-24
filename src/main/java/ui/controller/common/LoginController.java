@@ -4,12 +4,15 @@ import application.AppContext;
 import domain.model.User;
 import java.util.Optional;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ui.common.WindowManager;
 import ui.controller.admin.AdminDashboardController;
 import ui.controller.customer.CustomerDashboardController;
 import ui.view.common.LoginPage;
 
 public class LoginController {
+    private static final Logger log = LoggerFactory.getLogger(LoginController.class);
     private final AppContext ctx;
     private LoginPage view;
     private String expectedRole;
@@ -22,7 +25,8 @@ public class LoginController {
         this.nav = nav;
         this.expectedRole = role;
         view = new LoginPage();
-        WindowManager.configureStage(stage, "Sign in - CinemaBook", view.getView(), 900, 650);
+        WindowManager.configure(stage, "Sign In", view.getView());
+        log.info("Opening Sign In page");
 
         view.roleLabel.setText("Sign in as " + capitalize(role));
         view.loginBtn.setOnAction(e -> handleLogin());

@@ -59,7 +59,8 @@ public class PaymentController {
         this.selectedSeatIds = selectedSeatIds;
         this.totalAmount = seatPrice * selectedSeatIds.size();
         this.view = new PaymentPage();
-        WindowManager.configureStage(stage, "Payment - CinemaBook", view.getView(), 900, 750);
+        WindowManager.configure(stage, "Payment", view.getView());
+        log.info("Opening Payment page");
         generatedOTP = generateOTP();
         view.usernameField.setText(currentUser.getUsername());
         view.emailField.setText(currentUser.getEmail());
@@ -172,6 +173,8 @@ public class PaymentController {
             showSuccessAndTicket();
         } catch (Exception e) {
             log.error("Payment processing failed", e);
+            view.errorLabel.setText("Payment failed: " + e.getMessage());
+            view.errorLabel.setVisible(true);
         }
     }
 

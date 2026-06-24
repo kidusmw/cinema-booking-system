@@ -2,15 +2,19 @@ package ui.controller.common;
 
 import application.AppContext;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ui.common.WindowManager;
 import ui.view.common.AuthChoice;
 
 public class AuthChoiceController {
+    private static final Logger log = LoggerFactory.getLogger(AuthChoiceController.class);
     private AuthChoice view;
 
     public AuthChoiceController(Stage stage, AppContext ctx, NavigationManager nav, String role) {
         this.view = new AuthChoice();
-        WindowManager.configureStage(stage, "Choose Option", view.getView(), 500, 450);
+        WindowManager.configure(stage, "Choose Option", view.getView());
+        log.info("Opening Choose Option page");
 
         view.btnBack.setOnAction(e -> nav.back());
 

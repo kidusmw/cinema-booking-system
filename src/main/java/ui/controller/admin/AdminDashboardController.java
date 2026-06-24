@@ -6,12 +6,15 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ui.common.WindowManager;
 import ui.controller.common.NavigationManager;
 import ui.controller.common.WelcomeController;
 import ui.view.admin.AdminDashboardPage;
 
 public class AdminDashboardController {
+    private static final Logger log = LoggerFactory.getLogger(AdminDashboardController.class);
 
     private AdminDashboardPage view;
     private Stage stage;
@@ -26,8 +29,8 @@ public class AdminDashboardController {
         this.nav = nav;
         this.adminName = adminName;
         this.view = new AdminDashboardPage();
-        WindowManager.configureStage(
-                stage, "Admin Dashboard - CinemaBook", view.getView(), 1200, 750);
+        WindowManager.configure(stage, "Admin Dashboard", view.getView());
+        log.info("Opening Admin Dashboard page");
 
         view.welcomeLabel.setText("Welcome, " + adminName);
 

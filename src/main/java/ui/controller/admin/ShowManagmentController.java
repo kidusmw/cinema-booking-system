@@ -13,9 +13,12 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ui.view.admin.ShowManagementPage;
 
 public class ShowManagmentController {
+    private static final Logger log = LoggerFactory.getLogger(ShowManagmentController.class);
 
     private final ShowManagementPage view;
     private final AppContext ctx;

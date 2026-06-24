@@ -5,9 +5,12 @@ import domain.model.Payment;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ui.view.admin.PaymentManagment;
 
 public class PaymentManagmentController {
+    private static final Logger log = LoggerFactory.getLogger(PaymentManagmentController.class);
     private final PaymentManagment view;
     private final AppContext ctx;
     private final AdminDashboardController dashboard;

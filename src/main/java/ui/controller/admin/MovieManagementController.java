@@ -13,11 +13,14 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ui.common.WindowManager;
 import ui.controller.common.NavigationManager;
 import ui.view.admin.MovieManagementPage;
 
 public class MovieManagementController {
+    private static final Logger log = LoggerFactory.getLogger(MovieManagementController.class);
     private MovieManagementPage view;
     private Stage stage;
     private AppContext ctx;
@@ -30,8 +33,8 @@ public class MovieManagementController {
         this.nav = nav;
         view = new MovieManagementPage();
 
-        WindowManager.configureStage(
-                stage, "Manage Movies - CinemaBook User", view.getView(), 1200, 750);
+        WindowManager.configure(stage, "Movie Management", view.getView());
+        log.info("Opening Movie Management page");
 
         loadMovies();
 

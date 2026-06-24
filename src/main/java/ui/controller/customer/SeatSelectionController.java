@@ -7,11 +7,14 @@ import java.util.stream.Collectors;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ui.common.WindowManager;
 import ui.controller.common.NavigationManager;
 import ui.view.customer.SeatSelectionPage;
 
 public class SeatSelectionController {
+    private static final Logger log = LoggerFactory.getLogger(SeatSelectionController.class);
 
     private SeatSelectionPage view;
     private Stage stage;
@@ -46,8 +49,8 @@ public class SeatSelectionController {
         this.seatPrice = isVIP ? 120.0 : 50.0;
         this.view = new SeatSelectionPage();
 
-        WindowManager.configureStage(
-                stage, "Select Seats - " + selectedMovie.getTitle(), view.getView(), 1200, 750);
+        WindowManager.configure(stage, "Select Seats", view.getView());
+        log.info("Opening Select Seats page");
         view.hallNameLabel.setText("🏛️ " + selectedHall.getName());
         view.showInfoLabel.setText(
                 "🕐 " + selectedShow.getShowTime() + "  |  📅 " + selectedShow.getShowDate());

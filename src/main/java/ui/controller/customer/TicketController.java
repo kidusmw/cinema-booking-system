@@ -6,11 +6,14 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ui.common.WindowManager;
 import ui.controller.common.NavigationManager;
 import ui.view.customer.TicketPage;
 
 public class TicketController {
+    private static final Logger log = LoggerFactory.getLogger(TicketController.class);
     private TicketPage view;
     private User currentUser;
     private Movie selectedMovie;
@@ -40,7 +43,8 @@ public class TicketController {
         this.bookingIds = bookingIds;
         this.view = new TicketPage();
 
-        WindowManager.configureStage(stage, "Your Ticket - CinemaBook", view.getView(), 900, 800);
+        WindowManager.configure(stage, "Your Ticket", view.getView());
+        log.info("Opening Your Ticket page");
         populateTicket();
         view.btnDownload.setOnAction(
                 e -> {

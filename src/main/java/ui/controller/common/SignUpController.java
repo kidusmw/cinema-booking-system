@@ -3,10 +3,14 @@ package ui.controller.common;
 import application.AppContext;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ui.common.WindowManager;
 import ui.view.common.SignUpPage;
 
 public class SignUpController {
+
+    private static final Logger log = LoggerFactory.getLogger(SignUpController.class);
     private final AppContext ctx;
     private SignUpPage view;
     private String role;
@@ -19,8 +23,7 @@ public class SignUpController {
         this.nav = nav;
         this.role = role;
         view = new SignUpPage();
-        WindowManager.configureStage(
-                stage, "Create Account - CinemaBook", view.getView(), 800, 700);
+        WindowManager.configure(stage, "Create Account", view.getView());
         view.roleLabel.setText("Sign up as " + capitalize(role));
 
         view.signUpBtn.setOnAction(e -> handleSignUp());
@@ -62,6 +65,7 @@ public class SignUpController {
             showInfo("Account Created", "Welcome, " + firstName + "!");
             nav.goFresh(() -> new LoginController(stage, ctx, nav, role));
         } catch (Exception e) {
+            log.error("Failed to create account", e);
             showError("Failed to create account.");
         }
     }
