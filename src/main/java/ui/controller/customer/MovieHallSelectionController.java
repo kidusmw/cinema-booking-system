@@ -50,6 +50,7 @@ public class MovieHallSelectionController {
         this.selectedShow = selectedShow;
         this.view = new MovieHallSelectionPage();
         Scene scene = new Scene(view.getView(), 1100, 700);
+        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
         stage.setTitle("Select Hall - " + selectedMovie.getTitle());
         stage.setScene(scene);
         stage.show();

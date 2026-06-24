@@ -1,12 +1,9 @@
 package ui.view.customer;
 
-import static ui.common.Theme.*;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
@@ -24,10 +21,6 @@ public class ShowSelectionPage {
 
     private VBox root;
 
-    private static final String WHITE = "#FFFFFF";
-    private static final String BG = "#FAFAFA";
-    private static final String BG_LIGHT = "#F8FAFC";
-
     public ShowSelectionPage() {
         try {
             createUI();
@@ -40,65 +33,44 @@ public class ShowSelectionPage {
 
     private void createUI() {
         root = new VBox(20);
-        root.setStyle("-fx-background-color: " + BG + ";");
+        root.getStyleClass().add("page");
         root.setPadding(new Insets(30));
         HBox topBar = new HBox(15);
         topBar.setAlignment(Pos.CENTER_LEFT);
 
         btnBack = new Button("← Back to Movies");
-        btnBack.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
-        btnBack.setTextFill(Color.web(TEXT_MUTED));
-        btnBack.setStyle(
-                "-fx-background-color: transparent;" + "-fx-cursor: hand;" + "-fx-padding: 8 16;");
+        btnBack.getStyleClass().add("back-button");
 
         topBar.getChildren().add(btnBack);
         VBox movieInfoCard = new VBox(10);
         movieInfoCard.setPadding(new Insets(20, 25, 20, 25));
-        movieInfoCard.setStyle(
-                "-fx-background-color: "
-                        + WHITE
-                        + ";"
-                        + "-fx-border-color: "
-                        + BORDER
-                        + ";"
-                        + "-fx-border-radius: 12;"
-                        + "-fx-background-radius: 12;");
+        movieInfoCard.getStyleClass().add("card");
 
         movieTitle = new Label("Movie Title");
-        movieTitle.setFont(Font.font("Segoe UI", FontWeight.BOLD, 24));
-        movieTitle.setTextFill(Color.web(TEXT_DARK));
+        movieTitle.getStyleClass().add("title");
 
         HBox metaRow = new HBox(15);
         metaRow.setAlignment(Pos.CENTER_LEFT);
 
         movieGenre = new Label("Genre");
-        movieGenre.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 12));
-        movieGenre.setTextFill(Color.WHITE);
-        movieGenre.setStyle(
-                "-fx-background-color: "
-                        + ACCENT
-                        + ";"
-                        + "-fx-background-radius: 12;"
-                        + "-fx-padding: 4 12;");
+        movieGenre.getStyleClass().add("badge");
 
         movieDuration = new Label("⏱ 2h 30m");
-        movieDuration.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
-        movieDuration.setTextFill(Color.web(TEXT_MUTED));
+        movieDuration.getStyleClass().add("muted-text");
 
         movieRating = new Label("⭐ 8.5");
         movieRating.setFont(Font.font("Segoe UI", FontWeight.BOLD, 13));
-        movieRating.setTextFill(Color.web("#F59E0B"));
+        movieRating.getStyleClass().add("star-rating");
 
         metaRow.getChildren().addAll(movieGenre, movieDuration, movieRating);
         movieInfoCard.getChildren().addAll(movieTitle, metaRow);
         VBox dateSection = new VBox(10);
         Label dateLabel = new Label("📅 Select Date");
-        dateLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
-        dateLabel.setTextFill(Color.web(TEXT_DARK));
+        dateLabel.getStyleClass().add("body-text");
 
         ScrollPane dateScroll = new ScrollPane();
         dateScroll.setFitToHeight(true);
-        dateScroll.setStyle("-fx-background: transparent; -fx-border-color: transparent;");
+        dateScroll.getStyleClass().add("scroll-pane-transparent");
         dateScroll.setPrefHeight(60);
 
         dateButtonsContainer = new HBox(10);
@@ -109,12 +81,11 @@ public class ShowSelectionPage {
         dateSection.getChildren().addAll(dateLabel, dateScroll);
         VBox showsSection = new VBox(10);
         Label showsLabel = new Label("🕐 Available Showtimes");
-        showsLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
-        showsLabel.setTextFill(Color.web(TEXT_DARK));
+        showsLabel.getStyleClass().add("body-text");
 
         ScrollPane showsScroll = new ScrollPane();
         showsScroll.setFitToWidth(true);
-        showsScroll.setStyle("-fx-background: " + BG + "; -fx-border-color: transparent;");
+        showsScroll.getStyleClass().add("scroll-pane");
         VBox.setVgrow(showsScroll, Priority.ALWAYS);
 
         showCardsContainer = new VBox(10);

@@ -1,7 +1,5 @@
 package ui.view.admin;
 
-import static ui.common.Theme.*;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javafx.geometry.Insets;
@@ -9,9 +7,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 public class MovieManagementPage {
     public TableView<domain.model.Movie> movieTable;
@@ -21,14 +16,10 @@ public class MovieManagementPage {
     public Button btnDelete;
     public Button btnRefresh;
     public Button btnBack;
-    private static final String HOVER = "#EC4899";
-    private static final String WHITE = "#FFFFFF";
-    private static final String BG = "#FAFAFA";
-    private static final String BG_LIGHT = "#F8FAFC";
 
     public VBox getView() {
         VBox root = new VBox();
-        root.setStyle("-fx-background-color: " + BG + ";");
+        root.getStyleClass().add("page");
         root.setPadding(new Insets(30));
         root.setSpacing(20);
 
@@ -39,20 +30,16 @@ public class MovieManagementPage {
 
         VBox titleBox = new VBox(5);
         Label title = new Label("Movie Management");
-        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 24));
-        title.setTextFill(Color.web(TEXT_DARK));
+        title.getStyleClass().add("title");
 
         Label subtitle = new Label("Add, edit, or delete movies from your cinema");
-        subtitle.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
-        subtitle.setTextFill(Color.web(TEXT_MUTED));
+        subtitle.getStyleClass().add("muted-text");
 
         titleBox.getChildren().addAll(title, subtitle);
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         btnAddMovie = createPrimaryButton("➕  Add Movie");
-        btnAddMovie.setOnMouseEntered(e -> btnAddMovie.setStyle(getPrimaryStyle(true)));
-        btnAddMovie.setOnMouseExited(e -> btnAddMovie.setStyle(getPrimaryStyle(false)));
         header.getChildren().addAll(btnBack, titleBox, spacer, btnAddMovie);
         HBox toolbar = new HBox(10);
         toolbar.setAlignment(Pos.CENTER_LEFT);
@@ -60,21 +47,7 @@ public class MovieManagementPage {
         searchField.setPromptText("🔍 Search by title or genre...");
         searchField.setPrefHeight(38);
         searchField.setPrefWidth(350);
-        searchField.setFont(Font.font("Segoe UI", 13));
-        searchField.setStyle(
-                "-fx-background-color: white;"
-                        + "-fx-border-color: "
-                        + BORDER
-                        + ";"
-                        + "-fx-border-radius: 8;"
-                        + "-fx-background-radius: 8;"
-                        + "-fx-padding: 8 14;"
-                        + "-fx-text-fill: "
-                        + TEXT_DARK
-                        + ";"
-                        + "-fx-prompt-text-fill: "
-                        + TEXT_MUTED
-                        + ";");
+        searchField.getStyleClass().add("search-field");
 
         Region toolbarSpacer = new Region();
         HBox.setHgrow(toolbarSpacer, Priority.ALWAYS);
@@ -85,10 +58,7 @@ public class MovieManagementPage {
 
         toolbar.getChildren().addAll(searchField, toolbarSpacer, btnEdit, btnDelete, btnRefresh);
         movieTable = new TableView<>();
-        movieTable.setStyle(
-                "-fx-background-color: white; -fx-border-color: "
-                        + BORDER
-                        + "; -fx-border-radius: 8;");
+        movieTable.getStyleClass().add("table-view");
         movieTable.setPlaceholder(new Label("No movies found. Click 'Add Movie' to create one."));
 
         VBox.setVgrow(movieTable, Priority.ALWAYS);
@@ -183,38 +153,15 @@ public class MovieManagementPage {
 
     private Button createPrimaryButton(String text) {
         Button btn = new Button(text);
-        btn.setFont(Font.font("Segoe UI", FontWeight.BOLD, 13));
         btn.setPrefHeight(38);
-        btn.setStyle(getPrimaryStyle(false));
+        btn.getStyleClass().add("primary-button-small");
         return btn;
     }
 
     private Button createSecondaryButton(String text) {
         Button btn = new Button(text);
-        btn.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
         btn.setPrefHeight(38);
-        btn.setStyle(
-                "-fx-background-color: white;"
-                        + "-fx-border-color: "
-                        + BORDER
-                        + ";"
-                        + "-fx-border-radius: 8;"
-                        + "-fx-background-radius: 8;"
-                        + "-fx-cursor: hand;"
-                        + "-fx-text-fill: "
-                        + TEXT_DARK
-                        + ";");
+        btn.getStyleClass().add("secondary-button");
         return btn;
-    }
-
-    private String getPrimaryStyle(boolean hovered) {
-        String bg = hovered ? HOVER : ACCENT;
-        return "-fx-background-color: "
-                + bg
-                + ";"
-                + "-fx-text-fill: white;"
-                + "-fx-background-radius: 8;"
-                + "-fx-cursor: hand;"
-                + "-fx-padding: 8 16;";
     }
 }

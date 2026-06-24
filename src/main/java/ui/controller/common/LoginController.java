@@ -23,6 +23,7 @@ public class LoginController {
         this.expectedRole = role;
         view = new LoginPage();
         Scene scene = new Scene(view.getView(), 900, 650);
+        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
         stage.setTitle("Sign in - CinemaBook");
         stage.setScene(scene);
         stage.show();

@@ -1,7 +1,5 @@
 package ui.view.admin;
 
-import static ui.common.Theme.*;
-
 import domain.model.Showtime;
 import java.time.LocalDate;
 import javafx.geometry.Insets;
@@ -9,9 +7,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 public class ShowManagementPage {
     public TableView<Showtime> showTable;
@@ -22,11 +17,6 @@ public class ShowManagementPage {
     public Button btnRefresh;
     public Button btnBack;
     private VBox root;
-    private static final String HOVER = "#EC4899";
-    private static final String BG = "#FAFAFA";
-    private static final String BG_LIGHT = "#F8FAFC";
-    private static final String WHITE = "#FFFFFF";
-    private static final String INFO = "#3B82F6";
 
     public ShowManagementPage() {
         createUI();
@@ -34,44 +24,24 @@ public class ShowManagementPage {
 
     private void createUI() {
         root = new VBox(20);
-        root.setStyle("-fx-background-color: " + BG + ";");
+        root.getStyleClass().add("page");
         root.setPadding(new Insets(30));
         HBox header = new HBox(15);
         header.setAlignment(Pos.CENTER_LEFT);
 
         VBox titleBox = new VBox(5);
         Label title = new Label("Show Management");
-        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 26));
-        title.setTextFill(Color.web(TEXT_DARK));
+        title.getStyleClass().add("title");
 
         Label subtitle = new Label("Schedule movies in halls at specific dates and times");
-        subtitle.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
-        subtitle.setTextFill(Color.web(TEXT_MUTED));
+        subtitle.getStyleClass().add("muted-text");
 
         titleBox.getChildren().addAll(title, subtitle);
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         btnBack = new Button("← Back");
-        btnBack.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
-        btnBack.setTextFill(Color.web(TEXT_MUTED));
-        btnBack.setStyle(
-                "-fx-background-color: transparent;" + "-fx-cursor: hand;" + "-fx-padding: 8 16;");
-        btnBack.setOnMouseEntered(
-                e ->
-                        btnBack.setStyle(
-                                "-fx-background-color: "
-                                        + BG_LIGHT
-                                        + ";"
-                                        + "-fx-cursor: hand;"
-                                        + "-fx-padding: 8 16;"
-                                        + "-fx-background-radius: 8;"));
-        btnBack.setOnMouseExited(
-                e ->
-                        btnBack.setStyle(
-                                "-fx-background-color: transparent;"
-                                        + "-fx-cursor: hand;"
-                                        + "-fx-padding: 8 16;"));
+        btnBack.getStyleClass().add("back-button");
 
         header.getChildren().addAll(titleBox, spacer, btnBack);
         HBox toolbar = new HBox(10);
@@ -80,42 +50,18 @@ public class ShowManagementPage {
         searchField.setPromptText("🔍  Search by ID, movie name, hall name, or time...");
         searchField.setPrefHeight(40);
         searchField.setPrefWidth(400);
-        searchField.setFont(Font.font("Segoe UI", 13));
-        searchField.setStyle(
-                "-fx-background-color: "
-                        + WHITE
-                        + ";"
-                        + "-fx-border-color: "
-                        + BORDER
-                        + ";"
-                        + "-fx-border-radius: 8;"
-                        + "-fx-background-radius: 8;"
-                        + "-fx-padding: 8 14;"
-                        + "-fx-text-fill: "
-                        + TEXT_DARK
-                        + ";"
-                        + "-fx-prompt-text-fill: "
-                        + TEXT_MUTED
-                        + ";");
+        searchField.getStyleClass().add("search-field");
 
         Region toolbarSpacer = new Region();
         HBox.setHgrow(toolbarSpacer, Priority.ALWAYS);
-        btnAddShow = createActionButton("➕  Add Show", ACCENT, HOVER, WHITE);
-        btnEdit = createActionButton("✏️  Edit", INFO, "#2563EB", WHITE);
-        btnDelete = createActionButton("🗑️  Delete", DANGER, "#B91C1C", WHITE);
-        btnRefresh = createActionButton("🔄  Refresh", SUCCESS, "#059669", WHITE);
+        btnAddShow = createActionButton("➕  Add Show", "primary-button-small");
+        btnEdit = createActionButton("✏️  Edit", "secondary-button");
+        btnDelete = createActionButton("🗑️  Delete", "danger-button");
+        btnRefresh = createActionButton("🔄  Refresh", "secondary-button");
 
         toolbar.getChildren().addAll(searchField, toolbarSpacer, btnAddShow);
         showTable = new TableView<>();
-        showTable.setStyle(
-                "-fx-background-color: "
-                        + WHITE
-                        + ";"
-                        + "-fx-border-color: "
-                        + BORDER
-                        + ";"
-                        + "-fx-border-radius: 8;"
-                        + "-fx-background-radius: 8;");
+        showTable.getStyleClass().add("table-view");
         showTable.setPlaceholder(new Label("No shows scheduled. Click 'Add Show' to create one."));
         VBox.setVgrow(showTable, Priority.ALWAYS);
 
@@ -171,43 +117,10 @@ public class ShowManagementPage {
         return root;
     }
 
-    private Button createActionButton(
-            String text, String normalColor, String hoverColor, String textColor) {
+    private Button createActionButton(String text, String cssClass) {
         Button btn = new Button(text);
-        btn.setFont(Font.font("Segoe UI", FontWeight.BOLD, 13));
         btn.setPrefHeight(38);
-        btn.setTextFill(Color.web(textColor));
-        btn.setStyle(
-                "-fx-background-color: "
-                        + normalColor
-                        + ";"
-                        + "-fx-background-radius: 8;"
-                        + "-fx-cursor: hand;"
-                        + "-fx-padding: 8 16;");
-        btn.setOnMouseEntered(
-                e ->
-                        btn.setStyle(
-                                "-fx-background-color: "
-                                        + hoverColor
-                                        + ";"
-                                        + "-fx-background-radius: 8;"
-                                        + "-fx-cursor: hand;"
-                                        + "-fx-padding: 8 16;"
-                                        + "-fx-text-fill: "
-                                        + textColor
-                                        + ";"));
-        btn.setOnMouseExited(
-                e ->
-                        btn.setStyle(
-                                "-fx-background-color: "
-                                        + normalColor
-                                        + ";"
-                                        + "-fx-background-radius: 8;"
-                                        + "-fx-cursor: hand;"
-                                        + "-fx-padding: 8 16;"
-                                        + "-fx-text-fill: "
-                                        + textColor
-                                        + ";"));
+        btn.getStyleClass().add(cssClass);
         return btn;
     }
 }

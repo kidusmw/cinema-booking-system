@@ -1,14 +1,9 @@
 package ui.view.customer;
 
-import static ui.common.Theme.*;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 public class CustomerDashboardPage {
     private static final org.slf4j.Logger log =
@@ -22,11 +17,6 @@ public class CustomerDashboardPage {
 
     private VBox root;
 
-    private static final String HOVER = "#EC4899";
-    private static final String WHITE = "#FFFFFF";
-    private static final String BG = "#FAFAFA";
-    private static final String BG_LIGHT = "#F8FAFC";
-
     public CustomerDashboardPage() {
         try {
             createUI();
@@ -39,46 +29,33 @@ public class CustomerDashboardPage {
 
     private void createUI() {
         root = new VBox();
-        root.setStyle("-fx-background-color: " + BG + ";");
+        root.getStyleClass().add("page");
 
         // ===== TOP BAR =====
         HBox topBar = new HBox(15);
         topBar.setAlignment(Pos.CENTER_LEFT);
         topBar.setPadding(new Insets(20, 30, 20, 30));
-        topBar.setStyle(
-                "-fx-background-color: "
-                        + WHITE
-                        + ";"
-                        + "-fx-border-color: "
-                        + BORDER
-                        + ";"
-                        + "-fx-border-width: 0 0 1 0;");
+        topBar.getStyleClass().add("top-bar");
 
         HBox brandBox = new HBox(8);
         brandBox.setAlignment(Pos.CENTER_LEFT);
         StackPane logo = new StackPane();
         logo.setPrefSize(32, 32);
-        logo.setStyle("-fx-background-color: " + ACCENT + "; -fx-background-radius: 8;");
+        logo.getStyleClass().add("logo-badge");
         Label logoIcon = new Label("🎬");
-        logoIcon.setFont(Font.font(16));
         logo.getChildren().add(logoIcon);
         Label brand = new Label("CinemaBook");
-        brand.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
-        brand.setTextFill(Color.web(TEXT_DARK));
+        brand.getStyleClass().add("subtitle");
         brandBox.getChildren().addAll(logo, brand);
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
         welcomeLabel = new Label("Welcome, User!");
-        welcomeLabel.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 14));
-        welcomeLabel.setTextFill(Color.web(TEXT_MUTED));
+        welcomeLabel.getStyleClass().addAll("body-text", "muted-text");
 
         btnLogout = new Button("🚪  Logout");
-        btnLogout.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
-        btnLogout.setTextFill(Color.web(TEXT_MUTED));
-        btnLogout.setStyle(
-                "-fx-background-color: transparent;" + "-fx-cursor: hand;" + "-fx-padding: 8 16;");
+        btnLogout.getStyleClass().add("back-button");
 
         topBar.getChildren().addAll(brandBox, spacer, welcomeLabel, btnLogout);
         contentArea = new VBox(20);
@@ -89,42 +66,15 @@ public class CustomerDashboardPage {
         heroBox.setPadding(new Insets(40, 20, 40, 20));
 
         Label welcomeText = new Label("🎬 Ready to watch a movie?");
-        welcomeText.setFont(Font.font("Segoe UI", FontWeight.BOLD, 32));
-        welcomeText.setTextFill(Color.web(TEXT_DARK));
+        welcomeText.getStyleClass().add("welcome-title");
 
         Label subtitle = new Label("Browse the latest movies and book your seats");
-        subtitle.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 16));
-        subtitle.setTextFill(Color.web(TEXT_MUTED));
+        subtitle.getStyleClass().add("muted-text");
 
         btnBrowseMovies = new Button("🎬  Browse Movies");
-        btnBrowseMovies.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
         btnBrowseMovies.setPrefHeight(55);
         btnBrowseMovies.setPrefWidth(280);
-        btnBrowseMovies.setTextFill(Color.WHITE);
-        btnBrowseMovies.setStyle(
-                "-fx-background-color: "
-                        + ACCENT
-                        + ";"
-                        + "-fx-background-radius: 10;"
-                        + "-fx-cursor: hand;");
-        btnBrowseMovies.setOnMouseEntered(
-                e ->
-                        btnBrowseMovies.setStyle(
-                                "-fx-background-color: "
-                                        + HOVER
-                                        + ";"
-                                        + "-fx-background-radius: 10;"
-                                        + "-fx-cursor: hand;"
-                                        + "-fx-text-fill: white;"));
-        btnBrowseMovies.setOnMouseExited(
-                e ->
-                        btnBrowseMovies.setStyle(
-                                "-fx-background-color: "
-                                        + ACCENT
-                                        + ";"
-                                        + "-fx-background-radius: 10;"
-                                        + "-fx-cursor: hand;"
-                                        + "-fx-text-fill: white;"));
+        btnBrowseMovies.getStyleClass().add("primary-button");
 
         heroBox.getChildren().addAll(welcomeText, subtitle, btnBrowseMovies);
         HBox quickActions = new HBox(20);
@@ -145,27 +95,16 @@ public class CustomerDashboardPage {
     private Button createActionCard(String icon, String title, String description) {
         Button btn = new Button();
         btn.setPrefSize(220, 130);
-        btn.setStyle(
-                "-fx-background-color: "
-                        + WHITE
-                        + ";"
-                        + "-fx-border-color: "
-                        + BORDER
-                        + ";"
-                        + "-fx-border-radius: 12;"
-                        + "-fx-background-radius: 12;"
-                        + "-fx-cursor: hand;");
+        btn.getStyleClass().add("card");
 
         VBox content = new VBox(8);
         content.setAlignment(Pos.CENTER);
         Label iconLabel = new Label(icon);
-        iconLabel.setFont(Font.font(36));
+        iconLabel.getStyleClass().add("icon-emoji");
         Label titleLabel = new Label(title);
-        titleLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
-        titleLabel.setTextFill(Color.web(TEXT_DARK));
+        titleLabel.getStyleClass().add("body-text");
         Label descLabel = new Label(description);
-        descLabel.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 11));
-        descLabel.setTextFill(Color.web(TEXT_MUTED));
+        descLabel.getStyleClass().add("caption");
         content.getChildren().addAll(iconLabel, titleLabel, descLabel);
         btn.setGraphic(content);
         return btn;

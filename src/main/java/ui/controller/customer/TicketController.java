@@ -54,6 +54,7 @@ public class TicketController {
         this.view = new TicketPage();
 
         Scene scene = new Scene(view.getView(), 900, 800);
+        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
         stage.setTitle("Your Ticket - CinemaBook");
         stage.setScene(scene);
         stage.show();
