@@ -158,19 +158,30 @@ public class ShowSelectionController {
         bookBtn.getStyleClass().add("h-32");
         bookBtn.getStyleClass().add("primary-button-small");
         bookBtn.setOnAction(
-                e ->
-                        nav.go(
-                                () ->
-                                        new ShowSelectionController(
-                                                stage, ctx, nav, currentUser, selectedMovie),
-                                () ->
-                                        new MovieHallSelectionController(
-                                                stage,
-                                                ctx,
-                                                nav,
-                                                currentUser,
-                                                selectedMovie,
-                                                show)));
+                e -> {
+                    ctx.hallRepo
+                            .findById(show.getHallId())
+                            .ifPresent(
+                                    hall ->
+                                            nav.go(
+                                                    () ->
+                                                            new ShowSelectionController(
+                                                                    stage,
+                                                                    ctx,
+                                                                    nav,
+                                                                    currentUser,
+                                                                    selectedMovie),
+                                                    () ->
+                                                            new SeatSelectionController(
+                                                                    stage,
+                                                                    ctx,
+                                                                    nav,
+                                                                    currentUser,
+                                                                    selectedMovie,
+                                                                    show,
+                                                                    hall,
+                                                                    hall.isVip())));
+                });
 
         HBox bottomRow = new HBox();
         Region spacer = new Region();
