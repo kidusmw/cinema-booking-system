@@ -211,6 +211,13 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>${flyway.version}</version>
             </plugin>
+
+            <!-- Maven Wrapper: project-specific Maven version -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-wrapper-plugin</artifactId>
+                <version>3.3.2</version>
+            </plugin>
         
         <!-- ========== Code Quality Plugins ========== -->
 
