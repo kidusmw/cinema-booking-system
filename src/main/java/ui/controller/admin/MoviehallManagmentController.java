@@ -9,9 +9,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
-import ui.common.WindowManager;
-import ui.controller.common.NavigationManager;
 import ui.view.admin.MovieHallManagmentPage;
 
 public class MoviehallManagmentController {
@@ -20,16 +17,13 @@ public class MoviehallManagmentController {
             org.slf4j.LoggerFactory.getLogger(MoviehallManagmentController.class);
     private MovieHallManagmentPage view;
     private final AppContext ctx;
-    private final NavigationManager nav;
+    private final AdminDashboardController dashboard;
     private ObservableList<Hall> hallList;
 
-    public MoviehallManagmentController(Stage stage, AppContext ctx, NavigationManager nav) {
+    public MoviehallManagmentController(AppContext ctx, AdminDashboardController dashboard) {
         this.ctx = ctx;
-        this.nav = nav;
+        this.dashboard = dashboard;
         this.view = new MovieHallManagmentPage();
-
-        WindowManager.configure(stage, "Hall Management", view.getView());
-        log.info("Opening Hall Management page");
 
         view.btnBack.setOnAction(e -> handleBack());
         loadHalls();
@@ -127,7 +121,7 @@ public class MoviehallManagmentController {
 
     private void handleBack() {
         log.info("Going back to admin dashboard...");
-        nav.back();
+        dashboard.showDashboard();
     }
 
     private Dialog<Hall> createHallDialog(Hall existing) {

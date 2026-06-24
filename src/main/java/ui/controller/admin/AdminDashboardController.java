@@ -80,9 +80,8 @@ public class AdminDashboardController {
 
     private void showMovies() {
         setActiveMenu(view.btnMovies);
-        nav.go(
-                () -> new AdminDashboardController(stage, ctx, nav, adminName),
-                () -> new MovieManagementController(stage, ctx, nav));
+        MovieManagementController c = new MovieManagementController(ctx, nav, this);
+        injectView(c.getRootView());
     }
 
     private void showShows() {
@@ -93,7 +92,7 @@ public class AdminDashboardController {
 
     private void showHalls() {
         setActiveMenu(view.btnHalls);
-        MoviehallManagmentController c = new MoviehallManagmentController(stage, ctx, nav);
+        MoviehallManagmentController c = new MoviehallManagmentController(ctx, this);
         injectView(c.getRootView());
     }
 

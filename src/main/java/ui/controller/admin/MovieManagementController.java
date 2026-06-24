@@ -11,30 +11,27 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ui.common.WindowManager;
 import ui.controller.common.NavigationManager;
 import ui.view.admin.MovieManagementPage;
 
 public class MovieManagementController {
     private static final Logger log = LoggerFactory.getLogger(MovieManagementController.class);
     private MovieManagementPage view;
-    private Stage stage;
     private AppContext ctx;
     private NavigationManager nav;
+    private AdminDashboardController dashboard;
     private ObservableList<Movie> movieList;
 
-    public MovieManagementController(Stage stage, AppContext ctx, NavigationManager nav) {
-        this.stage = stage;
+    public MovieManagementController(
+            AppContext ctx, NavigationManager nav, AdminDashboardController dashboard) {
         this.ctx = ctx;
         this.nav = nav;
+        this.dashboard = dashboard;
         view = new MovieManagementPage();
-
-        WindowManager.configure(stage, "Movie Management", view.getView());
-        log.info("Opening Movie Management page");
 
         loadMovies();
 
@@ -65,8 +62,12 @@ public class MovieManagementController {
         alert.showAndWait();
     }
 
+    public VBox getRootView() {
+        return view.getView();
+    }
+
     private void handleBackToDashboard() {
-        nav.back();
+        dashboard.showDashboard();
     }
 
     private void loadMovies() {
@@ -241,7 +242,7 @@ public class MovieManagementController {
                             .addAll(
                                     new FileChooser.ExtensionFilter(
                                             "Image Files", "*.png", "*.jpg", "*.jpeg", "*.webp"));
-                    java.io.File selectedFile = fileChooser.showOpenDialog(stage);
+                    java.io.File selectedFile = fileChooser.showOpenDialog(nav.getStage());
                     if (selectedFile != null) {
                         posterField.setText(selectedFile.getAbsolutePath());
                     }
