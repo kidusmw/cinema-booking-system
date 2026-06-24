@@ -1,14 +1,10 @@
 package ui.view.admin;
 
-import static ui.common.Theme.*;
-
 import domain.model.Hall;
 import javafx.geometry.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.*;
 
 public class MovieHallManagmentPage {
 
@@ -27,10 +23,6 @@ public class MovieHallManagmentPage {
 
     private static final org.slf4j.Logger log =
             org.slf4j.LoggerFactory.getLogger(MovieHallManagmentPage.class);
-    private static final String HOVER = "#EC4899";
-    private static final String WHITE = "#FFFFFF";
-    private static final String BG = "#FAFAFA";
-    private static final String INFO = "#3B82F6";
 
     public MovieHallManagmentPage() {
         try {
@@ -44,19 +36,17 @@ public class MovieHallManagmentPage {
 
     private void createUI() {
         root = new VBox(20);
-        root.setStyle("-fx-background-color: " + BG + ";");
+        root.getStyleClass().add("page");
         root.setPadding(new Insets(30));
         HBox header = new HBox(15);
         header.setAlignment(Pos.CENTER_LEFT);
 
         VBox titleBox = new VBox(5);
         Label title = new Label("🏛️ Hall Management");
-        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 26));
-        title.setTextFill(Color.web(TEXT_DARK));
+        title.getStyleClass().add("title");
 
         Label subtitle = new Label("Manage cinema halls and their seating capacity");
-        subtitle.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
-        subtitle.setTextFill(Color.web(TEXT_MUTED));
+        subtitle.getStyleClass().add("muted-text");
 
         titleBox.getChildren().addAll(title, subtitle);
 
@@ -64,9 +54,7 @@ public class MovieHallManagmentPage {
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
         btnBack = new Button("← Back to Dashboard");
-        btnBack.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
-        btnBack.setTextFill(Color.web(TEXT_MUTED));
-        btnBack.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-padding: 8 16;");
+        btnBack.getStyleClass().add("back-button");
 
         header.getChildren().addAll(titleBox, spacer, btnBack);
         HBox toolbar = new HBox(10);
@@ -75,25 +63,15 @@ public class MovieHallManagmentPage {
         searchField.setPromptText("🔍  Search by name...");
         searchField.setPrefHeight(40);
         searchField.setPrefWidth(400);
-        searchField.setStyle(
-                "-fx-background-color: "
-                        + WHITE
-                        + "; -fx-border-color: "
-                        + BORDER
-                        + "; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 8 14;");
+        searchField.getStyleClass().add("search-field");
 
         Region toolbarSpacer = new Region();
         HBox.setHgrow(toolbarSpacer, Priority.ALWAYS);
 
-        btnAddHall = createStyledButton("➕  Add Hall", ACCENT, HOVER);
+        btnAddHall = createStyledButton("➕  Add Hall", "primary-button-small");
         toolbar.getChildren().addAll(searchField, toolbarSpacer, btnAddHall);
         hallTable = new TableView<>();
-        hallTable.setStyle(
-                "-fx-background-color: "
-                        + WHITE
-                        + "; -fx-border-color: "
-                        + BORDER
-                        + "; -fx-background-radius: 8;");
+        hallTable.getStyleClass().add("table-view");
         VBox.setVgrow(hallTable, Priority.ALWAYS);
         idCol = new TableColumn<>("Hall ID");
         idCol.setCellValueFactory(new PropertyValueFactory<>("MovieHallID"));
@@ -109,9 +87,9 @@ public class MovieHallManagmentPage {
 
         hallTable.getColumns().addAll(idCol, nameCol, capacityCol);
         hallTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        btnEdit = createStyledButton("✏️  Edit", INFO, "#2563EB");
-        btnDelete = createStyledButton("🗑️  Delete", DANGER, "#B91C1C");
-        btnRefresh = createStyledButton("🔄  Refresh", WARNING, "#D97706");
+        btnEdit = createStyledButton("✏️  Edit", "secondary-button");
+        btnDelete = createStyledButton("🗑️  Delete", "danger-button");
+        btnRefresh = createStyledButton("🔄  Refresh", "secondary-button");
 
         HBox actionRow = new HBox(10);
         actionRow.setAlignment(Pos.CENTER_RIGHT);
@@ -124,15 +102,10 @@ public class MovieHallManagmentPage {
         return root;
     }
 
-    private Button createStyledButton(String text, String normalColor, String hoverColor) {
+    private Button createStyledButton(String text, String cssClass) {
         Button btn = new Button(text);
-        btn.setFont(Font.font("Segoe UI", FontWeight.BOLD, 13));
         btn.setPrefHeight(38);
-        btn.setTextFill(Color.WHITE);
-        btn.setStyle(
-                "-fx-background-color: "
-                        + normalColor
-                        + "; -fx-background-radius: 8; -fx-cursor: hand; -fx-padding: 8 16;");
+        btn.getStyleClass().add(cssClass);
         return btn;
     }
 }

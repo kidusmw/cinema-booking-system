@@ -31,6 +31,7 @@ public class CustomerDashboardController {
         this.view = new CustomerDashboardPage();
 
         Scene scene = new Scene(view.getView(), 1200, 750);
+        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
         stage.setTitle("CinemaBook - User");
         stage.setScene(scene);
         stage.show();

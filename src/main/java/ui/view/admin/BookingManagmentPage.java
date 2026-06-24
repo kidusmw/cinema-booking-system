@@ -7,7 +7,6 @@ import javafx.geometry.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import javafx.scene.text.*;
 
 public class BookingManagmentPage {
 
@@ -25,14 +24,14 @@ public class BookingManagmentPage {
 
     private void createUI() {
         root = new VBox(20);
-        root.setStyle("-fx-background-color: #FAFAFA;");
+        root.getStyleClass().add("page");
         root.setPadding(new Insets(30));
 
         // Header
         HBox header = new HBox(15);
         header.setAlignment(Pos.CENTER_LEFT);
         Label title = new Label("🎟️ Booking Management");
-        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 26));
+        title.getStyleClass().add("title");
 
         btnBack = new Button("← Back to Dashboard");
         Region spacer = new Region();

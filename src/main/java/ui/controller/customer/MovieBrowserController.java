@@ -38,6 +38,7 @@ public class MovieBrowserController {
         this.currentUser = currentUser;
         this.view = new MovieBrowserPage();
         Scene scene = new Scene(view.getView(), 1200, 750);
+        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
         stage.setTitle("Browse Movies - CinemaBook");
         stage.setScene(scene);
         stage.show();

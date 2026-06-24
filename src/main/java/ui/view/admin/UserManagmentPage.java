@@ -1,16 +1,11 @@
 package ui.view.admin;
 
-import static ui.common.Theme.*;
-
 import domain.model.User;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 public class UserManagmentPage {
     public TableView<User> userTable;
@@ -23,9 +18,6 @@ public class UserManagmentPage {
     private static final org.slf4j.Logger log =
             org.slf4j.LoggerFactory.getLogger(UserManagmentPage.class);
     private VBox root;
-    private static final String WHITE = "#FFFFFF";
-    private static final String BG = "#FAFAFA";
-    private static final String BG_LIGHT = "#F8FAFC";
 
     public UserManagmentPage() {
         try {
@@ -42,19 +34,17 @@ public class UserManagmentPage {
     private void createUI() {
 
         root = new VBox(20);
-        root.setStyle("-fx-background-color: " + BG + ";");
+        root.getStyleClass().add("page");
         root.setPadding(new Insets(30));
         HBox header = new HBox(15);
         header.setAlignment(Pos.CENTER_LEFT);
 
         VBox titleBox = new VBox(5);
         Label title = new Label("👥 User Management");
-        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 26));
-        title.setTextFill(Color.web(TEXT_DARK));
+        title.getStyleClass().add("title");
 
         Label subtitle = new Label("View, edit, and manage all user accounts");
-        subtitle.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
-        subtitle.setTextFill(Color.web(TEXT_MUTED));
+        subtitle.getStyleClass().add("muted-text");
 
         titleBox.getChildren().addAll(title, subtitle);
 
@@ -62,10 +52,7 @@ public class UserManagmentPage {
         HBox.setHgrow(headerSpacer, Priority.ALWAYS);
 
         btnBack = new Button("← Back");
-        btnBack.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
-        btnBack.setTextFill(Color.web(TEXT_MUTED));
-        btnBack.setStyle(
-                "-fx-background-color: transparent;" + "-fx-cursor: hand;" + "-fx-padding: 8 16;");
+        btnBack.getStyleClass().add("back-button");
 
         header.getChildren().addAll(titleBox, headerSpacer, btnBack);
         HBox toolbar = new HBox(10);
@@ -75,23 +62,7 @@ public class UserManagmentPage {
         searchField.setPromptText("🔍  Search by username, name, or email...");
         searchField.setPrefHeight(40);
         searchField.setPrefWidth(400);
-        searchField.setFont(Font.font("Segoe UI", 13));
-        searchField.setStyle(
-                "-fx-background-color: "
-                        + WHITE
-                        + ";"
-                        + "-fx-border-color: "
-                        + BORDER
-                        + ";"
-                        + "-fx-border-radius: 8;"
-                        + "-fx-background-radius: 8;"
-                        + "-fx-padding: 8 14;"
-                        + "-fx-text-fill: "
-                        + TEXT_DARK
-                        + ";"
-                        + "-fx-prompt-text-fill: "
-                        + TEXT_MUTED
-                        + ";");
+        searchField.getStyleClass().add("search-field");
 
         toolbar.getChildren().add(searchField);
         HBox body = new HBox(20);
@@ -99,36 +70,15 @@ public class UserManagmentPage {
         VBox actionPanel = new VBox(15);
         actionPanel.setPrefWidth(280);
         actionPanel.setPadding(new Insets(20));
-        actionPanel.setStyle(
-                "-fx-background-color: "
-                        + WHITE
-                        + ";"
-                        + "-fx-border-color: "
-                        + BORDER
-                        + ";"
-                        + "-fx-border-radius: 12;"
-                        + "-fx-background-radius: 12;");
+        actionPanel.getStyleClass().add("action-panel");
 
         Label actionTitle = new Label("Modify User");
-        actionTitle.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
-        actionTitle.setTextFill(Color.web(TEXT_DARK));
+        actionTitle.getStyleClass().add("section-title");
         roleDropdown = new ComboBox<>();
         roleDropdown.getItems().addAll("ADMIN", "CUSTOMER");
         roleDropdown.setPromptText("Select role...");
         roleDropdown.setPrefWidth(240);
         roleDropdown.setPrefHeight(38);
-        roleDropdown.setStyle(
-                "-fx-background-color: "
-                        + WHITE
-                        + ";"
-                        + "-fx-border-color: "
-                        + BORDER
-                        + ";"
-                        + "-fx-border-radius: 8;"
-                        + "-fx-background-radius: 8;"
-                        + "-fx-text-fill: "
-                        + TEXT_DARK
-                        + ";");
         roleDropdown.setCellFactory(
                 param ->
                         new ListCell<String>() {
@@ -140,7 +90,6 @@ public class UserManagmentPage {
                                     setGraphic(null);
                                 } else {
                                     setText(item);
-                                    setTextFill(Color.web(TEXT_DARK));
                                     setGraphic(null);
                                 }
                             }
@@ -150,12 +99,12 @@ public class UserManagmentPage {
                     @Override
                     protected void updateItem(String item, boolean empty) {
                         super.updateItem(item, empty);
+                        getStyleClass().remove("muted-text");
                         if (empty || item == null) {
                             setText(roleDropdown.getPromptText());
-                            setTextFill(Color.web(TEXT_MUTED));
+                            getStyleClass().add("muted-text");
                         } else {
                             setText(item);
-                            setTextFill(Color.web(TEXT_DARK));
                         }
                         setGraphic(null);
                     }
@@ -164,37 +113,17 @@ public class UserManagmentPage {
         btnUpdateRole = new Button("✏️  Update Role");
         btnUpdateRole.setPrefWidth(240);
         btnUpdateRole.setPrefHeight(38);
-        btnUpdateRole.setTextFill(Color.WHITE);
-        btnUpdateRole.setStyle(
-                "-fx-background-color: "
-                        + ACCENT
-                        + ";"
-                        + "-fx-background-radius: 8;"
-                        + "-fx-cursor: hand;"
-                        + "-fx-font-weight: bold;");
+        btnUpdateRole.getStyleClass().add("primary-button-small");
 
         btnDelete = new Button("🗑️  Delete User");
         btnDelete.setPrefWidth(240);
         btnDelete.setPrefHeight(38);
-        btnDelete.setTextFill(Color.WHITE);
-        btnDelete.setStyle(
-                "-fx-background-color: "
-                        + DANGER
-                        + ";"
-                        + "-fx-background-radius: 8;"
-                        + "-fx-cursor: hand;"
-                        + "-fx-font-weight: bold;");
+        btnDelete.getStyleClass().add("danger-button");
 
         btnRefresh = new Button("🔄  Refresh");
         btnRefresh.setPrefWidth(240);
         btnRefresh.setPrefHeight(38);
-        btnRefresh.setTextFill(Color.web(TEXT_MUTED));
-        btnRefresh.setStyle(
-                "-fx-background-color: "
-                        + BG_LIGHT
-                        + ";"
-                        + "-fx-background-radius: 8;"
-                        + "-fx-cursor: hand;");
+        btnRefresh.getStyleClass().add("secondary-button");
 
         actionPanel
                 .getChildren()
@@ -208,14 +137,7 @@ public class UserManagmentPage {
                         btnDelete,
                         btnRefresh);
         userTable = new TableView<>();
-        userTable.setStyle(
-                "-fx-background-color: "
-                        + WHITE
-                        + ";"
-                        + "-fx-border-color: "
-                        + BORDER
-                        + ";"
-                        + "-fx-border-radius: 8;");
+        userTable.getStyleClass().add("table-view");
         userTable.setPlaceholder(new Label("No users found."));
         HBox.setHgrow(userTable, Priority.ALWAYS);
         VBox.setVgrow(userTable, Priority.ALWAYS);

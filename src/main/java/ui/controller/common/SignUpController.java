@@ -20,6 +20,7 @@ public class SignUpController {
         this.role = role;
         view = new SignUpPage();
         Scene scene = new Scene(view.getView(), 800, 700);
+        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
         stage.setTitle("Create Account - CinemaBook");
         stage.setScene(scene);
         stage.show();

@@ -1,14 +1,9 @@
 package ui.view.customer;
 
-import static ui.common.Theme.*;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 public class MovieBrowserPage {
     private static final org.slf4j.Logger log =
@@ -19,9 +14,6 @@ public class MovieBrowserPage {
     public TilePane movieContainer;
 
     private VBox root;
-
-    private static final String WHITE = "#FFFFFF";
-    private static final String BG = "#FAFAFA";
 
     public MovieBrowserPage() {
         try {
@@ -35,25 +27,20 @@ public class MovieBrowserPage {
 
     private void createUI() {
         root = new VBox(20);
-        root.setStyle("-fx-background-color: " + BG + ";");
+        root.getStyleClass().add("page");
         root.setPadding(new Insets(30));
 
         HBox header = new HBox(15);
         header.setAlignment(Pos.CENTER_LEFT);
 
         btnBack = new Button("← Back");
-        btnBack.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
-        btnBack.setTextFill(Color.web(TEXT_MUTED));
-        btnBack.setStyle(
-                "-fx-background-color: transparent;" + "-fx-cursor: hand;" + "-fx-padding: 8 16;");
+        btnBack.getStyleClass().add("back-button");
 
         VBox titleBox = new VBox(3);
         Label title = new Label("🎬 Now Showing");
-        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 24));
-        title.setTextFill(Color.web(TEXT_DARK));
+        title.getStyleClass().add("title");
         Label subtitle = new Label("Pick a movie to book your seats");
-        subtitle.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 12));
-        subtitle.setTextFill(Color.web(TEXT_MUTED));
+        subtitle.getStyleClass().add("caption");
         titleBox.getChildren().addAll(title, subtitle);
 
         Region spacer = new Region();
@@ -63,17 +50,7 @@ public class MovieBrowserPage {
         searchField.setPromptText("🔍 Search movies...");
         searchField.setPrefHeight(38);
         searchField.setPrefWidth(300);
-        searchField.setFont(Font.font("Segoe UI", 13));
-        searchField.setStyle(
-                "-fx-background-color: "
-                        + WHITE
-                        + ";"
-                        + "-fx-border-color: "
-                        + BORDER
-                        + ";"
-                        + "-fx-border-radius: 8;"
-                        + "-fx-background-radius: 8;"
-                        + "-fx-padding: 8 14;");
+        searchField.getStyleClass().add("search-field");
 
         header.getChildren().addAll(btnBack, titleBox, spacer, searchField);
 
@@ -87,7 +64,7 @@ public class MovieBrowserPage {
 
         ScrollPane scroll = new ScrollPane(movieContainer);
         scroll.setFitToWidth(true);
-        scroll.setStyle("-fx-background: " + BG + "; -fx-border-color: transparent;");
+        scroll.getStyleClass().add("scroll-pane");
 
         root.getChildren().addAll(header, scroll);
     }

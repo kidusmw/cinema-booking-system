@@ -32,6 +32,7 @@ public class MovieManagementController {
         view = new MovieManagementPage();
 
         Scene scene = new Scene(view.getView(), 1200, 750);
+        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
         stage.setTitle("Manage Movies - CinemaBook User");
         stage.setScene(scene);
         stage.show();

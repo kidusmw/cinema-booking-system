@@ -56,6 +56,7 @@ public class SeatSelectionController {
         this.view = new SeatSelectionPage();
 
         Scene scene = new Scene(view.getView(), 1200, 750);
+        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
         stage.setTitle("Select Seats - " + selectedMovie.getTitle());
         stage.setScene(scene);
         stage.show();

@@ -67,6 +67,7 @@ public class PaymentController {
         this.totalAmount = seatPrice * selectedSeatIds.size();
         this.view = new PaymentPage();
         Scene scene = new Scene(view.getView(), 900, 750);
+        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
         stage.setTitle("Payment - CinemaBook");
         stage.setScene(scene);
         stage.show();

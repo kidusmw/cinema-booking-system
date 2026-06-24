@@ -33,6 +33,7 @@ public class MoviehallManagmentController {
         this.view = new MovieHallManagmentPage();
 
         Scene scene = new Scene(view.getView(), 1100, 700);
+        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
         stage.setTitle("Hall Management - CinemaBook User");
         stage.setScene(scene);
         stage.show();

@@ -1,16 +1,11 @@
 package ui.view.admin;
 
-import static ui.common.Theme.*;
-
 import domain.model.Payment;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 public class PaymentManagment {
     public TableView<Payment> paymentTable;
@@ -26,43 +21,20 @@ public class PaymentManagment {
 
     private void createUI() {
         root = new VBox(25);
-        root.setStyle("-fx-background-color: #FAFAFA;");
+        root.getStyleClass().add("page");
         root.setPadding(new Insets(30));
         btnBack = new Button("⬅  Back");
-        btnBack.setFont(Font.font("Segoe UI", 13));
         btnBack.setPrefHeight(38);
-        btnBack.setStyle(
-                "-fx-background-color: white;"
-                        + "-fx-text-fill: "
-                        + TEXT_DARK
-                        + ";"
-                        + "-fx-border-color: "
-                        + BORDER
-                        + ";"
-                        + "-fx-border-radius: 8;"
-                        + "-fx-background-radius: 8;"
-                        + "-fx-cursor: hand;"
-                        + "-fx-padding: 8 16;");
+        btnBack.getStyleClass().add("secondary-button");
         lblTotalRevenue = new Label("0.00 Birr");
-        lblTotalRevenue.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
-        lblTotalRevenue.setTextFill(Color.web("#DB2777"));
+        lblTotalRevenue.getStyleClass().add("text-accent");
 
         btnRefresh = new Button("🔄  Refresh");
         btnRefresh.setPrefHeight(38);
-        btnRefresh.setStyle(
-                "-fx-background-color: white;"
-                        + "-fx-border-color: "
-                        + BORDER
-                        + ";"
-                        + "-fx-border-radius: 8;"
-                        + "-fx-background-radius: 8;"
-                        + "-fx-cursor: hand;");
+        btnRefresh.getStyleClass().add("secondary-button");
 
         paymentTable = new TableView<>();
-        paymentTable.setStyle(
-                "-fx-background-color: white; -fx-border-color: "
-                        + BORDER
-                        + "; -fx-border-radius: 8;");
+        paymentTable.getStyleClass().add("table-view");
         paymentTable.setPlaceholder(new Label("No system payment logs detected."));
         VBox.setVgrow(paymentTable, Priority.ALWAYS);
         HBox header = new HBox(15);
@@ -70,20 +42,17 @@ public class PaymentManagment {
 
         VBox titleBox = new VBox(5);
         Label title = new Label("Financial Ledger");
-        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 24));
-        title.setTextFill(Color.web(TEXT_DARK));
+        title.getStyleClass().add("title");
         titleBox.getChildren().addAll(title);
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         VBox revCard = new VBox(2);
         revCard.setPadding(new Insets(10, 20, 10, 20));
-        revCard.setStyle(
-                "-fx-background-color: white; -fx-border-color: #DB2777; -fx-border-radius: 8; -fx-background-radius: 8;");
+        revCard.getStyleClass().add("stat-card");
 
         Label cardTitle = new Label("TOTAL REVENUE");
-        cardTitle.setFont(Font.font("Segoe UI", FontWeight.BOLD, 10));
-        cardTitle.setTextFill(Color.web("#64748B"));
+        cardTitle.getStyleClass().add("muted-text");
         revCard.getChildren().addAll(cardTitle, lblTotalRevenue);
 
         header.getChildren().addAll(btnBack, titleBox, spacer, revCard, btnRefresh);

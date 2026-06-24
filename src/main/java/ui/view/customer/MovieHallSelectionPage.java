@@ -1,14 +1,9 @@
 package ui.view.customer;
 
-import static ui.common.Theme.*;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 public class MovieHallSelectionPage {
     private static final org.slf4j.Logger log =
@@ -20,10 +15,6 @@ public class MovieHallSelectionPage {
     public VBox hallsContainer;
 
     private VBox root;
-
-    private static final String WHITE = "#FFFFFF";
-    private static final String BG = "#FAFAFA";
-    private static final String BG_LIGHT = "#F8FAFC";
 
     public MovieHallSelectionPage() {
         try {
@@ -37,27 +28,22 @@ public class MovieHallSelectionPage {
 
     private void createUI() {
         root = new VBox(20);
-        root.setStyle("-fx-background-color: " + BG + ";");
+        root.getStyleClass().add("page");
         root.setPadding(new Insets(30));
         HBox topBar = new HBox(15);
         topBar.setAlignment(Pos.CENTER_LEFT);
 
         btnBack = new Button("← Back to Showtimes");
-        btnBack.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
-        btnBack.setTextFill(Color.web(TEXT_MUTED));
-        btnBack.setStyle(
-                "-fx-background-color: transparent;" + "-fx-cursor: hand;" + "-fx-padding: 8 16;");
+        btnBack.getStyleClass().add("back-button");
 
         topBar.getChildren().add(btnBack);
         VBox header = new VBox(8);
 
         movieTitle = new Label("🏛️ Select Your Hall");
-        movieTitle.setFont(Font.font("Segoe UI", FontWeight.BOLD, 26));
-        movieTitle.setTextFill(Color.web(TEXT_DARK));
+        movieTitle.getStyleClass().add("title");
 
         showInfoLabel = new Label("Showtime info");
-        showInfoLabel.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 14));
-        showInfoLabel.setTextFill(Color.web(TEXT_MUTED));
+        showInfoLabel.getStyleClass().add("muted-text");
 
         header.getChildren().addAll(movieTitle, showInfoLabel);
 
@@ -65,32 +51,29 @@ public class MovieHallSelectionPage {
         HBox legend = new HBox(20);
         legend.setAlignment(Pos.CENTER_LEFT);
         legend.setPadding(new Insets(10, 15, 10, 15));
-        legend.setStyle("-fx-background-color: " + BG_LIGHT + ";" + "-fx-background-radius: 8;");
+        legend.getStyleClass().add("info-card");
 
         Label legendTitle = new Label("💡 Hall Types (Prices in ETB):");
-        legendTitle.setFont(Font.font("Segoe UI", FontWeight.BOLD, 12));
-        legendTitle.setTextFill(Color.web(TEXT_DARK));
+        legendTitle.getStyleClass().add("caption");
 
         HBox regularLegend = new HBox(8);
         regularLegend.setAlignment(Pos.CENTER_LEFT);
         Label regularDot = new Label("🎬");
         Label regularText = new Label("Regular - Standard seating");
-        regularText.setFont(Font.font("Segoe UI", 11));
-        regularText.setTextFill(Color.web(TEXT_MUTED));
+        regularText.getStyleClass().add("muted-text");
         regularLegend.getChildren().addAll(regularDot, regularText);
 
         HBox vipLegend = new HBox(8);
         vipLegend.setAlignment(Pos.CENTER_LEFT);
         Label vipDot = new Label("👑");
         Label vipText = new Label("VIP - Premium recliner seats");
-        vipText.setFont(Font.font("Segoe UI", 11));
-        vipText.setTextFill(Color.web(TEXT_MUTED));
+        vipText.getStyleClass().add("muted-text");
         vipLegend.getChildren().addAll(vipDot, vipText);
 
         legend.getChildren().addAll(legendTitle, regularLegend, vipLegend);
         ScrollPane scroll = new ScrollPane();
         scroll.setFitToWidth(true);
-        scroll.setStyle("-fx-background: " + BG + "; -fx-border-color: transparent;");
+        scroll.getStyleClass().add("scroll-pane");
         VBox.setVgrow(scroll, Priority.ALWAYS);
 
         hallsContainer = new VBox(15);

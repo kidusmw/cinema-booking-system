@@ -8,8 +8,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 public class SeatSelectionPage {
     private static final org.slf4j.Logger log =
@@ -26,8 +24,6 @@ public class SeatSelectionPage {
     public Button btnProceed;
     public FlowPane seatContainer;
     private VBox root;
-    private static final String WHITE = "#FFFFFF";
-    private static final String BG = "#FAFAFA";
 
     public SeatSelectionPage() {
         try {
@@ -42,33 +38,27 @@ public class SeatSelectionPage {
 
     private void createUI() {
         root = new VBox(15);
-        root.setStyle("-fx-background-color: " + BG + ";");
+        root.getStyleClass().add("page");
         root.setPadding(new Insets(25));
 
         HBox topBar = new HBox(15);
         topBar.setAlignment(Pos.CENTER_LEFT);
         btnBack = new Button("← Back to Halls");
-        btnBack.setStyle("-fx-background-color: transparent; -fx-cursor: hand; -fx-padding: 8 16;");
+        btnBack.getStyleClass().add("back-button");
         topBar.getChildren().add(btnBack);
 
         HBox infoBar = new HBox(20);
         infoBar.setAlignment(Pos.CENTER_LEFT);
         infoBar.setPadding(new Insets(15, 20, 15, 20));
-        infoBar.setStyle(
-                "-fx-background-color: "
-                        + WHITE
-                        + "; -fx-border-color: "
-                        + BORDER
-                        + "; -fx-border-radius: 10; -fx-background-radius: 10;");
+        infoBar.getStyleClass().add("card");
 
         hallNameLabel = new Label("🏛️ Hall Name");
-        hallNameLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
+        hallNameLabel.getStyleClass().add("subtitle");
         showInfoLabel = new Label("Show info");
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         priceLabel = new Label("50 Birr per seat");
-        priceLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 14));
-        priceLabel.setTextFill(Color.web(ACCENT));
+        priceLabel.getStyleClass().add("text-accent");
 
         infoBar.getChildren().addAll(hallNameLabel, showInfoLabel, spacer, priceLabel);
 
@@ -76,9 +66,9 @@ public class SeatSelectionPage {
         legend.setAlignment(Pos.CENTER);
         legend.getChildren()
                 .addAll(
-                        createLegendItem("#10B981", "Available"),
-                        createLegendItem("#DB2777", "Selected"),
-                        createLegendItem("#EF4444", "Booked"));
+                        createLegendItem("legend-dot-available", "Available"),
+                        createLegendItem("legend-dot-selected", "Selected"),
+                        createLegendItem("legend-dot-booked", "Booked"));
 
         VBox screenBox = new VBox(10);
         screenBox.setAlignment(Pos.CENTER);
@@ -88,47 +78,33 @@ public class SeatSelectionPage {
         screenBox.getChildren().addAll(screen, screenLabel);
 
         VBox seatContainer = new VBox(20);
-        seatContainer.setStyle(
-                "-fx-background-color: "
-                        + WHITE
-                        + "; -fx-border-color: "
-                        + BORDER
-                        + "; -fx-border-radius: 12;");
+        seatContainer.getStyleClass().add("card");
         seatGrid = new VBox(8);
         seatGrid.setAlignment(Pos.CENTER);
         seatContainer.getChildren().add(seatGrid);
 
         HBox bottomBar = new HBox(20);
-        bottomBar.setStyle(
-                "-fx-background-color: "
-                        + WHITE
-                        + "; -fx-border-color: "
-                        + BORDER
-                        + "; -fx-border-radius: 12;");
+        bottomBar.getStyleClass().add("card");
         VBox summaryBox = new VBox(5);
         selectedCountLabel = new Label("0 seats selected");
         totalAmountLabel = new Label("0.00 Birr");
-        totalAmountLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 24));
-        totalAmountLabel.setTextFill(Color.web(ACCENT));
+        totalAmountLabel.getStyleClass().addAll("title", "text-accent");
         summaryBox.getChildren().addAll(selectedCountLabel, totalAmountLabel);
 
         Region bottomSpacer = new Region();
         HBox.setHgrow(bottomSpacer, Priority.ALWAYS);
         btnProceed = new Button("Proceed to Payment →");
         btnProceed.setDisable(true);
-        btnProceed.setStyle(
-                "-fx-background-color: "
-                        + ACCENT
-                        + "; -fx-background-radius: 8; -fx-cursor: hand; -fx-text-fill: white;");
+        btnProceed.getStyleClass().add("primary-button");
 
         bottomBar.getChildren().addAll(summaryBox, bottomSpacer, btnProceed);
         root.getChildren().addAll(topBar, infoBar, legend, screenBox, seatContainer, bottomBar);
     }
 
-    private HBox createLegendItem(String color, String label) {
+    private HBox createLegendItem(String styleClass, String label) {
         HBox item = new HBox(8);
         Rectangle rect = new Rectangle(20, 20);
-        rect.setFill(Color.web(color));
+        rect.getStyleClass().add(styleClass);
         item.getChildren().addAll(rect, new Label(label));
         return item;
     }

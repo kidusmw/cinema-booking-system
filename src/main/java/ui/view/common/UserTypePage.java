@@ -6,44 +6,31 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 public class UserTypePage {
     public Button btnAdmin;
     public Button btnCustomer;
     public Button btnBack;
-    private static final String BG = "#FAFAFA";
-    private static final String WHITE = "#FFFFFF";
-    private static final String PRIMARY = "#F472B6";
-    private static final String HOVER = "#EC4899";
 
     public BorderPane getView() {
 
         BorderPane root = new BorderPane();
-        root.setStyle("-fx-background-color: " + BG + ";");
+        root.getStyleClass().add("page");
         HBox topBar = new HBox();
         topBar.setPadding(new Insets(20, 30, 20, 30));
 
         btnBack = new Button("← Back");
-        btnBack.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 13));
-        btnBack.setTextFill(Color.web(TEXT_MUTED));
-        btnBack.setStyle(
-                "-fx-background-color: transparent;" + "-fx-cursor: hand;" + "-fx-padding: 6 12;");
+        btnBack.getStyleClass().add("back-button");
         topBar.getChildren().add(btnBack);
         VBox centerBox = new VBox(30);
         centerBox.setAlignment(Pos.CENTER);
         centerBox.setPadding(new Insets(40));
         Label title = new Label("Choose your account type");
-        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 28));
-        title.setTextFill(Color.web(TEXT_DARK));
+        title.getStyleClass().add("title");
 
         Label subtitle = new Label("Select how you want to continue");
-        subtitle.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 14));
-        subtitle.setTextFill(Color.web(TEXT_MUTED));
+        subtitle.getStyleClass().add("muted-text");
         HBox cardsBox = new HBox(25);
         cardsBox.setAlignment(Pos.CENTER);
 
@@ -77,91 +64,24 @@ public class UserTypePage {
         card.setPadding(new Insets(30, 25, 30, 25));
         card.setPrefWidth(240);
         card.setPrefHeight(280);
-        card.setStyle(
-                "-fx-background-color: "
-                        + WHITE
-                        + ";"
-                        + "-fx-background-radius: 12;"
-                        + "-fx-border-color: "
-                        + BORDER
-                        + ";"
-                        + "-fx-border-radius: 12;"
-                        + "-fx-border-width: 1;");
-        card.setEffect(new DropShadow(8, Color.rgb(0, 0, 0, 0.05)));
+        card.getStyleClass().add("card");
         Label emojiLabel = new Label(emoji);
-        emojiLabel.setFont(Font.font(48));
+        emojiLabel.getStyleClass().add("icon-emoji");
         Label titleLabel = new Label(title);
-        titleLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 18));
-        titleLabel.setTextFill(Color.web(TEXT_DARK));
+        titleLabel.getStyleClass().add("subtitle");
         Label descLabel = new Label(description);
-        descLabel.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 12));
-        descLabel.setTextFill(Color.web(TEXT_MUTED));
+        descLabel.getStyleClass().add("muted-text");
         descLabel.setWrapText(true);
         descLabel.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
 
         card.getChildren().addAll(emojiLabel, titleLabel, descLabel);
-        card.setOnMouseEntered(
-                e -> {
-                    card.setStyle(
-                            "-fx-background-color: "
-                                    + WHITE
-                                    + ";"
-                                    + "-fx-background-radius: 12;"
-                                    + "-fx-border-color: "
-                                    + PRIMARY
-                                    + ";"
-                                    + "-fx-border-radius: 12;"
-                                    + "-fx-border-width: 2;"
-                                    + "-fx-cursor: hand;");
-                });
-        card.setOnMouseExited(
-                e -> {
-                    card.setStyle(
-                            "-fx-background-color: "
-                                    + WHITE
-                                    + ";"
-                                    + "-fx-background-radius: 12;"
-                                    + "-fx-border-color: "
-                                    + BORDER
-                                    + ";"
-                                    + "-fx-border-radius: 12;"
-                                    + "-fx-border-width: 1;");
-                });
 
         return card;
     }
 
     private void stylePrimaryButton(Button btn) {
-        btn.setFont(Font.font("Segoe UI", FontWeight.BOLD, 13));
+        btn.getStyleClass().add("primary-button");
         btn.setPrefWidth(180);
         btn.setPrefHeight(38);
-        btn.setTextFill(Color.web(WHITE));
-        btn.setStyle(
-                "-fx-background-color: "
-                        + ACCENT
-                        + ";"
-                        + "-fx-background-radius: 8;"
-                        + "-fx-cursor: hand;");
-    }
-
-    public void setButtonHover(Button btn) {
-        btn.setOnMouseEntered(
-                e -> {
-                    btn.setStyle(
-                            "-fx-background-color: "
-                                    + HOVER
-                                    + ";"
-                                    + "-fx-background-radius: 8;"
-                                    + "-fx-cursor: hand;");
-                });
-        btn.setOnMouseExited(
-                e -> {
-                    btn.setStyle(
-                            "-fx-background-color: "
-                                    + ACCENT
-                                    + ";"
-                                    + "-fx-background-radius: 8;"
-                                    + "-fx-cursor: hand;");
-                });
     }
 }

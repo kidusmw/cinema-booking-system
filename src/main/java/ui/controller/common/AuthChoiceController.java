@@ -14,7 +14,9 @@ public class AuthChoiceController {
         this.stage = stage;
         this.nav = nav;
         this.view = new AuthChoice();
-        stage.setScene(new Scene(view.getView(), 500, 450));
+        Scene scene = new Scene(view.getView(), 500, 450);
+        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
+        stage.setScene(scene);
         stage.setTitle("Choose Option");
         stage.show();
 

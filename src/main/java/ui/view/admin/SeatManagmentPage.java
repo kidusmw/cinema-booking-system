@@ -5,7 +5,6 @@ import domain.model.Seat;
 import javafx.geometry.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.text.*;
 
 public class SeatManagmentPage {
     public TableView<Seat> seatTable;
@@ -26,13 +25,13 @@ public class SeatManagmentPage {
 
     private void createUI() {
         root = new VBox(20);
-        root.setStyle("-fx-background-color: #FAFAFA;");
+        root.getStyleClass().add("page");
         root.setPadding(new Insets(30));
         HBox header = new HBox(15);
         header.setAlignment(Pos.CENTER_LEFT);
         VBox titleBox = new VBox(5);
         Label title = new Label("💺 Seat Management");
-        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 26));
+        title.getStyleClass().add("title");
         titleBox.getChildren().addAll(title);
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -41,8 +40,7 @@ public class SeatManagmentPage {
 
         VBox selectorCard = new VBox(15);
         selectorCard.setPadding(new Insets(20));
-        selectorCard.setStyle(
-                "-fx-background-color: white; -fx-border-color: #E2E8F0; -fx-border-radius: 8;");
+        selectorCard.getStyleClass().add("card");
 
         hallDropdown = new ComboBox<>();
         hallDropdown.setPromptText("-- Choose a hall --");
@@ -58,8 +56,7 @@ public class SeatManagmentPage {
                 .addAll(new Label("Select Hall:"), hallDropdown, hallInfoLabel, statsLabel);
         VBox generateCard = new VBox(15);
         generateCard.setPadding(new Insets(20));
-        generateCard.setStyle(
-                "-fx-background-color: #F0FDF4; -fx-border-color: #10B981; -fx-border-radius: 8;");
+        generateCard.getStyleClass().add("card");
 
         seatCountField = new TextField();
         seatCountField.setPromptText("e.g., 50");
