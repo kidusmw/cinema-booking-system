@@ -13,7 +13,7 @@
 | Phase 6: UI/UX Polish | ✅ |
 | Phase 7: Seed Data & Demo Readiness | ✅ (code), ⬜ (branch merge, final verification) |
 
-**Test count**: 48 @Test methods across 5 test files (DomainModelTest, AuthServiceTest, BookingServiceTest, PaymentServiceTest, FlywayMigrationTest).
+**Test count**: 46 @Test methods across 5 test files (DomainModelTest: 25, AuthServiceTest: 5, BookingServiceTest: 7, PaymentServiceTest: 6, FlywayMigrationTest: 3).
 
 **CI pipeline** (`make ci`): `mvn clean verify spotless:check spotbugs:check`. PMD is excluded from CI due to noise; run `mvn pmd:check` manually.
 
@@ -27,17 +27,17 @@
 
 **What was done:**
 - Bootstrapped JUnit 5, Mockito, TestFX, AssertJ, H2 (in-memory DB for Flyway)
-- Wrote **48 characterization tests** across 5 files to lock down domain models, auth, booking, payment, and Flyway migration
+- Wrote **46 characterization tests** across 5 files to lock down domain models, auth, booking, payment, and Flyway migration
 - Verified all tests pass with `mvn verify`
 
 **Key decisions:**
 - H2 over Testcontainers (no Docker dependency for tests)
 - TestFX for UI-layer testing (not yet used in current suite)
-- Initial 53-test suite was pruned to 48 when redundant characterization tests were removed after refactoring stabilized
+- Initial 53-test suite was pruned to 46 when redundant characterization tests were removed after refactoring stabilized
 
 **Key files:** `pom.xml` (surefire + dependencies), `src/test/java/domain/model/DomainModelTest.java`, `src/test/java/domain/service/AuthServiceTest.java`, `src/test/java/domain/service/BookingServiceTest.java`, `src/test/java/domain/service/PaymentServiceTest.java`, `src/test/java/infrastructure/persistence/FlywayMigrationTest.java`
 
-**Delivery:** 48 tests pass, zero infrastructure dependencies for testing.
+**Delivery:** 46 tests pass, zero infrastructure dependencies for testing.
 
 ---
 
@@ -97,7 +97,7 @@
 - Implemented with Hibernate `Session` via `PersistenceContext` (thread-local Session, per-request open/close)
 - Wired repositories into services, services into controllers via manual constructor injection
 - Each controller now receives all dependencies through its constructor
-- All 48 tests pass
+- All 46 tests pass
 
 **Key decisions:**
 - Manual DI (no Spring/Guice) — keeps the project lightweight
@@ -272,7 +272,7 @@ Replaced `System.out.println` / `printStackTrace` with `java.util.logging.Logger
 ### 7.2 — Final CI Pipeline
 
 - `make ci` confirmed green: `mvn clean verify spotless:check spotbugs:check`
-- All 48 tests pass
+- All 46 tests pass
 - `make run` / `run-app.sh` start DB + app in one command
 - Docker auto-stops on app exit (via `trap` in `run-app.sh`)
 
@@ -334,7 +334,7 @@ Replaced `System.out.println` / `printStackTrace` with `java.util.logging.Logger
 |---|---|---|
 | Architecture | Transaction Script | Hexagonal + Pragmatic Services |
 | Package structure | `Controller/`, `DAO/`, `Model/`, `View/`, `Database/` | `domain/`, `application/`, `infrastructure/`, `ui/` |
-| Test coverage | 0% | 48 tests (5 files) |
+| Test coverage | 0% | 46 tests (5 files) |
 | Password storage | Plaintext | BCrypt |
 | Transaction safety | None | `BookingFacade` with atomic txn |
 | Schema management | Manual `script.sql` | Flyway (V1 + V2 + V3) |
