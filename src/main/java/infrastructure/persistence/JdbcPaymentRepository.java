@@ -25,7 +25,7 @@ public class JdbcPaymentRepository implements PaymentRepository {
 
     private Payment insert(Payment payment) {
         String sql =
-                "INSERT INTO payment (booking_id, total_amount, status, verification_code, payment_method, paid_at) VALUES (?, ?, ?, ?, ?, ?)";
+                "INSERT INTO payment (booking_id, amount, status, verification_code, payment_method, paid_at) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps =
                         conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -51,7 +51,7 @@ public class JdbcPaymentRepository implements PaymentRepository {
 
     private Payment update(Payment payment) {
         String sql =
-                "UPDATE payment SET booking_id=?, total_amount=?, status=?, verification_code=?, payment_method=? WHERE payment_id=?";
+                "UPDATE payment SET booking_id=?, amount=?, status=?, verification_code=?, payment_method=? WHERE payment_id=?";
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setLong(1, payment.getBookingId().longValue());
@@ -116,7 +116,7 @@ public class JdbcPaymentRepository implements PaymentRepository {
                 new Payment(
                         Long.valueOf(rs.getLong("payment_id")),
                         Long.valueOf(rs.getLong("booking_id")),
-                        rs.getDouble("total_amount"),
+                        rs.getDouble("amount"),
                         rs.getString("status"),
                         rs.getString("verification_code"),
                         rs.getString("payment_method"));
