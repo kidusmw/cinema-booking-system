@@ -19,7 +19,7 @@ public class JdbcHallRepository implements HallRepository {
         String sql = "SELECT * FROM hall WHERE hall_id = ?";
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, id);
+            ps.setLong(1, id.longValue());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) return Optional.of(mapRow(rs));
             }
@@ -62,7 +62,7 @@ public class JdbcHallRepository implements HallRepository {
             ps.setString(3, hall.getHallType());
             ps.executeUpdate();
             try (ResultSet keys = ps.getGeneratedKeys()) {
-                if (keys.next()) hall.setHallId(keys.getLong(1));
+                if (keys.next()) hall.setHallId(Long.valueOf(keys.getLong(1)));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to insert hall", e);
@@ -77,7 +77,7 @@ public class JdbcHallRepository implements HallRepository {
             ps.setString(1, hall.getName());
             ps.setInt(2, hall.getCapacity());
             ps.setString(3, hall.getHallType());
-            ps.setLong(4, hall.getHallId());
+            ps.setLong(4, hall.getHallId().longValue());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to update hall", e);
@@ -90,16 +90,16 @@ public class JdbcHallRepository implements HallRepository {
         String sql = "DELETE FROM hall WHERE hall_id=?";
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, id);
+            ps.setLong(1, id.longValue());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to delete hall", e);
         }
     }
 
-    private Hall mapRow(ResultSet rs) throws SQLException {
+    private static Hall mapRow(ResultSet rs) throws SQLException {
         return new Hall(
-                rs.getLong("hall_id"),
+                Long.valueOf(rs.getLong("hall_id")),
                 rs.getString("name"),
                 rs.getInt("capacity"),
                 rs.getString("hall_type"));

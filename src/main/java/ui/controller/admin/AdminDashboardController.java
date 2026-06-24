@@ -1,34 +1,25 @@
 package ui.controller.admin;
 
-import static ui.common.Theme.*;
-
 import application.AppContext;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ui.common.WindowManager;
 import ui.controller.common.NavigationManager;
 import ui.controller.common.WelcomeController;
 import ui.view.admin.AdminDashboardPage;
 
 public class AdminDashboardController {
+    private static final Logger log = LoggerFactory.getLogger(AdminDashboardController.class);
 
     private AdminDashboardPage view;
     private Stage stage;
     private String adminName;
     private AppContext ctx;
-
-    public Parent getView() {
-        return view.getView();
-    }
-
     private NavigationManager nav;
 
     public AdminDashboardController(
@@ -38,15 +29,15 @@ public class AdminDashboardController {
         this.nav = nav;
         this.adminName = adminName;
         this.view = new AdminDashboardPage();
-
-        Scene scene = new Scene(view.getView(), 1200, 750);
-        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
-        stage.setTitle("User Dashboard - CinemaBook");
-        stage.setScene(scene);
-        stage.show();
+        WindowManager.configure(stage, "Admin Dashboard", view.getView());
+        log.info("Opening Admin Dashboard page");
 
         view.welcomeLabel.setText("Welcome, " + adminName);
+        initHandlers();
+        showDashboard();
+    }
 
+    private void initHandlers() {
         view.btnLogout.setOnAction(e -> nav.goFresh(() -> new WelcomeController(stage, ctx, nav)));
 
         view.btnDashboard.setOnAction(e -> showDashboard());
@@ -57,7 +48,6 @@ public class AdminDashboardController {
         view.btnBookings.setOnAction(e -> showBookings());
         view.btnPayments.setOnAction(e -> showPayments());
         view.btnUsers.setOnAction(e -> showUsers());
-        showDashboard();
     }
 
     public void injectView(javafx.scene.Parent content) {
@@ -74,19 +64,37 @@ public class AdminDashboardController {
         view.contentArea.getChildren().clear();
 
         VBox dashboardContent = new VBox(20);
-        dashboardContent.setPadding(new Insets(30));
+        dashboardContent.getStyleClass().add("p-30");
 
         Label title = new Label("Dashboard Overview");
-        title.setFont(Font.font("Segoe UI", FontWeight.BOLD, 24));
-        title.setTextFill(Color.web(TEXT_DARK));
+        title.getStyleClass().add("title");
+
+        long movieCount = ctx.movieRepo.findAll().size();
+        long bookingCount = ctx.bookingRepo.findAll().size();
+        double revenue =
+                ctx.paymentRepo.findAll().stream()
+                        .filter(p -> "paid".equals(p.getStatus()))
+                        .mapToDouble(p -> p.getTotalAmount())
+                        .sum();
+        long userCount = ctx.userRepo.findAll().size();
 
         HBox statsBox = new HBox(20);
         statsBox.getChildren()
                 .addAll(
-                        createStatCard("Movies", "Total Movies", "11", ACCENT),
-                        createStatCard("Bookings", "Total Bookings", "15", "#10B981"),
-                        createStatCard("Revenue", "Revenue", "0.00birr", "#F59E0B"),
-                        createStatCard("Users", "Total Users", "9", "#8B5CF6"));
+                        createStatCard(
+                                "Movies", "Total Movies", String.valueOf(movieCount), "accent"),
+                        createStatCard(
+                                "Bookings",
+                                "Total Bookings",
+                                String.valueOf(bookingCount),
+                                "success"),
+                        createStatCard(
+                                "Revenue",
+                                "Revenue",
+                                String.format("%.2f Birr", revenue),
+                                "warning"),
+                        createStatCard(
+                                "Users", "Total Users", String.valueOf(userCount), "purple"));
 
         dashboardContent.getChildren().addAll(title, statsBox);
         view.contentArea.getChildren().add(dashboardContent);
@@ -94,9 +102,8 @@ public class AdminDashboardController {
 
     private void showMovies() {
         setActiveMenu(view.btnMovies);
-        nav.go(
-                () -> new AdminDashboardController(stage, ctx, nav, adminName),
-                () -> new MovieManagementController(stage, ctx, nav));
+        MovieManagementController c = new MovieManagementController(ctx, stage, this);
+        injectView(c.getRootView());
     }
 
     private void showShows() {
@@ -107,7 +114,7 @@ public class AdminDashboardController {
 
     private void showHalls() {
         setActiveMenu(view.btnHalls);
-        MoviehallManagmentController c = new MoviehallManagmentController(stage, ctx, nav);
+        MoviehallManagmentController c = new MoviehallManagmentController(ctx, this);
         injectView(c.getRootView());
     }
 
@@ -143,47 +150,32 @@ public class AdminDashboardController {
         };
 
         for (Button btn : allButtons) {
-            if (btn == activeBtn) {
-                btn.setStyle(
-                        "-fx-background-color: "
-                                + ACCENT
-                                + "; -fx-text-fill: white; -fx-background-radius: 8; -fx-alignment: center-left; -fx-cursor: hand;");
-            } else {
-                btn.setStyle(
-                        "-fx-background-color: transparent; -fx-text-fill: "
-                                + TEXT_MUTED
-                                + "; -fx-background-radius: 8; -fx-alignment: center-left; -fx-cursor: hand;");
-            }
+            btn.getStyleClass().remove("sidebar-btn-active");
         }
+        activeBtn.getStyleClass().add("sidebar-btn-active");
     }
 
-    private VBox createStatCard(String icon, String label, String value, String color) {
+    private static VBox createStatCard(String icon, String label, String value, String colorClass) {
         VBox card = new VBox(8);
-        card.setAlignment(Pos.CENTER_LEFT);
-        card.setPadding(new Insets(20));
-        card.setPrefWidth(220);
-        card.setStyle(
-                "-fx-background-color: white; -fx-background-radius: 12; -fx-border-color: "
-                        + BORDER
-                        + "; -fx-border-radius: 12; -fx-border-width: 1;");
-        card.setEffect(new DropShadow(5, Color.rgb(0, 0, 0, 0.04)));
+        card.getStyleClass().add("align-center-left");
+        card.getStyleClass().add("p-20");
+        card.getStyleClass().add("w-220");
+        card.getStyleClass().add("stat-card");
 
         Label iconLabel = new Label(icon);
-        iconLabel.setFont(Font.font(24));
+        iconLabel.getStyleClass().add("stat-icon");
 
         Label valueLabel = new Label(value);
-        valueLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 28));
-        valueLabel.setTextFill(Color.web(color));
+        valueLabel.getStyleClass().addAll("stat-value", "text-" + colorClass);
 
         Label nameLabel = new Label(label);
-        nameLabel.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 12));
-        nameLabel.setTextFill(Color.web(TEXT_MUTED));
+        nameLabel.getStyleClass().add("stat-label");
 
         card.getChildren().addAll(iconLabel, valueLabel, nameLabel);
         return card;
     }
 
-    public Parent getRootView() {
+    public javafx.scene.Parent getRootView() {
         return view.getView();
     }
 }

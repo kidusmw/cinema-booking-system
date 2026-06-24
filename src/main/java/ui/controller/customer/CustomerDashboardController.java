@@ -1,40 +1,31 @@
 package ui.controller.customer;
 
-import static ui.common.Theme.*;
-
 import application.AppContext;
 import domain.model.User;
 import java.util.List;
-import javafx.geometry.*;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.scene.text.*;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ui.common.WindowManager;
 import ui.controller.common.NavigationManager;
 import ui.controller.common.WelcomeController;
 import ui.view.customer.CustomerDashboardPage;
 
 public class CustomerDashboardController {
+    private static final Logger log = LoggerFactory.getLogger(CustomerDashboardController.class);
     private CustomerDashboardPage view;
-    private Stage stage;
     private User currentUser;
     private AppContext ctx;
-    private NavigationManager nav;
 
     public CustomerDashboardController(
             Stage stage, AppContext ctx, NavigationManager nav, User currentUser) {
-        this.stage = stage;
         this.ctx = ctx;
-        this.nav = nav;
         this.currentUser = currentUser;
         this.view = new CustomerDashboardPage();
 
-        Scene scene = new Scene(view.getView(), 1200, 750);
-        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
-        stage.setTitle("CinemaBook - User");
-        stage.setScene(scene);
-        stage.show();
+        WindowManager.configure(stage, "Dashboard", view.getView());
+        log.info("Opening Dashboard page");
         view.welcomeLabel.setText("Welcome, " + currentUser.getFirstName() + "!");
         view.btnBrowseMovies.setOnAction(
                 e ->

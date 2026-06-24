@@ -8,34 +8,30 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import ui.controller.common.NavigationManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ui.view.admin.MovieManagementPage;
 
 public class MovieManagementController {
+    private static final Logger log = LoggerFactory.getLogger(MovieManagementController.class);
     private MovieManagementPage view;
-    private Stage stage;
     private AppContext ctx;
-    private NavigationManager nav;
+    private Stage stage;
+    private AdminDashboardController dashboard;
     private ObservableList<Movie> movieList;
 
-    public MovieManagementController(Stage stage, AppContext ctx, NavigationManager nav) {
-        this.stage = stage;
+    public MovieManagementController(
+            AppContext ctx, Stage stage, AdminDashboardController dashboard) {
         this.ctx = ctx;
-        this.nav = nav;
+        this.stage = stage;
+        this.dashboard = dashboard;
         view = new MovieManagementPage();
-
-        Scene scene = new Scene(view.getView(), 1200, 750);
-        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
-        stage.setTitle("Manage Movies - CinemaBook User");
-        stage.setScene(scene);
-        stage.show();
 
         loadMovies();
 
@@ -57,7 +53,7 @@ public class MovieManagementController {
                 });
     }
 
-    private void showAlert(String title, String content) {
+    private static void showAlert(String title, String content) {
         javafx.scene.control.Alert alert =
                 new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -66,8 +62,12 @@ public class MovieManagementController {
         alert.showAndWait();
     }
 
+    public VBox getRootView() {
+        return view.getView();
+    }
+
     private void handleBackToDashboard() {
-        nav.back();
+        dashboard.showDashboard();
     }
 
     private void loadMovies() {
@@ -157,7 +157,7 @@ public class MovieManagementController {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
-        grid.setPadding(new Insets(20, 50, 10, 10));
+        grid.getStyleClass().add("p-20-50-10-10");
 
         TextField titleField = new TextField();
         titleField.setPromptText("Title");
@@ -213,7 +213,7 @@ public class MovieManagementController {
                             try {
                                 return LocalDate.parse(
                                         text, java.time.format.DateTimeFormatter.ofPattern(format));
-                            } catch (java.time.format.DateTimeParseException ignored) {
+                            } catch (java.time.format.DateTimeParseException _ignored) {
                                 // Try next format
                             }
                         }
@@ -286,7 +286,8 @@ public class MovieManagementController {
                                                         java.time.format.DateTimeFormatter
                                                                 .ofPattern(format));
                                         break;
-                                    } catch (Exception ignored) {
+                                    } catch (Exception _ignored) {
+                                        // continue to next format
                                     }
                                 }
                                 if (parsedDate != null) {
@@ -302,7 +303,7 @@ public class MovieManagementController {
                             String rText = ratingField.getText().trim();
                             try {
                                 movie.setRating(Double.parseDouble(rText));
-                            } catch (NumberFormatException nfe) {
+                            } catch (NumberFormatException _nfe) {
                                 movie.setRating(0.0);
                             }
 
@@ -325,7 +326,7 @@ public class MovieManagementController {
                             }
 
                             return movie;
-                        } catch (NumberFormatException e) {
+                        } catch (NumberFormatException _e) {
                             showAlert("Invalid Input", "Duration must be a valid number.");
                             return null;
                         }

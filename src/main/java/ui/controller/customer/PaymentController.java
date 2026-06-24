@@ -1,29 +1,23 @@
 package ui.controller.customer;
 
-import static ui.common.Theme.*;
-
 import application.AppContext;
 import domain.model.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import ui.common.WindowManager;
 import ui.controller.common.NavigationManager;
 import ui.view.customer.PaymentPage;
 
@@ -66,11 +60,8 @@ public class PaymentController {
         this.selectedSeatIds = selectedSeatIds;
         this.totalAmount = seatPrice * selectedSeatIds.size();
         this.view = new PaymentPage();
-        Scene scene = new Scene(view.getView(), 900, 750);
-        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
-        stage.setTitle("Payment - CinemaBook");
-        stage.setScene(scene);
-        stage.show();
+        WindowManager.configure(stage, "Payment", view.getView());
+        log.info("Opening Payment page");
         generatedOTP = generateOTP();
         view.usernameField.setText(currentUser.getUsername());
         view.emailField.setText(currentUser.getEmail());
@@ -95,32 +86,28 @@ public class PaymentController {
         summary.getChildren().add(new Separator());
 
         HBox totalBox = new HBox();
-        totalBox.setAlignment(Pos.CENTER_LEFT);
+        totalBox.getStyleClass().add("align-center-left");
         Label totalLabel = new Label("Total Amount:");
-        totalLabel.setFont(Font.font("Segoe UI", FontWeight.BOLD, 16));
-        totalLabel.setTextFill(Color.web(TEXT_DARK));
+        totalLabel.getStyleClass().add("section-title");
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-        Label totalValue = new Label(String.format("%.2f Birr", totalAmount));
-        totalValue.setFont(Font.font("Segoe UI", FontWeight.BOLD, 20));
-        totalValue.setTextFill(Color.web(ACCENT));
+        Label totalValue = new Label(String.format("%.2f Birr", Double.valueOf(totalAmount)));
+        totalValue.getStyleClass().addAll("price-large", "text-accent");
         totalBox.getChildren().addAll(totalLabel, spacer, totalValue);
         summary.getChildren().add(totalBox);
     }
 
     private void addSummaryRow(String label, String value) {
         HBox row = new HBox();
-        row.setAlignment(Pos.CENTER_LEFT);
-        row.setPadding(new Insets(3, 0, 3, 0));
+        row.getStyleClass().add("align-center-left");
+        row.getStyleClass().add("p-3-0");
 
         Label lblLabel = new Label(label);
-        lblLabel.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 12));
-        lblLabel.setTextFill(Color.web(TEXT_MUTED));
-        lblLabel.setPrefWidth(100);
+        lblLabel.getStyleClass().add("payment-label");
+        lblLabel.getStyleClass().add("w-100");
 
         Label valLabel = new Label(value);
-        valLabel.setFont(Font.font("Segoe UI", FontWeight.NORMAL, 12));
-        valLabel.setTextFill(Color.web(TEXT_DARK));
+        valLabel.getStyleClass().add("payment-value");
 
         row.getChildren().addAll(lblLabel, valLabel);
         view.summaryBox.getChildren().add(row);
@@ -128,7 +115,7 @@ public class PaymentController {
 
     private void startCountdown() {
         countdownTimer = new Timeline();
-        countdownTimer.setCycleCount(Timeline.INDEFINITE);
+        countdownTimer.setCycleCount(Animation.INDEFINITE);
 
         KeyFrame keyFrame =
                 new KeyFrame(
@@ -149,13 +136,14 @@ public class PaymentController {
     private void updateCountdownDisplay() {
         int minutes = secondsRemaining / 60;
         int seconds = secondsRemaining % 60;
-        view.timerLabel.setText(String.format("%02d:%02d", minutes, seconds));
+        view.timerLabel.setText(
+                String.format("%02d:%02d", Integer.valueOf(minutes), Integer.valueOf(seconds)));
 
         if (secondsRemaining <= 30) {
-            view.timerLabel.setTextFill(Color.web(DANGER));
+            view.timerLabel.getStyleClass().add("text-danger");
             view.timerIconLabel.setText("⚠️");
         } else if (secondsRemaining <= 60) {
-            view.timerLabel.setTextFill(Color.web(WARNING));
+            view.timerLabel.getStyleClass().add("text-warning");
             view.timerIconLabel.setText("⏰");
         }
     }
@@ -187,6 +175,8 @@ public class PaymentController {
             showSuccessAndTicket();
         } catch (Exception e) {
             log.error("Payment processing failed", e);
+            view.errorLabel.setText("Payment failed: " + e.getMessage());
+            view.errorLabel.setVisible(true);
         }
     }
 

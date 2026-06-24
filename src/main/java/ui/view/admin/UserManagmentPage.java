@@ -1,12 +1,11 @@
 package ui.view.admin;
 
 import domain.model.User;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
+@SuppressWarnings({"unchecked", "deprecation"})
 public class UserManagmentPage {
     public TableView<User> userTable;
     public ComboBox<String> roleDropdown;
@@ -35,9 +34,9 @@ public class UserManagmentPage {
 
         root = new VBox(20);
         root.getStyleClass().add("page");
-        root.setPadding(new Insets(30));
+        root.getStyleClass().add("p-30");
         HBox header = new HBox(15);
-        header.setAlignment(Pos.CENTER_LEFT);
+        header.getStyleClass().add("align-center-left");
 
         VBox titleBox = new VBox(5);
         Label title = new Label("👥 User Management");
@@ -56,20 +55,20 @@ public class UserManagmentPage {
 
         header.getChildren().addAll(titleBox, headerSpacer, btnBack);
         HBox toolbar = new HBox(10);
-        toolbar.setAlignment(Pos.CENTER_LEFT);
+        toolbar.getStyleClass().add("align-center-left");
 
         searchField = new TextField();
         searchField.setPromptText("🔍  Search by username, name, or email...");
-        searchField.setPrefHeight(40);
-        searchField.setPrefWidth(400);
+        searchField.getStyleClass().add("h-40");
+        searchField.getStyleClass().add("w-400");
         searchField.getStyleClass().add("search-field");
 
         toolbar.getChildren().add(searchField);
         HBox body = new HBox(20);
         VBox.setVgrow(body, Priority.ALWAYS);
         VBox actionPanel = new VBox(15);
-        actionPanel.setPrefWidth(280);
-        actionPanel.setPadding(new Insets(20));
+        actionPanel.getStyleClass().add("w-280");
+        actionPanel.getStyleClass().add("p-20");
         actionPanel.getStyleClass().add("action-panel");
 
         Label actionTitle = new Label("Modify User");
@@ -77,8 +76,8 @@ public class UserManagmentPage {
         roleDropdown = new ComboBox<>();
         roleDropdown.getItems().addAll("ADMIN", "CUSTOMER");
         roleDropdown.setPromptText("Select role...");
-        roleDropdown.setPrefWidth(240);
-        roleDropdown.setPrefHeight(38);
+        roleDropdown.getStyleClass().add("w-240");
+        roleDropdown.getStyleClass().add("h-38");
         roleDropdown.setCellFactory(
                 param ->
                         new ListCell<String>() {
@@ -111,18 +110,18 @@ public class UserManagmentPage {
                 });
 
         btnUpdateRole = new Button("✏️  Update Role");
-        btnUpdateRole.setPrefWidth(240);
-        btnUpdateRole.setPrefHeight(38);
+        btnUpdateRole.getStyleClass().add("w-240");
+        btnUpdateRole.getStyleClass().add("h-38");
         btnUpdateRole.getStyleClass().add("primary-button-small");
 
         btnDelete = new Button("🗑️  Delete User");
-        btnDelete.setPrefWidth(240);
-        btnDelete.setPrefHeight(38);
+        btnDelete.getStyleClass().add("w-240");
+        btnDelete.getStyleClass().add("h-38");
         btnDelete.getStyleClass().add("danger-button");
 
         btnRefresh = new Button("🔄  Refresh");
-        btnRefresh.setPrefWidth(240);
-        btnRefresh.setPrefHeight(38);
+        btnRefresh.getStyleClass().add("w-240");
+        btnRefresh.getStyleClass().add("h-38");
         btnRefresh.getStyleClass().add("secondary-button");
 
         actionPanel
@@ -142,49 +141,38 @@ public class UserManagmentPage {
         HBox.setHgrow(userTable, Priority.ALWAYS);
         VBox.setVgrow(userTable, Priority.ALWAYS);
         TableColumn<User, Integer> idCol = new TableColumn<>("ID");
-        idCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
-        idCol.setPrefWidth(50);
+        idCol.setCellValueFactory(new PropertyValueFactory<>("userId"));
+        idCol.getStyleClass().add("w-50");
 
         TableColumn<User, String> firstNameCol = new TableColumn<>("First Name");
         firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-        firstNameCol.setPrefWidth(100);
+        firstNameCol.getStyleClass().add("w-100");
 
         TableColumn<User, String> lastNameCol = new TableColumn<>("Last Name");
         lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        lastNameCol.setPrefWidth(100);
+        lastNameCol.getStyleClass().add("w-100");
 
         TableColumn<User, String> usernameCol = new TableColumn<>("Username");
         usernameCol.setCellValueFactory(new PropertyValueFactory<>("username"));
-        usernameCol.setPrefWidth(110);
+        usernameCol.getStyleClass().add("w-110");
 
         TableColumn<User, String> emailCol = new TableColumn<>("Email");
         emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
-        emailCol.setPrefWidth(160);
+        emailCol.getStyleClass().add("w-160");
 
         TableColumn<User, String> phoneCol = new TableColumn<>("Phone");
         phoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
-        phoneCol.setPrefWidth(100);
+        phoneCol.getStyleClass().add("w-100");
 
         TableColumn<User, String> roleCol = new TableColumn<>("Role");
         roleCol.setCellValueFactory(new PropertyValueFactory<>("role"));
-        roleCol.setPrefWidth(80);
-
-        TableColumn<User, String> statusCol = new TableColumn<>("Status");
-        statusCol.setCellValueFactory(new PropertyValueFactory<>("loginStatus"));
-        statusCol.setPrefWidth(70);
+        roleCol.getStyleClass().add("w-80");
 
         userTable
                 .getColumns()
-                .addAll(
-                        idCol,
-                        firstNameCol,
-                        lastNameCol,
-                        usernameCol,
-                        emailCol,
-                        phoneCol,
-                        roleCol,
-                        statusCol);
+                .addAll(idCol, firstNameCol, lastNameCol, usernameCol, emailCol, phoneCol, roleCol);
         userTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        userTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         body.getChildren().addAll(actionPanel, userTable);
         root.getChildren().addAll(header, toolbar, body);

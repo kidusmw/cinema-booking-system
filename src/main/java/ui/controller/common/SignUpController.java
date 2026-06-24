@@ -1,12 +1,16 @@
 package ui.controller.common;
 
 import application.AppContext;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ui.common.WindowManager;
 import ui.view.common.SignUpPage;
 
 public class SignUpController {
+
+    private static final Logger log = LoggerFactory.getLogger(SignUpController.class);
     private final AppContext ctx;
     private SignUpPage view;
     private String role;
@@ -19,11 +23,7 @@ public class SignUpController {
         this.nav = nav;
         this.role = role;
         view = new SignUpPage();
-        Scene scene = new Scene(view.getView(), 800, 700);
-        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
-        stage.setTitle("Create Account - CinemaBook");
-        stage.setScene(scene);
-        stage.show();
+        WindowManager.configure(stage, "Create Account", view.getView());
         view.roleLabel.setText("Sign up as " + capitalize(role));
 
         view.signUpBtn.setOnAction(e -> handleSignUp());
@@ -65,11 +65,12 @@ public class SignUpController {
             showInfo("Account Created", "Welcome, " + firstName + "!");
             nav.goFresh(() -> new LoginController(stage, ctx, nav, role));
         } catch (Exception e) {
+            log.error("Failed to create account", e);
             showError("Failed to create account.");
         }
     }
 
-    private String capitalize(String str) {
+    private static String capitalize(String str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 
@@ -78,7 +79,7 @@ public class SignUpController {
         view.errorLabel.setVisible(true);
     }
 
-    private void showInfo(String title, String content) {
+    private static void showInfo(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setContentText(content);

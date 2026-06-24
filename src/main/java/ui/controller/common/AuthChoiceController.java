@@ -1,24 +1,20 @@
 package ui.controller.common;
 
 import application.AppContext;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ui.common.WindowManager;
 import ui.view.common.AuthChoice;
 
 public class AuthChoiceController {
-    private Stage stage;
+    private static final Logger log = LoggerFactory.getLogger(AuthChoiceController.class);
     private AuthChoice view;
-    private NavigationManager nav;
 
     public AuthChoiceController(Stage stage, AppContext ctx, NavigationManager nav, String role) {
-        this.stage = stage;
-        this.nav = nav;
         this.view = new AuthChoice();
-        Scene scene = new Scene(view.getView(), 500, 450);
-        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
-        stage.setScene(scene);
-        stage.setTitle("Choose Option");
-        stage.show();
+        WindowManager.configure(stage, "Choose Option", view.getView());
+        log.info("Opening Choose Option page");
 
         view.btnBack.setOnAction(e -> nav.back());
 

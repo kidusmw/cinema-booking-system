@@ -1,7 +1,5 @@
 package ui.view.customer;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
@@ -29,9 +27,9 @@ public class MovieHallSelectionPage {
     private void createUI() {
         root = new VBox(20);
         root.getStyleClass().add("page");
-        root.setPadding(new Insets(30));
+        root.getStyleClass().add("p-30");
         HBox topBar = new HBox(15);
-        topBar.setAlignment(Pos.CENTER_LEFT);
+        topBar.getStyleClass().add("align-center-left");
 
         btnBack = new Button("← Back to Showtimes");
         btnBack.getStyleClass().add("back-button");
@@ -49,22 +47,22 @@ public class MovieHallSelectionPage {
 
         // ===== LEGEND =====
         HBox legend = new HBox(20);
-        legend.setAlignment(Pos.CENTER_LEFT);
-        legend.setPadding(new Insets(10, 15, 10, 15));
+        legend.getStyleClass().add("align-center-left");
+        legend.getStyleClass().add("p-10-15");
         legend.getStyleClass().add("info-card");
 
         Label legendTitle = new Label("💡 Hall Types (Prices in ETB):");
         legendTitle.getStyleClass().add("caption");
 
         HBox regularLegend = new HBox(8);
-        regularLegend.setAlignment(Pos.CENTER_LEFT);
+        regularLegend.getStyleClass().add("align-center-left");
         Label regularDot = new Label("🎬");
         Label regularText = new Label("Regular - Standard seating");
         regularText.getStyleClass().add("muted-text");
         regularLegend.getChildren().addAll(regularDot, regularText);
 
         HBox vipLegend = new HBox(8);
-        vipLegend.setAlignment(Pos.CENTER_LEFT);
+        vipLegend.getStyleClass().add("align-center-left");
         Label vipDot = new Label("👑");
         Label vipText = new Label("VIP - Premium recliner seats");
         vipText.getStyleClass().add("muted-text");
@@ -77,7 +75,7 @@ public class MovieHallSelectionPage {
         VBox.setVgrow(scroll, Priority.ALWAYS);
 
         hallsContainer = new VBox(15);
-        hallsContainer.setPadding(new Insets(10, 0, 10, 0));
+        hallsContainer.getStyleClass().add("p-10-0");
 
         scroll.setContent(hallsContainer);
         root.getChildren().addAll(topBar, header, legend, scroll);

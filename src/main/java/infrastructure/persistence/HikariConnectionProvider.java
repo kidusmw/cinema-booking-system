@@ -58,7 +58,8 @@ public class HikariConnectionProvider {
     }
 
     public static Connection getConnection() throws SQLException {
-        return getDataSource().getConnection();
+        Connection connection = getDataSource().getConnection();
+        return connection;
     }
 
     static HikariDataSource getDataSourceField() {

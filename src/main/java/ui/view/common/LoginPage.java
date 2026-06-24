@@ -1,9 +1,5 @@
 package ui.view.common;
 
-import static ui.common.Theme.*;
-
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
@@ -24,21 +20,21 @@ public class LoginPage {
 
         // Top bar
         HBox topBar = new HBox();
-        topBar.setPadding(new Insets(20, 30, 20, 30));
+        topBar.getStyleClass().add("p-20-30");
 
         backBtn = new Button("← Back");
         backBtn.getStyleClass().addAll("back-button", "muted-text");
 
         topBar.getChildren().add(backBtn);
         HBox splitLayout = new HBox(60);
-        splitLayout.setAlignment(Pos.CENTER);
-        splitLayout.setPadding(new Insets(40));
+        splitLayout.getStyleClass().add("align-center");
+        splitLayout.getStyleClass().add("p-40");
         VBox leftSide = new VBox(15);
-        leftSide.setAlignment(Pos.CENTER_LEFT);
-        leftSide.setPrefWidth(320);
+        leftSide.getStyleClass().add("align-center-left");
+        leftSide.getStyleClass().add("w-320");
 
         HBox brandBox = new HBox(8);
-        brandBox.setAlignment(Pos.CENTER_LEFT);
+        brandBox.getStyleClass().add("align-center-left");
         StackPane logo = new StackPane();
         logo.setPrefSize(36, 36);
         logo.getStyleClass().add("logo-badge");
@@ -62,9 +58,9 @@ public class LoginPage {
 
         leftSide.getChildren().addAll(brandBox, welcomeText, tagline);
         VBox card = new VBox(18);
-        card.setAlignment(Pos.CENTER);
-        card.setPadding(new Insets(40, 36, 40, 36));
-        card.setPrefWidth(400);
+        card.getStyleClass().add("align-center");
+        card.getStyleClass().add("p-40-36");
+        card.getStyleClass().add("w-400");
         card.getStyleClass().add("form-card");
 
         Label cardTitle = new Label("Sign in to your account");
@@ -75,7 +71,7 @@ public class LoginPage {
 
         usernameField = new TextField();
         usernameField.setPromptText("Enter your username");
-        usernameField.setPrefHeight(42);
+        usernameField.getStyleClass().add("h-42");
 
         usernameBox.getChildren().addAll(usernameLabel, usernameField);
         VBox passwordBox = new VBox(6);
@@ -84,7 +80,7 @@ public class LoginPage {
 
         passwordField = new PasswordField();
         passwordField.setPromptText("Enter your password");
-        passwordField.setPrefHeight(42);
+        passwordField.getStyleClass().add("h-42");
 
         passwordBox.getChildren().addAll(passwordLabel, passwordField);
         errorLabel = new Label("");
@@ -92,10 +88,10 @@ public class LoginPage {
         errorLabel.setVisible(false);
         loginBtn = new Button("Sign in");
         loginBtn.setPrefWidth(Double.MAX_VALUE);
-        loginBtn.setPrefHeight(44);
+        loginBtn.getStyleClass().add("h-44");
         loginBtn.getStyleClass().add("primary-button");
         HBox signupBox = new HBox(5);
-        signupBox.setAlignment(Pos.CENTER);
+        signupBox.getStyleClass().add("align-center");
         Label noAccount = new Label("Don't have an account?");
         noAccount.getStyleClass().add("caption");
 

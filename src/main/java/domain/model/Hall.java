@@ -50,4 +50,9 @@ public class Hall {
     public void setHallType(String hallType) {
         this.hallType = hallType;
     }
+
+    @Override
+    public String toString() {
+        return name + " (" + hallType + ")";
+    }
 }

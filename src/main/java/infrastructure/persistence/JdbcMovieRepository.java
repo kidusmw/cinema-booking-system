@@ -19,7 +19,7 @@ public class JdbcMovieRepository implements MovieRepository {
         String sql = "SELECT * FROM movie WHERE movie_id = ?";
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, id);
+            ps.setLong(1, id.longValue());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) return Optional.of(mapRow(rs));
             }
@@ -88,7 +88,7 @@ public class JdbcMovieRepository implements MovieRepository {
             ps.setString(8, movie.getPosterPath());
             ps.executeUpdate();
             try (ResultSet keys = ps.getGeneratedKeys()) {
-                if (keys.next()) movie.setMovieId(keys.getLong(1));
+                if (keys.next()) movie.setMovieId(Long.valueOf(keys.getLong(1)));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to insert movie", e);
@@ -113,7 +113,7 @@ public class JdbcMovieRepository implements MovieRepository {
                             : null);
             ps.setString(7, movie.getLanguage());
             ps.setString(8, movie.getPosterPath());
-            ps.setLong(9, movie.getMovieId());
+            ps.setLong(9, movie.getMovieId().longValue());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to update movie", e);
@@ -126,17 +126,17 @@ public class JdbcMovieRepository implements MovieRepository {
         String sql = "DELETE FROM movie WHERE movie_id=?";
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, id);
+            ps.setLong(1, id.longValue());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to delete movie", e);
         }
     }
 
-    private Movie mapRow(ResultSet rs) throws SQLException {
+    private static Movie mapRow(ResultSet rs) throws SQLException {
         Movie movie =
                 new Movie(
-                        rs.getLong("movie_id"),
+                        Long.valueOf(rs.getLong("movie_id")),
                         rs.getString("title"),
                         rs.getString("genre"),
                         rs.getInt("duration_min"),

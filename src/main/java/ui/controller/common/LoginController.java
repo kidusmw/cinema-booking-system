@@ -3,13 +3,16 @@ package ui.controller.common;
 import application.AppContext;
 import domain.model.User;
 import java.util.Optional;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ui.common.WindowManager;
 import ui.controller.admin.AdminDashboardController;
 import ui.controller.customer.CustomerDashboardController;
 import ui.view.common.LoginPage;
 
 public class LoginController {
+    private static final Logger log = LoggerFactory.getLogger(LoginController.class);
     private final AppContext ctx;
     private LoginPage view;
     private String expectedRole;
@@ -22,11 +25,8 @@ public class LoginController {
         this.nav = nav;
         this.expectedRole = role;
         view = new LoginPage();
-        Scene scene = new Scene(view.getView(), 900, 650);
-        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
-        stage.setTitle("Sign in - CinemaBook");
-        stage.setScene(scene);
-        stage.show();
+        WindowManager.configure(stage, "Sign In", view.getView());
+        log.info("Opening Sign In page");
 
         view.roleLabel.setText("Sign in as " + capitalize(role));
         view.loginBtn.setOnAction(e -> handleLogin());
@@ -60,7 +60,7 @@ public class LoginController {
         }
     }
 
-    private String capitalize(String str) {
+    private static String capitalize(String str) {
         return str.substring(0, 1).toUpperCase() + str.substring(1);
     }
 }

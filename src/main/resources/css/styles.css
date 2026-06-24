@@ -1,6 +1,6 @@
 /* ============================================================
    CinemaBooking Design System
-   Mirrors ui.common.Theme color constants
+   Design tokens
    ============================================================ */
 
 .root {
@@ -17,6 +17,8 @@
     -warning: #F59E0B;
     -white: #FFFFFF;
     -sidebar-bg: #1E293B;
+    -blue: #3B82F6;
+    -purple: #8B5CF6;
 
     /* Fonts */
     -fx-font-family: "Segoe UI", "System", sans-serif;
@@ -45,14 +47,25 @@
 .card {
     -fx-background-color: -white;
     -fx-border-color: -border;
-    -fx-border-radius: 12;
-    -fx-background-radius: 12;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
     -fx-padding: 24;
+    -fx-cursor: hand;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 2);
 }
 
 .card:hover {
     -fx-border-color: -primary;
+    -fx-background-color: derive(-primary, 93%);
+}
+
+.card-sm {
+    -fx-background-color: -white;
+    -fx-border-color: -border;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 16;
+    -fx-cursor: hand;
 }
 
 .info-card {
@@ -82,7 +95,7 @@
    ============================================================ */
 .sidebar {
     -fx-background-color: -sidebar-bg;
-    -fx-padding: 20 0;
+    -fx-padding: 20 12 20 12;
     -fx-spacing: 4;
     -fx-min-width: 240;
     -fx-pref-width: 240;
@@ -91,6 +104,30 @@
 .sidebar .label {
     -fx-text-fill: -text-muted;
     -fx-font-size: 13px;
+}
+
+.sidebar-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-muted;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+    -fx-font-size: 14px;
+    -fx-alignment: center-left;
+    -fx-background-radius: 8;
+    -fx-margin: 0 8;
+}
+
+.sidebar-btn:hover {
+    -fx-background-color: derive(-sidebar-bg, 10%);
+    -fx-text-fill: -white;
+}
+
+.sidebar-btn:selected,
+.sidebar-btn.active,
+.sidebar-btn-active {
+    -fx-background-color: -primary;
+    -fx-text-fill: -white;
+    -fx-font-weight: bold;
 }
 
 .top-bar {
@@ -136,6 +173,20 @@
 
 .primary-button-small:hover {
     -fx-background-color: derive(-primary, -10%);
+}
+
+.warning-button-small {
+    -fx-background-color: -warning;
+    -fx-text-fill: -white;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+    -fx-padding: 8 16;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.warning-button-small:hover {
+    -fx-background-color: derive(-warning, -10%);
 }
 
 .secondary-button {
@@ -188,7 +239,7 @@
     -fx-cursor: hand;
     -fx-font-size: 14px;
     -fx-alignment: center-left;
-    -fx-background-radius: 0;
+    -fx-background-radius: 8;
 }
 
 .menu-button:hover {
@@ -198,8 +249,8 @@
 
 .menu-button:selected,
 .menu-button.active {
-    -fx-background-color: derive(-primary, 70%);
-    -fx-text-fill: -primary;
+    -fx-background-color: -primary;
+    -fx-text-fill: -white;
     -fx-font-weight: bold;
 }
 
@@ -217,6 +268,34 @@
     -fx-background-color: #FEE2E2;
     -fx-text-fill: -danger;
     -fx-background-radius: 8;
+}
+
+/* Date selection buttons (ShowSelection) */
+.date-button {
+    -fx-background-color: -white;
+    -fx-text-fill: -text-dark;
+    -fx-border-color: -border;
+    -fx-border-radius: 18;
+    -fx-background-radius: 18;
+    -fx-cursor: hand;
+    -fx-padding: 8 16;
+}
+
+.date-button:hover {
+    -fx-border-color: -primary;
+}
+
+.date-button-active {
+    -fx-background-color: -primary;
+    -fx-text-fill: -white;
+    -fx-background-radius: 18;
+    -fx-cursor: hand;
+    -fx-padding: 8 16;
+    -fx-font-weight: bold;
+}
+
+.date-button-active:hover {
+    -fx-background-color: derive(-primary, -10%);
 }
 
 /* ============================================================
@@ -333,13 +412,41 @@
     -fx-text-fill: -text-dark;
 }
 
+.heading {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-dark;
+}
+
 .body-text {
     -fx-font-size: 14px;
     -fx-text-fill: -text-dark;
 }
 
+.body-bold {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-dark;
+}
+
 .muted-text {
     -fx-font-size: 13px;
+    -fx-text-fill: -text-muted;
+}
+
+.caption {
+    -fx-font-size: 12px;
+    -fx-text-fill: -text-muted;
+}
+
+.caption-bold {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-dark;
+}
+
+.caption-sm {
+    -fx-font-size: 10px;
     -fx-text-fill: -text-muted;
 }
 
@@ -355,6 +462,12 @@
 
 .price-label {
     -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -primary;
+}
+
+.price-large {
+    -fx-font-size: 20px;
     -fx-font-weight: bold;
     -fx-text-fill: -primary;
 }
@@ -395,6 +508,32 @@
     -fx-background-radius: 20;
     -fx-padding: 4 14;
     -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.badge-primary-solid {
+    -fx-background-color: -primary;
+    -fx-text-fill: -white;
+    -fx-background-radius: 12;
+    -fx-padding: 3 10;
+    -fx-font-size: 11px;
+}
+
+.badge-warning-solid {
+    -fx-background-color: -warning;
+    -fx-text-fill: -white;
+    -fx-background-radius: 12;
+    -fx-padding: 4 12;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.badge-blue-solid {
+    -fx-background-color: -blue;
+    -fx-text-fill: -white;
+    -fx-background-radius: 12;
+    -fx-padding: 4 12;
+    -fx-font-size: 11px;
     -fx-font-weight: bold;
 }
 
@@ -442,11 +581,16 @@
 .seat-available {
     -fx-background-color: -bg-light;
     -fx-border-color: -border;
-    -fx-border-radius: 4;
-    -fx-background-radius: 4;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
     -fx-min-width: 35;
     -fx-min-height: 35;
     -fx-cursor: hand;
+    -fx-text-fill: -white;
+}
+
+.screen-fill {
+    -fx-fill: -primary;
 }
 
 .seat-available:hover {
@@ -457,19 +601,21 @@
 .seat-selected {
     -fx-background-color: -primary;
     -fx-border-color: -primary;
-    -fx-border-radius: 4;
-    -fx-background-radius: 4;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
     -fx-min-width: 35;
     -fx-min-height: 35;
+    -fx-text-fill: -white;
 }
 
 .seat-booked {
     -fx-background-color: -text-muted;
     -fx-border-color: derive(-text-muted, -30%);
-    -fx-border-radius: 4;
-    -fx-background-radius: 4;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
     -fx-min-width: 35;
     -fx-min-height: 35;
+    -fx-text-fill: -white;
 }
 
 /* ============================================================
@@ -490,22 +636,116 @@
 .stat-card {
     -fx-background-color: -white;
     -fx-border-color: -border;
-    -fx-border-radius: 8;
-    -fx-background-radius: 8;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
     -fx-padding: 20;
     -fx-spacing: 8;
-    -fx-alignment: center;
+    -fx-alignment: center-left;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.04), 5, 0, 0, 0);
+}
+
+.stat-icon {
+    -fx-font-size: 24px;
 }
 
 .stat-value {
     -fx-font-size: 28px;
     -fx-font-weight: bold;
-    -fx-text-fill: -primary;
 }
 
 .stat-label {
-    -fx-font-size: 13px;
+    -fx-font-size: 12px;
     -fx-text-fill: -text-muted;
+}
+
+/* ============================================================
+   Movie / Hall / Show cards
+   ============================================================ */
+.movie-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-dark;
+}
+
+.movie-genre {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -white;
+}
+
+.movie-duration {
+    -fx-font-size: 11px;
+    -fx-text-fill: -text-muted;
+}
+
+.movie-rating {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -warning;
+}
+
+.hall-name {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-dark;
+}
+
+.hall-type {
+    -fx-font-size: 12px;
+    -fx-font-weight: normal;
+}
+
+.hall-capacity {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-dark;
+}
+
+.hall-price {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -primary;
+}
+
+.hall-features {
+    -fx-font-size: 12px;
+    -fx-text-fill: -text-dark;
+}
+
+.hall-meta-label {
+    -fx-font-size: 10px;
+    -fx-text-fill: -text-muted;
+}
+
+.show-date-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-dark;
+}
+
+.show-time-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -accent;
+}
+
+.show-hall-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: -text-muted;
+}
+
+/* ============================================================
+   Payment page
+   ============================================================ */
+.payment-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: -text-muted;
+}
+
+.payment-value {
+    -fx-font-size: 12px;
+    -fx-text-fill: -text-dark;
 }
 
 /* ============================================================
@@ -519,14 +759,53 @@
     -fx-background-color: -white;
 }
 
+.ticket-circle-left {
+    -fx-fill: -bg;
+    -fx-translate-x: -5;
+}
+
+.ticket-circle-right {
+    -fx-fill: -bg;
+    -fx-translate-x: 5;
+}
+
 .ticket-barcode-bg {
     -fx-background-color: -bg;
+}
+
+.ticket-detail-value {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-dark;
+}
+
+.barcode-text {
+    -fx-font-family: "Monospaced";
+    -fx-font-size: 16px;
+}
+
+.ticket-divider {
+    -fx-stroke: -border;
+    -fx-stroke-width: 1;
+    -fx-stroke-dash-array: 5 5;
+}
+
+.ticket-type-text {
+    -fx-text-fill: derive(-primary, 90%);
 }
 
 .otp-warning {
     -fx-background-color: #FEF3C7;
     -fx-padding: 10;
     -fx-background-radius: 8;
+}
+
+/* ============================================================
+   Placeholder / empty state
+   ============================================================ */
+.empty-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: -text-muted;
 }
 
 /* ============================================================
@@ -541,22 +820,18 @@
 .welcome-title {
     -fx-font-size: 32px;
     -fx-font-weight: bold;
-    -fx-text-fill: -text-dark;
-}
-
-.heading {
-    -fx-font-size: 22px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -text-dark;
 }
 
 .icon-emoji {
     -fx-font-size: 32px;
 }
 
-.caption {
-    -fx-font-size: 12px;
-    -fx-text-fill: -text-muted;
+.icon-large {
+    -fx-font-size: 40px;
+}
+
+.icon-emoji-small {
+    -fx-font-size: 24px;
 }
 
 /* ============================================================
@@ -574,11 +849,29 @@
     -fx-text-fill: -danger;
 }
 
+.text-success {
+    -fx-text-fill: -success;
+}
+
 .text-white {
     -fx-text-fill: -white;
 }
 
+.text-blue {
+    -fx-text-fill: -blue;
+}
+
+.text-purple {
+    -fx-text-fill: -purple;
+}
+
+.text-dark {
+    -fx-text-fill: -text-dark;
+}
+
 .star-rating {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
     -fx-text-fill: #F59E0B;
 }
 
@@ -596,3 +889,124 @@
 .legend-dot-booked {
     -fx-fill: -danger;
 }
+
+/* ============================================================
+   Spacing utility classes
+   ============================================================ */
+.p-10 { -fx-padding: 10; }
+.p-15 { -fx-padding: 15; }
+.p-20 { -fx-padding: 20; }
+.p-24 { -fx-padding: 24; }
+.p-25 { -fx-padding: 25; }
+.p-30 { -fx-padding: 30; }
+.p-35 { -fx-padding: 35; }
+.p-40 { -fx-padding: 40; }
+.p-50 { -fx-padding: 50; }
+.p-60 { -fx-padding: 60; }
+
+.px-20 { -fx-padding: 0 20; }
+.px-24 { -fx-padding: 0 24; }
+.px-25 { -fx-padding: 0 25; }
+.px-30 { -fx-padding: 0 30; }
+.px-36 { -fx-padding: 0 36; }
+.px-40 { -fx-padding: 0 40; }
+.px-50 { -fx-padding: 0 50; }
+
+.py-10 { -fx-padding: 10 0; }
+.py-15 { -fx-padding: 15 0; }
+.py-20 { -fx-padding: 20 0; }
+
+.pt-10 { -fx-padding: 10 0 0 0; }
+.pt-20 { -fx-padding: 20 0 0 0; }
+.pb-60 { -fx-padding: 0 0 60 0; }
+
+/* Compound padding shortcuts */
+.p-20-25 { -fx-padding: 20 25 20 25; }
+.p-20-30 { -fx-padding: 20 30 20 30; }
+.p-20-40 { -fx-padding: 20 40 20 40; }
+.p-20-12 { -fx-padding: 20 12 20 12; }
+.p-15-20 { -fx-padding: 15 20 15 20; }
+.p-10-15 { -fx-padding: 10 15 10 15; }
+.p-30-25 { -fx-padding: 30 25 30 25; }
+.p-35-50 { -fx-padding: 35 50 35 50; }
+.p-40-36 { -fx-padding: 40 36 40 36; }
+.p-40-20 { -fx-padding: 40 20 40 20; }
+.p-50-60 { -fx-padding: 50 60 50 60; }
+.p-60-40 { -fx-padding: 60 40 40 40; }
+.p-24-20 { -fx-padding: 24 20 24 20; }
+.p-10-20 { -fx-padding: 10 20 10 20; }
+.p-6-12 { -fx-padding: 6 12 6 12; }
+.p-0-40-60-40 { -fx-padding: 0 40 60 40; }
+.p-25-30 { -fx-padding: 25 30 25 30; }
+.p-0 { -fx-padding: 0; }
+.p-0-0-20-8 { -fx-padding: 0 0 20 8; }
+.p-10-8 { -fx-padding: 10 8 10 8; }
+.p-20-150-10-10 { -fx-padding: 20 150 10 10; }
+.p-20-50-10-10 { -fx-padding: 20 50 10 10; }
+.p-20-40-10-20 { -fx-padding: 20 40 10 20; }
+.p-3-0-3-0 { -fx-padding: 3 0 3 0; }
+
+.gap-5 { -fx-spacing: 5; }
+.gap-8 { -fx-spacing: 8; }
+.gap-10 { -fx-spacing: 10; }
+.gap-15 { -fx-spacing: 15; }
+.gap-20 { -fx-spacing: 20; }
+.gap-24 { -fx-spacing: 24; }
+.gap-25 { -fx-spacing: 25; }
+.gap-30 { -fx-spacing: 30; }
+.gap-40 { -fx-spacing: 40; }
+.gap-50 { -fx-spacing: 50; }
+.gap-60 { -fx-spacing: 60; }
+
+/* ============================================================
+   Width / Height utility classes
+   ============================================================ */
+.w-30 { -fx-pref-width: 30; }
+.w-50 { -fx-pref-width: 50; }
+.w-80 { -fx-pref-width: 80; }
+.w-90 { -fx-pref-width: 90; }
+.w-100 { -fx-pref-width: 100; }
+.w-110 { -fx-pref-width: 110; }
+.w-120 { -fx-pref-width: 120; }
+.w-130 { -fx-pref-width: 130; }
+.w-140 { -fx-pref-width: 140; }
+.w-150 { -fx-pref-width: 150; }
+.w-160 { -fx-pref-width: 160; }
+.w-180 { -fx-pref-width: 180; }
+.w-200 { -fx-pref-width: 200; }
+.w-220 { -fx-pref-width: 220; }
+.w-240 { -fx-pref-width: 240; }
+.w-280 { -fx-pref-width: 280; }
+.w-300 { -fx-pref-width: 300; }
+.w-320 { -fx-pref-width: 320; }
+.w-350 { -fx-pref-width: 350; }
+.w-400 { -fx-pref-width: 400; }
+.w-450 { -fx-pref-width: 450; }
+.w-500 { -fx-pref-width: 500; }
+.w-600 { -fx-pref-width: 600; }
+
+.h-1 { -fx-pref-height: 1; }
+.h-10 { -fx-pref-height: 10; }
+.h-20 { -fx-pref-height: 20; }
+.h-32 { -fx-pref-height: 32; }
+.h-36 { -fx-pref-height: 36; }
+.h-38 { -fx-pref-height: 38; }
+.h-40 { -fx-pref-height: 40; }
+.h-42 { -fx-pref-height: 42; }
+.h-44 { -fx-pref-height: 44; }
+.h-45 { -fx-pref-height: 45; }
+.h-48 { -fx-pref-height: 48; }
+.h-50 { -fx-pref-height: 50; }
+.h-55 { -fx-pref-height: 55; }
+.h-60 { -fx-pref-height: 60; }
+.h-280 { -fx-pref-height: 280; }
+
+/* ============================================================
+   Alignment utility classes
+   ============================================================ */
+.align-center { -fx-alignment: center; }
+.align-center-left { -fx-alignment: center-left; }
+.align-center-right { -fx-alignment: center-right; }
+.align-top-left { -fx-alignment: top-left; }
+.align-top-center { -fx-alignment: top-center; }
+.align-bottom-center { -fx-alignment: bottom-center; }

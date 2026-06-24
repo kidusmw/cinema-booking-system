@@ -1,12 +1,7 @@
 package ui.view.customer;
 
-import static ui.common.Theme.*;
-
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class SeatSelectionPage {
@@ -39,17 +34,17 @@ public class SeatSelectionPage {
     private void createUI() {
         root = new VBox(15);
         root.getStyleClass().add("page");
-        root.setPadding(new Insets(25));
+        root.getStyleClass().add("p-25");
 
         HBox topBar = new HBox(15);
-        topBar.setAlignment(Pos.CENTER_LEFT);
+        topBar.getStyleClass().add("align-center-left");
         btnBack = new Button("← Back to Halls");
         btnBack.getStyleClass().add("back-button");
         topBar.getChildren().add(btnBack);
 
         HBox infoBar = new HBox(20);
-        infoBar.setAlignment(Pos.CENTER_LEFT);
-        infoBar.setPadding(new Insets(15, 20, 15, 20));
+        infoBar.getStyleClass().add("align-center-left");
+        infoBar.getStyleClass().add("p-15-20");
         infoBar.getStyleClass().add("card");
 
         hallNameLabel = new Label("🏛️ Hall Name");
@@ -63,7 +58,7 @@ public class SeatSelectionPage {
         infoBar.getChildren().addAll(hallNameLabel, showInfoLabel, spacer, priceLabel);
 
         HBox legend = new HBox(25);
-        legend.setAlignment(Pos.CENTER);
+        legend.getStyleClass().add("align-center");
         legend.getChildren()
                 .addAll(
                         createLegendItem("legend-dot-available", "Available"),
@@ -71,17 +66,17 @@ public class SeatSelectionPage {
                         createLegendItem("legend-dot-booked", "Booked"));
 
         VBox screenBox = new VBox(10);
-        screenBox.setAlignment(Pos.CENTER);
+        screenBox.getStyleClass().add("align-center");
         Rectangle screen = new Rectangle(400, 8);
-        screen.setFill(Color.web(ACCENT));
+        screen.getStyleClass().add("screen-fill");
         screenLabel = new Label("🎬 SCREEN");
         screenBox.getChildren().addAll(screen, screenLabel);
 
-        VBox seatContainer = new VBox(20);
-        seatContainer.getStyleClass().add("card");
+        VBox seatsVBox = new VBox(20);
+        seatsVBox.getStyleClass().add("card");
         seatGrid = new VBox(8);
-        seatGrid.setAlignment(Pos.CENTER);
-        seatContainer.getChildren().add(seatGrid);
+        seatGrid.getStyleClass().add("align-center");
+        seatsVBox.getChildren().add(seatGrid);
 
         HBox bottomBar = new HBox(20);
         bottomBar.getStyleClass().add("card");
@@ -98,10 +93,10 @@ public class SeatSelectionPage {
         btnProceed.getStyleClass().add("primary-button");
 
         bottomBar.getChildren().addAll(summaryBox, bottomSpacer, btnProceed);
-        root.getChildren().addAll(topBar, infoBar, legend, screenBox, seatContainer, bottomBar);
+        root.getChildren().addAll(topBar, infoBar, legend, screenBox, seatsVBox, bottomBar);
     }
 
-    private HBox createLegendItem(String styleClass, String label) {
+    private static HBox createLegendItem(String styleClass, String label) {
         HBox item = new HBox(8);
         Rectangle rect = new Rectangle(20, 20);
         rect.getStyleClass().add(styleClass);

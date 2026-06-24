@@ -31,8 +31,8 @@ public class JdbcBookingRepository implements BookingRepository {
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps =
                         conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setLong(1, booking.getUserId());
-            ps.setLong(2, booking.getShowId());
+            ps.setLong(1, booking.getUserId().longValue());
+            ps.setLong(2, booking.getShowId().longValue());
             ps.setString(3, booking.getMovieName());
             ps.setString(4, booking.getBookingStatus());
             ps.setDouble(5, booking.getAmount());
@@ -44,7 +44,7 @@ public class JdbcBookingRepository implements BookingRepository {
             ps.executeUpdate();
             try (ResultSet keys = ps.getGeneratedKeys()) {
                 if (keys.next()) {
-                    booking.setBookingId(keys.getLong(1));
+                    booking.setBookingId(Long.valueOf(keys.getLong(1)));
                 }
             }
         } catch (SQLException e) {
@@ -58,12 +58,12 @@ public class JdbcBookingRepository implements BookingRepository {
                 "UPDATE booking SET user_id=?, show_id=?, movie_name=?, status=?, total_amount=? WHERE booking_id=?";
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, booking.getUserId());
-            ps.setLong(2, booking.getShowId());
+            ps.setLong(1, booking.getUserId().longValue());
+            ps.setLong(2, booking.getShowId().longValue());
             ps.setString(3, booking.getMovieName());
             ps.setString(4, booking.getBookingStatus());
             ps.setDouble(5, booking.getAmount());
-            ps.setLong(6, booking.getBookingId());
+            ps.setLong(6, booking.getBookingId().longValue());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to update booking", e);
@@ -76,7 +76,7 @@ public class JdbcBookingRepository implements BookingRepository {
         String sql = "SELECT * FROM booking WHERE booking_id = ?";
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, id);
+            ps.setLong(1, id.longValue());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     Booking booking = mapRow(rs);
@@ -96,7 +96,7 @@ public class JdbcBookingRepository implements BookingRepository {
         List<Booking> bookings = new ArrayList<>();
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, userId);
+            ps.setLong(1, userId.longValue());
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Booking booking = mapRow(rs);
@@ -136,7 +136,7 @@ public class JdbcBookingRepository implements BookingRepository {
         String sql = "UPDATE booking SET status = 'cancelled' WHERE booking_id = ?";
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, bookingId);
+            ps.setLong(1, bookingId.longValue());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to cancel booking", e);
@@ -148,13 +148,13 @@ public class JdbcBookingRepository implements BookingRepository {
         List<BookingSeat> seats = new ArrayList<>();
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, bookingId);
+            ps.setLong(1, bookingId.longValue());
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     seats.add(
                             new BookingSeat(
-                                    rs.getLong("booking_id"),
-                                    rs.getLong("seat_id"),
+                                    Long.valueOf(rs.getLong("booking_id")),
+                                    Long.valueOf(rs.getLong("seat_id")),
                                     rs.getDouble("price")));
                 }
             }
@@ -164,11 +164,11 @@ public class JdbcBookingRepository implements BookingRepository {
         return seats;
     }
 
-    private Booking mapRow(ResultSet rs) throws SQLException {
+    private static Booking mapRow(ResultSet rs) throws SQLException {
         Booking booking = new Booking();
-        booking.setBookingId(rs.getLong("booking_id"));
-        booking.setUserId(rs.getLong("user_id"));
-        booking.setShowId(rs.getLong("show_id"));
+        booking.setBookingId(Long.valueOf(rs.getLong("booking_id")));
+        booking.setUserId(Long.valueOf(rs.getLong("user_id")));
+        booking.setShowId(Long.valueOf(rs.getLong("show_id")));
         booking.setMovieName(rs.getString("movie_name"));
         booking.setBookingStatus(rs.getString("status"));
         booking.setAmount(rs.getDouble("total_amount"));

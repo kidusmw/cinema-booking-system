@@ -1,11 +1,7 @@
 package ui.view.customer;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 public class ShowSelectionPage {
     private static final org.slf4j.Logger log =
@@ -34,23 +30,23 @@ public class ShowSelectionPage {
     private void createUI() {
         root = new VBox(20);
         root.getStyleClass().add("page");
-        root.setPadding(new Insets(30));
+        root.getStyleClass().add("p-30");
         HBox topBar = new HBox(15);
-        topBar.setAlignment(Pos.CENTER_LEFT);
+        topBar.getStyleClass().add("align-center-left");
 
         btnBack = new Button("← Back to Movies");
         btnBack.getStyleClass().add("back-button");
 
         topBar.getChildren().add(btnBack);
         VBox movieInfoCard = new VBox(10);
-        movieInfoCard.setPadding(new Insets(20, 25, 20, 25));
+        movieInfoCard.getStyleClass().add("p-20-25");
         movieInfoCard.getStyleClass().add("card");
 
         movieTitle = new Label("Movie Title");
         movieTitle.getStyleClass().add("title");
 
         HBox metaRow = new HBox(15);
-        metaRow.setAlignment(Pos.CENTER_LEFT);
+        metaRow.getStyleClass().add("align-center-left");
 
         movieGenre = new Label("Genre");
         movieGenre.getStyleClass().add("badge");
@@ -59,7 +55,7 @@ public class ShowSelectionPage {
         movieDuration.getStyleClass().add("muted-text");
 
         movieRating = new Label("⭐ 8.5");
-        movieRating.setFont(Font.font("Segoe UI", FontWeight.BOLD, 13));
+        movieRating.getStyleClass().add("star-rating");
         movieRating.getStyleClass().add("star-rating");
 
         metaRow.getChildren().addAll(movieGenre, movieDuration, movieRating);
@@ -71,11 +67,11 @@ public class ShowSelectionPage {
         ScrollPane dateScroll = new ScrollPane();
         dateScroll.setFitToHeight(true);
         dateScroll.getStyleClass().add("scroll-pane-transparent");
-        dateScroll.setPrefHeight(60);
+        dateScroll.getStyleClass().add("h-60");
 
         dateButtonsContainer = new HBox(10);
-        dateButtonsContainer.setAlignment(Pos.CENTER_LEFT);
-        dateButtonsContainer.setPadding(new Insets(0, 0, 0, 0));
+        dateButtonsContainer.getStyleClass().add("align-center-left");
+        dateButtonsContainer.getStyleClass().add("p-0");
 
         dateScroll.setContent(dateButtonsContainer);
         dateSection.getChildren().addAll(dateLabel, dateScroll);
@@ -89,7 +85,7 @@ public class ShowSelectionPage {
         VBox.setVgrow(showsScroll, Priority.ALWAYS);
 
         showCardsContainer = new VBox(10);
-        showCardsContainer.setPadding(new Insets(5, 0, 5, 0));
+        showCardsContainer.getStyleClass().add("p-5-0");
 
         showsScroll.setContent(showCardsContainer);
         showsSection.getChildren().addAll(showsLabel, showsScroll);

@@ -34,7 +34,7 @@ public class JdbcUserRepository implements UserRepository {
         String sql = "SELECT * FROM \"user\" WHERE user_id = ?";
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, id);
+            ps.setLong(1, id.longValue());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) return Optional.of(mapRow(rs));
             }
@@ -82,7 +82,7 @@ public class JdbcUserRepository implements UserRepository {
             ps.setString(7, user.getRole());
             ps.executeUpdate();
             try (ResultSet keys = ps.getGeneratedKeys()) {
-                if (keys.next()) user.setUserId(keys.getLong(1));
+                if (keys.next()) user.setUserId(Long.valueOf(keys.getLong(1)));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to insert user", e);
@@ -102,7 +102,7 @@ public class JdbcUserRepository implements UserRepository {
             ps.setString(5, user.getUsername());
             ps.setString(6, user.getPassword());
             ps.setString(7, user.getRole());
-            ps.setLong(8, user.getUserId());
+            ps.setLong(8, user.getUserId().longValue());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to update user", e);
@@ -115,16 +115,16 @@ public class JdbcUserRepository implements UserRepository {
         String sql = "DELETE FROM \"user\" WHERE user_id=?";
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, id);
+            ps.setLong(1, id.longValue());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to delete user", e);
         }
     }
 
-    private User mapRow(ResultSet rs) throws SQLException {
+    private static User mapRow(ResultSet rs) throws SQLException {
         return new User(
-                rs.getLong("user_id"),
+                Long.valueOf(rs.getLong("user_id")),
                 rs.getString("first_name"),
                 rs.getString("last_name"),
                 rs.getString("username"),

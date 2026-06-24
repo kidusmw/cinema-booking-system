@@ -29,9 +29,8 @@ ui/            — JavaFX controllers and views, grouped by user role (common/, 
 
 ## Prerequisites
 
-- Java 21+
+- **Java 21** (the only manual install — everything else is handled by the wrapper)
 - Docker & Docker Compose (for PostgreSQL + tests)
-- Maven 3.9+
 
 ## Quick Start
 
@@ -40,8 +39,11 @@ ui/            — JavaFX controllers and views, grouped by user role (common/, 
 docker-compose up -d
 
 # 2. Run the application
-mvn javafx:run
+make run
 ```
+
+> The Maven Wrapper (`mvnw`) is included in the repository — `make` and `make ci` use it automatically.
+> No local Maven installation is needed beyond what the wrapper downloads.
 
 The application will:
 1. Read `db.properties` (defaults to localhost:5432)

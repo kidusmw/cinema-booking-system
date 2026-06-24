@@ -13,8 +13,12 @@ import infrastructure.persistence.TransactionalConnectionProvider;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BookingFacade {
+
+    private static final Logger log = LoggerFactory.getLogger(BookingFacade.class);
     private final ConnectionProvider connectionProvider;
 
     public BookingFacade(ConnectionProvider connectionProvider) {
@@ -45,17 +49,23 @@ public class BookingFacade {
         } catch (Exception e) {
             if (conn != null) {
                 try {
-                    conn.rollback();
-                } catch (SQLException ignored) {
+                    if (!conn.isClosed()) {
+                        conn.rollback();
+                    }
+                } catch (SQLException rollbackEx) {
+                    log.warn("Rollback failed after transaction error", rollbackEx);
                 }
             }
             throw new RuntimeException("Booking+Payment transaction failed", e);
         } finally {
             if (conn != null) {
                 try {
-                    conn.setAutoCommit(true);
-                    conn.close();
-                } catch (SQLException ignored) {
+                    if (!conn.isClosed()) {
+                        conn.setAutoCommit(true);
+                        conn.close();
+                    }
+                } catch (SQLException closeEx) {
+                    log.warn("Failed to close connection after transaction", closeEx);
                 }
             }
         }

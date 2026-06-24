@@ -10,14 +10,12 @@ import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import ui.view.admin.ShowManagementPage;
 
 public class ShowManagmentController {
-
     private final ShowManagementPage view;
     private final AppContext ctx;
     private final AdminDashboardController dashboard;
@@ -176,7 +174,7 @@ public class ShowManagmentController {
         GridPane grid = new GridPane();
         grid.setHgap(12);
         grid.setVgap(12);
-        grid.setPadding(new Insets(20, 40, 10, 20));
+        grid.getStyleClass().add("p-20-40-10-20");
 
         TextField showIDField = new TextField();
         if (existing != null) showIDField.setText(String.valueOf(existing.getShowId()));
@@ -230,7 +228,7 @@ public class ShowManagmentController {
                 dialogButton -> {
                     if (dialogButton == saveButtonType) {
                         Showtime show = new Showtime();
-                        show.setShowId(Long.parseLong(showIDField.getText().trim()));
+                        show.setShowId(Long.valueOf(showIDField.getText().trim()));
 
                         String selectedTitle = movieComboBox.getValue();
                         String selectedHallName = hallComboBox.getValue();
@@ -238,8 +236,8 @@ public class ShowManagmentController {
                         show.setMovieName(selectedTitle);
                         show.setHallName(selectedHallName);
 
-                        show.setMovieId(Long.parseLong(movieMap.get(selectedTitle)));
-                        show.setHallId(Long.parseLong(hallMap.get(selectedHallName)));
+                        show.setMovieId(Long.valueOf(movieMap.get(selectedTitle)));
+                        show.setHallId(Long.valueOf(hallMap.get(selectedHallName)));
 
                         if (datePicker.getValue() != null) {
                             show.setShowDate(datePicker.getValue());
@@ -253,7 +251,7 @@ public class ShowManagmentController {
         return dialog;
     }
 
-    private void showAlert(String title, String content) {
+    private static void showAlert(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);

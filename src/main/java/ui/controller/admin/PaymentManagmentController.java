@@ -38,7 +38,7 @@ public class PaymentManagmentController {
             total += p.getTotalAmount();
         }
 
-        view.lblTotalRevenue.setText(String.format("%.2f Birr", total));
+        view.lblTotalRevenue.setText(String.format("%.2f Birr", Double.valueOf(total)));
     }
 
     private void handleBack() {

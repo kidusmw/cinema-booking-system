@@ -1,19 +1,12 @@
 package ui.view.customer;
 
-import static ui.common.Theme.*;
-
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 public class TicketPage {
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(TicketPage.class);
@@ -46,26 +39,26 @@ public class TicketPage {
 
     private void createUI() {
         root = new VBox(20);
-        root.setAlignment(Pos.CENTER);
+        root.getStyleClass().add("align-center");
         root.getStyleClass().add("page");
-        root.setPadding(new Insets(30));
+        root.getStyleClass().add("p-30");
 
         // Success message
         successLabel = new Label("🎉 Booking Confirmed!");
         successLabel.getStyleClass().add("welcome-title");
-        successLabel.setTextFill(Color.web(SUCCESS));
+        successLabel.getStyleClass().add("text-success");
 
         Label subMessage = new Label("Your ticket has been generated. Enjoy the show!");
         subMessage.getStyleClass().addAll("body-text", "muted-text");
 
         // ===== TICKET =====
         VBox ticket = new VBox(0);
-        ticket.setMaxWidth(600);
+        ticket.getStyleClass().add("w-600");
         ticket.getStyleClass().add("card");
 
         // Top colored section
         VBox topSection = new VBox(10);
-        topSection.setPadding(new Insets(25));
+        topSection.getStyleClass().add("p-25");
         topSection.getStyleClass().add("ticket-header");
 
         Label cinemaLabel = new Label("🎬 CINEMABOOK");
@@ -73,25 +66,27 @@ public class TicketPage {
 
         Label ticketType = new Label("MOVIE TICKET");
         ticketType.getStyleClass().add("caption");
-        ticketType.setTextFill(Color.web("#FCE7F3"));
+        ticketType.getStyleClass().add("ticket-type-text");
 
         topSection.getChildren().addAll(cinemaLabel, ticketType);
 
         // Perforated line
         HBox perforations = new HBox(0);
-        perforations.setAlignment(Pos.CENTER);
-        perforations.setPrefHeight(20);
+        perforations.getStyleClass().add("align-center");
+        perforations.getStyleClass().add("h-20");
         perforations.getStyleClass().add("ticket-perforations");
 
-        Circle leftCircle = new Circle(10, Color.web("#FAFAFA"));
+        Circle leftCircle = new Circle(10);
+        leftCircle.getStyleClass().add("ticket-circle-left");
         leftCircle.setTranslateX(-5);
-        Circle rightCircle = new Circle(10, Color.web("#FAFAFA"));
+        Circle rightCircle = new Circle(10);
+        rightCircle.getStyleClass().add("ticket-circle-right");
         rightCircle.setTranslateX(5);
         perforations.getChildren().addAll(leftCircle, rightCircle);
 
         // Middle section with details
         VBox middleSection = new VBox(15);
-        middleSection.setPadding(new Insets(25, 30, 25, 30));
+        middleSection.getStyleClass().add("p-25-30");
         middleSection.getStyleClass().add("ticket-perforations");
 
         // Movie title
@@ -104,48 +99,45 @@ public class TicketPage {
 
         // Date & Time row
         HBox dateTimeRow = new HBox(30);
-        dateTimeRow.setAlignment(Pos.CENTER_LEFT);
+        dateTimeRow.getStyleClass().add("align-center-left");
 
-        VBox dateBox = createDetailBox("📅 DATE & TIME", "dateTime");
+        VBox dateBox = createDetailBox("📅 DATE & TIME");
         dateTimeLabel = (Label) dateBox.getChildren().get(1);
         dateTimeRow.getChildren().add(dateBox);
 
         // Hall row
-        VBox hallBox = createDetailBox("🏛️ HALL", "hall");
+        VBox hallBox = createDetailBox("🏛️ HALL");
         hallLabel = (Label) hallBox.getChildren().get(1);
         dateTimeRow.getChildren().add(hallBox);
 
         // Seats
-        VBox seatsBox = createDetailBox("💺 SEATS", "seats");
+        VBox seatsBox = createDetailBox("💺 SEATS");
         seatsLabel = (Label) seatsBox.getChildren().get(1);
         dateTimeRow.getChildren().add(seatsBox);
 
         // Divider
         Line divider = new Line(0, 0, 540, 0);
-        divider.setStroke(Color.web(BORDER));
-        divider.setStrokeWidth(1);
-        // ✅ FIXED: Using appropriate property collection method implementation
-        divider.getStrokeDashArray().addAll(5.0, 5.0);
+        divider.getStyleClass().add("ticket-divider");
 
         // Bottom info
         HBox bottomInfo = new HBox(30);
-        bottomInfo.setAlignment(Pos.CENTER_LEFT);
+        bottomInfo.getStyleClass().add("align-center-left");
 
-        VBox customerBox = createDetailBox("👤 CUSTOMER", "customer");
+        VBox customerBox = createDetailBox("👤 CUSTOMER");
         customerLabel = (Label) customerBox.getChildren().get(1);
         bottomInfo.getChildren().add(customerBox);
 
-        VBox bookingBox = createDetailBox("🎫 BOOKING ID", "booking");
+        VBox bookingBox = createDetailBox("🎫 BOOKING ID");
         bookingIdLabel = (Label) bookingBox.getChildren().get(1);
         bottomInfo.getChildren().add(bookingBox);
 
-        VBox totalBox = createDetailBox("💰 TOTAL", "total");
+        VBox totalBox = createDetailBox("💰 TOTAL");
         totalLabel = (Label) totalBox.getChildren().get(1);
         totalLabel.getStyleClass().add("price-label");
         bottomInfo.getChildren().add(totalBox);
 
         // Booked on
-        VBox bookedOnBox = createDetailBox("📅 BOOKED ON", "bookedOn");
+        VBox bookedOnBox = createDetailBox("📅 BOOKED ON");
         bookedOnLabel = (Label) bookedOnBox.getChildren().get(1);
         bookedOnLabel.getStyleClass().add("caption");
 
@@ -156,7 +148,7 @@ public class TicketPage {
                         movieGenre,
                         new Region() {
                             {
-                                setPrefHeight(10);
+                                getStyleClass().add("h-10");
                             }
                         },
                         dateTimeRow,
@@ -166,12 +158,12 @@ public class TicketPage {
 
         // Bottom barcode section
         VBox barcodeSection = new VBox(10);
-        barcodeSection.setPadding(new Insets(20));
-        barcodeSection.setAlignment(Pos.CENTER);
+        barcodeSection.getStyleClass().add("p-20");
+        barcodeSection.getStyleClass().add("align-center");
         barcodeSection.getStyleClass().add("ticket-barcode-bg");
 
         Label barcode = new Label("┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃");
-        barcode.setFont(Font.font("Monospaced", 16));
+        barcode.getStyleClass().add("barcode-text");
 
         Label scanNote = new Label("Scan at entrance");
         scanNote.getStyleClass().add("caption");
@@ -183,8 +175,8 @@ public class TicketPage {
 
         // Action buttons
         HBox actionButtons = new HBox(15);
-        actionButtons.setAlignment(Pos.CENTER);
-        actionButtons.setPadding(new Insets(20, 0, 0, 0));
+        actionButtons.getStyleClass().add("align-center");
+        actionButtons.getStyleClass().add("pt-20");
 
         btnDownload = createActionButton("📥  Download Ticket");
         btnMyBookings = createActionButton("🎫  My Bookings");
@@ -195,20 +187,20 @@ public class TicketPage {
         root.getChildren().addAll(successLabel, subMessage, ticket, actionButtons);
     }
 
-    private VBox createDetailBox(String label, String type) {
+    private static VBox createDetailBox(String label) {
         VBox box = new VBox(3);
         Label lbl = new Label(label);
         lbl.getStyleClass().add("caption");
         Label val = new Label("");
-        val.setFont(Font.font("Segoe UI", FontWeight.BOLD, 13));
+        val.getStyleClass().add("ticket-detail-value");
         box.getChildren().addAll(lbl, val);
         return box;
     }
 
     private Button createActionButton(String text) {
         Button btn = new Button(text);
-        btn.setPrefHeight(45);
-        btn.setPrefWidth(180);
+        btn.getStyleClass().add("h-45");
+        btn.getStyleClass().add("w-180");
         btn.getStyleClass().add("primary-button");
         return btn;
     }

@@ -2,12 +2,11 @@ package ui.view.admin;
 
 import domain.model.Showtime;
 import java.time.LocalDate;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
+@SuppressWarnings({"unchecked", "deprecation"})
 public class ShowManagementPage {
     public TableView<Showtime> showTable;
     public TextField searchField;
@@ -25,9 +24,9 @@ public class ShowManagementPage {
     private void createUI() {
         root = new VBox(20);
         root.getStyleClass().add("page");
-        root.setPadding(new Insets(30));
+        root.getStyleClass().add("p-30");
         HBox header = new HBox(15);
-        header.setAlignment(Pos.CENTER_LEFT);
+        header.getStyleClass().add("align-center-left");
 
         VBox titleBox = new VBox(5);
         Label title = new Label("Show Management");
@@ -45,11 +44,11 @@ public class ShowManagementPage {
 
         header.getChildren().addAll(titleBox, spacer, btnBack);
         HBox toolbar = new HBox(10);
-        toolbar.setAlignment(Pos.CENTER_LEFT);
+        toolbar.getStyleClass().add("align-center-left");
         searchField = new TextField();
         searchField.setPromptText("🔍  Search by ID, movie name, hall name, or time...");
-        searchField.setPrefHeight(40);
-        searchField.setPrefWidth(400);
+        searchField.getStyleClass().add("h-40");
+        searchField.getStyleClass().add("w-400");
         searchField.getStyleClass().add("search-field");
 
         Region toolbarSpacer = new Region();
@@ -67,17 +66,17 @@ public class ShowManagementPage {
 
         TableColumn<Showtime, String> showIdCol = new TableColumn<>("Show ID");
         showIdCol.setCellValueFactory(new PropertyValueFactory<>("showId"));
-        showIdCol.setPrefWidth(120);
+        showIdCol.getStyleClass().add("w-120");
         TableColumn<Showtime, String> movieCol = new TableColumn<>("Movie Name");
         movieCol.setCellValueFactory(new PropertyValueFactory<>("movieName"));
-        movieCol.setPrefWidth(180);
+        movieCol.getStyleClass().add("w-180");
         TableColumn<Showtime, String> hallCol = new TableColumn<>("Hall Name");
         hallCol.setCellValueFactory(new PropertyValueFactory<>("hallName"));
-        hallCol.setPrefWidth(140);
+        hallCol.getStyleClass().add("w-140");
 
         TableColumn<Showtime, LocalDate> dateCol = new TableColumn<>("Date");
         dateCol.setCellValueFactory(new PropertyValueFactory<>("showDate"));
-        dateCol.setPrefWidth(130);
+        dateCol.getStyleClass().add("w-130");
         dateCol.setCellFactory(
                 col ->
                         new TableCell<Showtime, LocalDate>() {
@@ -94,17 +93,18 @@ public class ShowManagementPage {
 
         TableColumn<Showtime, String> timeCol = new TableColumn<>("Time");
         timeCol.setCellValueFactory(new PropertyValueFactory<>("showTime"));
-        timeCol.setPrefWidth(100);
+        timeCol.getStyleClass().add("w-100");
 
         showTable.getColumns().addAll(showIdCol, movieCol, hallCol, dateCol, timeCol);
         showTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        showTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         // ===== ASSEMBLE LAYOUT =====
         root.getChildren().addAll(header, toolbar, showTable);
 
         // Action button row
         HBox actionRow = new HBox(10);
-        actionRow.setAlignment(Pos.CENTER_RIGHT);
+        actionRow.getStyleClass().add("align-center-right");
         actionRow.getChildren().addAll(btnEdit, btnDelete, btnRefresh);
         root.getChildren().add(actionRow);
     }
@@ -117,9 +117,9 @@ public class ShowManagementPage {
         return root;
     }
 
-    private Button createActionButton(String text, String cssClass) {
+    private static Button createActionButton(String text, String cssClass) {
         Button btn = new Button(text);
-        btn.setPrefHeight(38);
+        btn.getStyleClass().add("h-38");
         btn.getStyleClass().add(cssClass);
         return btn;
     }

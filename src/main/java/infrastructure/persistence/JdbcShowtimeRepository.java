@@ -26,7 +26,7 @@ public class JdbcShowtimeRepository implements ShowtimeRepository {
         List<Showtime> list = new ArrayList<>();
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, movieId);
+            ps.setLong(1, movieId.longValue());
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) list.add(mapRow(rs));
             }
@@ -46,7 +46,7 @@ public class JdbcShowtimeRepository implements ShowtimeRepository {
                         + "WHERE s.show_id = ?";
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, id);
+            ps.setLong(1, id.longValue());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) return Optional.of(mapRow(rs));
             }
@@ -111,14 +111,14 @@ public class JdbcShowtimeRepository implements ShowtimeRepository {
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps =
                         conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setLong(1, showtime.getMovieId());
-            ps.setLong(2, showtime.getHallId());
+            ps.setLong(1, showtime.getMovieId().longValue());
+            ps.setLong(2, showtime.getHallId().longValue());
             ps.setDate(3, Date.valueOf(showtime.getShowDate()));
             ps.setTime(4, Time.valueOf(showtime.getShowTime()));
             ps.setDouble(5, showtime.getTicketPrice());
             ps.executeUpdate();
             try (ResultSet keys = ps.getGeneratedKeys()) {
-                if (keys.next()) showtime.setShowId(keys.getLong(1));
+                if (keys.next()) showtime.setShowId(Long.valueOf(keys.getLong(1)));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to insert showtime", e);
@@ -131,12 +131,12 @@ public class JdbcShowtimeRepository implements ShowtimeRepository {
                 "UPDATE showtime SET movie_id=?, hall_id=?, show_date=?, show_time=?, ticket_price=? WHERE show_id=?";
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, showtime.getMovieId());
-            ps.setLong(2, showtime.getHallId());
+            ps.setLong(1, showtime.getMovieId().longValue());
+            ps.setLong(2, showtime.getHallId().longValue());
             ps.setDate(3, Date.valueOf(showtime.getShowDate()));
             ps.setTime(4, Time.valueOf(showtime.getShowTime()));
             ps.setDouble(5, showtime.getTicketPrice());
-            ps.setLong(6, showtime.getShowId());
+            ps.setLong(6, showtime.getShowId().longValue());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to update showtime", e);
@@ -149,19 +149,19 @@ public class JdbcShowtimeRepository implements ShowtimeRepository {
         String sql = "DELETE FROM showtime WHERE show_id=?";
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setLong(1, id);
+            ps.setLong(1, id.longValue());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to delete showtime", e);
         }
     }
 
-    private Showtime mapRow(ResultSet rs) throws SQLException {
+    private static Showtime mapRow(ResultSet rs) throws SQLException {
         Showtime showtime =
                 new Showtime(
-                        rs.getLong("show_id"),
-                        rs.getLong("movie_id"),
-                        rs.getLong("hall_id"),
+                        Long.valueOf(rs.getLong("show_id")),
+                        Long.valueOf(rs.getLong("movie_id")),
+                        Long.valueOf(rs.getLong("hall_id")),
                         rs.getDate("show_date").toLocalDate(),
                         rs.getTime("show_time").toLocalTime(),
                         rs.getDouble("ticket_price"));

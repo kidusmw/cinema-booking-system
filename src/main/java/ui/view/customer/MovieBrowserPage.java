@@ -1,7 +1,5 @@
 package ui.view.customer;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
@@ -28,10 +26,10 @@ public class MovieBrowserPage {
     private void createUI() {
         root = new VBox(20);
         root.getStyleClass().add("page");
-        root.setPadding(new Insets(30));
+        root.getStyleClass().add("p-30");
 
         HBox header = new HBox(15);
-        header.setAlignment(Pos.CENTER_LEFT);
+        header.getStyleClass().add("align-center-left");
 
         btnBack = new Button("← Back");
         btnBack.getStyleClass().add("back-button");
@@ -48,8 +46,8 @@ public class MovieBrowserPage {
 
         searchField = new TextField();
         searchField.setPromptText("🔍 Search movies...");
-        searchField.setPrefHeight(38);
-        searchField.setPrefWidth(300);
+        searchField.getStyleClass().add("h-38");
+        searchField.getStyleClass().add("w-300");
         searchField.getStyleClass().add("search-field");
 
         header.getChildren().addAll(btnBack, titleBox, spacer, searchField);
@@ -58,8 +56,8 @@ public class MovieBrowserPage {
         movieContainer = new TilePane();
         movieContainer.setHgap(20);
         movieContainer.setVgap(20);
-        movieContainer.setPadding(new Insets(20, 0, 0, 0));
-        movieContainer.setAlignment(Pos.CENTER);
+        movieContainer.getStyleClass().add("pt-20");
+        movieContainer.getStyleClass().add("align-center");
         VBox.setVgrow(movieContainer, Priority.ALWAYS);
 
         ScrollPane scroll = new ScrollPane(movieContainer);
