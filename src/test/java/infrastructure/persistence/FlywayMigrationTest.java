@@ -2,10 +2,13 @@ package infrastructure.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import infrastructure.config.AppConfig;
+import java.net.URI;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Properties;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.output.MigrateResult;
 import org.junit.jupiter.api.MethodOrderer;
@@ -42,7 +45,7 @@ class FlywayMigrationTest {
         MigrateResult result = flyway.migrate();
 
         assertThat(result.success).isTrue();
-        assertThat(result.migrationsExecuted).isEqualTo(3);
+        assertThat(result.migrationsExecuted).isEqualTo(4);
 
         // Verify all expected tables exist
         String[] expectedTables = {
@@ -126,5 +129,44 @@ class FlywayMigrationTest {
 
         assertThat(second.migrationsExecuted).isZero(); // nothing to apply after first
         assertThat(second.success).isTrue();
+    }
+
+    @Test
+    void flywayMigratorWorks() throws Exception {
+        String jdbcUrl = postgres.getJdbcUrl();
+        String user = postgres.getUsername();
+        String password = postgres.getPassword();
+
+        // Parse JDBC URL into properties for AppConfig
+        URI uri = new URI(jdbcUrl.replace("jdbc:", ""));
+        Properties props = new Properties();
+        props.setProperty("db.host", uri.getHost());
+        props.setProperty("db.port", String.valueOf(uri.getPort()));
+        String dbName = uri.getPath().replace("/", "").split("\\?")[0];
+        props.setProperty("db.name", dbName);
+        props.setProperty("db.user", user);
+        props.setProperty("db.password", password);
+
+        AppConfig config = new AppConfig(props);
+        FlywayMigrator.migrate(config);
+
+        // Verify tables exist after migration
+        String[] expectedTables = {
+            "user", "movie", "hall", "seat", "showtime", "booking", "booking_seat", "payment"
+        };
+        try (Connection conn = DriverManager.getConnection(jdbcUrl, user, password);
+                Statement stmt = conn.createStatement()) {
+            for (String table : expectedTables) {
+                ResultSet rs =
+                        stmt.executeQuery(
+                                "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = '"
+                                        + table
+                                        + "')");
+                assertThat(rs.next()).isTrue();
+                assertThat(rs.getBoolean(1))
+                        .as("Table '%s' should exist after FlywayMigrator.migrate()", table)
+                        .isTrue();
+            }
+        }
     }
 }

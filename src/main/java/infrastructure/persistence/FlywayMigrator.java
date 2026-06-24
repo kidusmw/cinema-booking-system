@@ -16,6 +16,7 @@ public class FlywayMigrator {
                         .locations("classpath:db/migration")
                         .load();
 
+        flyway.repair();
         var result = flyway.migrate();
         log.info(
                 "Flyway migration applied {} migration(s)",
