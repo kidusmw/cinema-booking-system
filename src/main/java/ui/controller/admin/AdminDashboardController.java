@@ -33,7 +33,11 @@ public class AdminDashboardController {
         log.info("Opening Admin Dashboard page");
 
         view.welcomeLabel.setText("Welcome, " + adminName);
+        initHandlers();
+        showDashboard();
+    }
 
+    private void initHandlers() {
         view.btnLogout.setOnAction(e -> nav.goFresh(() -> new WelcomeController(stage, ctx, nav)));
 
         view.btnDashboard.setOnAction(e -> showDashboard());
@@ -44,7 +48,6 @@ public class AdminDashboardController {
         view.btnBookings.setOnAction(e -> showBookings());
         view.btnPayments.setOnAction(e -> showPayments());
         view.btnUsers.setOnAction(e -> showUsers());
-        showDashboard();
     }
 
     public void injectView(javafx.scene.Parent content) {
@@ -66,13 +69,32 @@ public class AdminDashboardController {
         Label title = new Label("Dashboard Overview");
         title.getStyleClass().add("title");
 
+        long movieCount = ctx.movieRepo.findAll().size();
+        long bookingCount = ctx.bookingRepo.findAll().size();
+        double revenue =
+                ctx.paymentRepo.findAll().stream()
+                        .filter(p -> "paid".equals(p.getStatus()))
+                        .mapToDouble(p -> p.getTotalAmount())
+                        .sum();
+        long userCount = ctx.userRepo.findAll().size();
+
         HBox statsBox = new HBox(20);
         statsBox.getChildren()
                 .addAll(
-                        createStatCard("Movies", "Total Movies", "11", "accent"),
-                        createStatCard("Bookings", "Total Bookings", "15", "success"),
-                        createStatCard("Revenue", "Revenue", "0.00birr", "warning"),
-                        createStatCard("Users", "Total Users", "9", "purple"));
+                        createStatCard(
+                                "Movies", "Total Movies", String.valueOf(movieCount), "accent"),
+                        createStatCard(
+                                "Bookings",
+                                "Total Bookings",
+                                String.valueOf(bookingCount),
+                                "success"),
+                        createStatCard(
+                                "Revenue",
+                                "Revenue",
+                                String.format("%.2f Birr", revenue),
+                                "warning"),
+                        createStatCard(
+                                "Users", "Total Users", String.valueOf(userCount), "purple"));
 
         dashboardContent.getChildren().addAll(title, statsBox);
         view.contentArea.getChildren().add(dashboardContent);
@@ -80,7 +102,7 @@ public class AdminDashboardController {
 
     private void showMovies() {
         setActiveMenu(view.btnMovies);
-        MovieManagementController c = new MovieManagementController(ctx, nav, this);
+        MovieManagementController c = new MovieManagementController(ctx, stage, this);
         injectView(c.getRootView());
     }
 
