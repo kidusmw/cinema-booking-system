@@ -92,3 +92,11 @@ UPDATE seat SET status = 'booked'
 WHERE seat_id IN (
     SELECT seat_id FROM booking_seat WHERE booking_id IN (1, 2)
 );
+
+-- 10. Sync sequences after explicit ID inserts ------------------
+SELECT setval('"user_user_id_seq"',     COALESCE((SELECT MAX(user_id)     FROM "user"), 1));
+SELECT setval('movie_movie_id_seq',      COALESCE((SELECT MAX(movie_id)    FROM movie), 1));
+SELECT setval('hall_hall_id_seq',        COALESCE((SELECT MAX(hall_id)    FROM hall), 1));
+SELECT setval('showtime_show_id_seq',    COALESCE((SELECT MAX(show_id)    FROM showtime), 1));
+SELECT setval('booking_booking_id_seq',  COALESCE((SELECT MAX(booking_id) FROM booking), 1));
+SELECT setval('payment_payment_id_seq',  COALESCE((SELECT MAX(payment_id) FROM payment), 1));
