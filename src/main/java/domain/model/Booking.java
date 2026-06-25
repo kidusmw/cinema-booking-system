@@ -11,7 +11,7 @@ public class Booking {
     private LocalDateTime bookingDate;
     private String movieName;
     private double amount;
-    private String bookingStatus;
+    private BookingStatus bookingStatus;
     private List<BookingSeat> seats = new ArrayList<>();
 
     public Booking() {}
@@ -28,22 +28,37 @@ public class Booking {
         this.showId = showId;
         this.bookingDate = bookingDate;
         this.amount = amount;
+        this.bookingStatus = BookingStatus.fromDbValue(bookingStatus);
+    }
+
+    public Booking(
+            Long bookingId,
+            Long userId,
+            Long showId,
+            LocalDateTime bookingDate,
+            double amount,
+            BookingStatus bookingStatus) {
+        this.bookingId = bookingId;
+        this.userId = userId;
+        this.showId = showId;
+        this.bookingDate = bookingDate;
+        this.amount = amount;
         this.bookingStatus = bookingStatus;
     }
 
     public void confirm() {
-        if (!"pending".equals(bookingStatus)) {
+        if (bookingStatus != BookingStatus.PENDING) {
             throw new IllegalStateException(
                     "Cannot confirm booking " + bookingId + " with status: " + bookingStatus);
         }
-        this.bookingStatus = "confirmed";
+        this.bookingStatus = BookingStatus.CONFIRMED;
     }
 
     public void cancel() {
-        if ("cancelled".equals(bookingStatus)) {
+        if (bookingStatus == BookingStatus.CANCELLED) {
             throw new IllegalStateException("Booking " + bookingId + " is already cancelled");
         }
-        this.bookingStatus = "cancelled";
+        this.bookingStatus = BookingStatus.CANCELLED;
     }
 
     public double total() {
@@ -102,11 +117,11 @@ public class Booking {
         this.amount = amount;
     }
 
-    public String getBookingStatus() {
+    public BookingStatus getBookingStatus() {
         return bookingStatus;
     }
 
-    public void setBookingStatus(String bookingStatus) {
+    public void setBookingStatus(BookingStatus bookingStatus) {
         this.bookingStatus = bookingStatus;
     }
 

@@ -3,27 +3,28 @@ package ui.controller.admin;
 import application.AppContext;
 import domain.model.Hall;
 import domain.model.Seat;
+import domain.model.SeatStatus;
 import java.util.List;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import ui.controller.common.NavigationManager;
-import ui.view.admin.SeatManagmentPage;
+import ui.view.admin.SeatManagementPage;
 
-public class SeatManagmentController {
+public class SeatManagementController {
 
     private static final org.slf4j.Logger log =
-            org.slf4j.LoggerFactory.getLogger(SeatManagmentController.class);
-    private SeatManagmentPage view;
+            org.slf4j.LoggerFactory.getLogger(SeatManagementController.class);
+    private SeatManagementPage view;
     private final AppContext ctx;
     private final NavigationManager nav;
     private Hall selectedHall;
 
-    public SeatManagmentController(AppContext ctx, NavigationManager nav) {
+    public SeatManagementController(AppContext ctx, NavigationManager nav) {
         this.ctx = ctx;
         this.nav = nav;
-        this.view = new SeatManagmentPage();
+        this.view = new SeatManagementPage();
         loadHalls();
         view.btnBack.setOnAction(e -> handleBack());
         view.btnGenerate.setOnAction(e -> handleGenerateSeats());
@@ -91,7 +92,7 @@ public class SeatManagmentController {
                 Seat seat = new Seat();
                 seat.setSeatNumber("R" + i); // Simplified for testing
                 seat.setSeatType("REGULAR");
-                seat.setStatus("AVAILABLE");
+                seat.setStatus(SeatStatus.AVAILABLE);
                 seat.setHallId(selectedHall.getHallId());
 
                 ctx.seatRepo.save(seat);
@@ -109,7 +110,7 @@ public class SeatManagmentController {
         try {
             List<domain.model.Seat> seats = ctx.seatRepo.findByHallId(selectedHall.getHallId());
             for (domain.model.Seat s : seats) {
-                s.setStatus("deleted");
+                s.setStatus(SeatStatus.AVAILABLE);
                 ctx.seatRepo.save(s);
             }
             loadSeatsForSelectedHall();

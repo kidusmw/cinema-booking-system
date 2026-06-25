@@ -9,20 +9,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import ui.view.admin.UserManagmentPage;
+import ui.view.admin.UserManagementPage;
 
-public class UserManagmentController {
+public class UserManagementController {
     private static final org.slf4j.Logger log =
-            org.slf4j.LoggerFactory.getLogger(UserManagmentController.class);
-    private final UserManagmentPage view;
+            org.slf4j.LoggerFactory.getLogger(UserManagementController.class);
+    private final UserManagementPage view;
     private final AppContext ctx;
     private final AdminDashboardController dashboard;
     private ObservableList<User> userList = FXCollections.observableArrayList();
 
-    public UserManagmentController(AppContext ctx, AdminDashboardController dashboard) {
+    public UserManagementController(AppContext ctx, AdminDashboardController dashboard) {
         this.ctx = ctx;
         this.dashboard = dashboard;
-        this.view = new UserManagmentPage();
+        this.view = new UserManagementPage();
         view.roleDropdown.getItems().setAll("ADMIN", "CUSTOMER");
         loadUsers();
         view.btnRefresh.setOnAction(e -> loadUsers());

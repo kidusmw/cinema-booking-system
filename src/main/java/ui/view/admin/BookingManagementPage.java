@@ -1,6 +1,7 @@
 package ui.view.admin;
 
 import domain.model.Booking;
+import domain.model.BookingStatus;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -8,7 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
-public class BookingManagmentPage {
+public class BookingManagementPage {
 
     public TableView<Booking> bookingTable;
     public TextField searchField;
@@ -18,7 +19,7 @@ public class BookingManagmentPage {
 
     private VBox root;
 
-    public BookingManagmentPage() {
+    public BookingManagementPage() {
         createUI();
     }
 
@@ -83,7 +84,7 @@ public class BookingManagmentPage {
         movieCol.setCellValueFactory(new PropertyValueFactory<>("movieName"));
 
         // 5. Booking Status
-        TableColumn<Booking, String> statusCol = new TableColumn<>("Status");
+        TableColumn<Booking, BookingStatus> statusCol = new TableColumn<>("Status");
         statusCol.setCellValueFactory(new PropertyValueFactory<>("bookingStatus"));
 
         // 6. Show ID - FIXED: was TableColumn<Booking, Integer> but showID is a String in the model

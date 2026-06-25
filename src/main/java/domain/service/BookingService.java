@@ -2,7 +2,9 @@ package domain.service;
 
 import domain.model.Booking;
 import domain.model.BookingSeat;
-import domain.model.Seat;
+import domain.model.BookingStatus;
+import domain.model.SeatStatus;
+import domain.model.SeatUnavailableException;
 import domain.port.BookingRepository;
 import domain.port.SeatRepository;
 import java.time.LocalDateTime;
@@ -19,22 +21,16 @@ public class BookingService {
     }
 
     public Booking createBooking(Long userId, Long showId, List<Long> seatIds, double amount) {
-        for (Long seatId : seatIds) {
-            Optional<Seat> seatOpt = seatRepo.findById(seatId);
-            if (seatOpt.isEmpty()) {
-                throw new IllegalArgumentException("Seat not found: " + seatId);
-            }
-            Seat seat = seatOpt.get();
-            if (!seat.isAvailable()) {
-                throw new IllegalStateException("Seat " + seatId + " is not available");
-            }
-        }
-
-        Booking booking = new Booking(null, userId, showId, LocalDateTime.now(), amount, "pending");
+        Booking booking =
+                new Booking(
+                        null, userId, showId, LocalDateTime.now(), amount, BookingStatus.PENDING);
         Booking saved = bookingRepo.save(booking);
 
         for (Long seatId : seatIds) {
-            seatRepo.updateStatus(seatId, "booked");
+            int rows = seatRepo.claimSeat(seatId);
+            if (rows == 0) {
+                throw new SeatUnavailableException("Seat " + seatId + " is not available");
+            }
             saved.addSeat(new BookingSeat(saved.getBookingId(), seatId, amount / seatIds.size()));
         }
 
@@ -51,7 +47,7 @@ public class BookingService {
         bookingRepo.cancel(bookingId);
 
         for (BookingSeat bs : booking.getSeats()) {
-            seatRepo.updateStatus(bs.getSeatId(), "available");
+            seatRepo.updateStatus(bs.getSeatId(), SeatStatus.AVAILABLE);
         }
     }
 

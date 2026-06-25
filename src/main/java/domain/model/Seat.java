@@ -7,7 +7,7 @@ public class Seat {
     private Long hallId;
     private String seatNumber;
     private String seatType;
-    private String status;
+    private SeatStatus status;
 
     public Seat() {}
 
@@ -16,23 +16,31 @@ public class Seat {
         this.hallId = hallId;
         this.seatNumber = seatNumber;
         this.seatType = seatType;
+        this.status = SeatStatus.fromDbValue(status);
+    }
+
+    public Seat(Long seatId, Long hallId, String seatNumber, String seatType, SeatStatus status) {
+        this.seatId = seatId;
+        this.hallId = hallId;
+        this.seatNumber = seatNumber;
+        this.seatType = seatType;
         this.status = status;
     }
 
     public boolean isAvailable() {
-        return "available".equals(status);
+        return status == SeatStatus.AVAILABLE;
     }
 
     public void book() {
-        if (!"available".equals(status)) {
+        if (status != SeatStatus.AVAILABLE) {
             throw new IllegalStateException(
                     "Seat " + seatId + " is not available (status: " + status + ")");
         }
-        this.status = "booked";
+        this.status = SeatStatus.BOOKED;
     }
 
     public void release() {
-        this.status = "available";
+        this.status = SeatStatus.AVAILABLE;
     }
 
     public Long getSeatId() {
@@ -67,24 +75,22 @@ public class Seat {
         this.seatType = seatType;
     }
 
-    public String getStatus() {
+    public SeatStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(SeatStatus status) {
         this.status = status;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (super.equals(o)) return true;
         if (!(o instanceof Seat seat)) return false;
         return Objects.equals(seatId, seat.seatId);
     }
 
     @Override
     public int hashCode() {
-        super.hashCode();
         return Objects.hashCode(seatId);
     }
 }

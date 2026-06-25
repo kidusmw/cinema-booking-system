@@ -1,6 +1,5 @@
 package ui.common;
 
-import application.AppConfig;
 import javafx.animation.FadeTransition;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -38,7 +37,7 @@ public final class WindowManager {
         Scene scene = new Scene(root, finalWidth, finalHeight);
         UITheme.loadStylesheet(scene);
 
-        stage.setTitle(AppConfig.getAppName() + " \u2014 " + pageTitle);
+        stage.setTitle("CinemaBook \u2014 " + pageTitle);
         stage.setScene(scene);
         stage.setWidth(finalWidth);
         stage.setHeight(finalHeight);

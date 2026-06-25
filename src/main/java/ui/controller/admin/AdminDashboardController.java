@@ -108,37 +108,37 @@ public class AdminDashboardController {
 
     private void showShows() {
         setActiveMenu(view.btnShows);
-        ShowManagmentController c = new ShowManagmentController(ctx, this);
+        ShowManagementController c = new ShowManagementController(ctx, this);
         injectView(c.getRootView());
     }
 
     private void showHalls() {
         setActiveMenu(view.btnHalls);
-        MoviehallManagmentController c = new MoviehallManagmentController(ctx, this);
+        MovieHallManagementController c = new MovieHallManagementController(ctx, this);
         injectView(c.getRootView());
     }
 
     private void showSeats() {
         setActiveMenu(view.btnSeats);
-        SeatManagmentController c = new SeatManagmentController(ctx, nav);
+        SeatManagementController c = new SeatManagementController(ctx, nav);
         injectView(c.getRootView());
     }
 
     private void showBookings() {
         setActiveMenu(view.btnBookings);
-        BookingManagmentController c = new BookingManagmentController(ctx, this);
+        BookingManagementController c = new BookingManagementController(ctx, this);
         injectView(c.getRootView());
     }
 
     private void showPayments() {
         setActiveMenu(view.btnPayments);
-        PaymentManagmentController c = new PaymentManagmentController(ctx, this);
+        PaymentManagementController c = new PaymentManagementController(ctx, this);
         injectView(c.getRootView());
     }
 
     private void showUsers() {
         setActiveMenu(view.btnUsers);
-        UserManagmentController c = new UserManagmentController(ctx, this);
+        UserManagementController c = new UserManagementController(ctx, this);
         injectView(c.getRootView());
     }
 

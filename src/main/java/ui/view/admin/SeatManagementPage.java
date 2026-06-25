@@ -8,7 +8,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
 @SuppressWarnings("unchecked")
-public class SeatManagmentPage {
+public class SeatManagementPage {
     public TableView<Seat> seatTable;
     public ComboBox<Hall> hallDropdown;
     public TextField seatCountField;
@@ -21,7 +21,7 @@ public class SeatManagmentPage {
 
     private VBox root;
 
-    public SeatManagmentPage() {
+    public SeatManagementPage() {
         createUI();
     }
 

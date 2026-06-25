@@ -9,13 +9,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 import ui.view.admin.AdminDashboardPage;
-import ui.view.admin.BookingManagmentPage;
-import ui.view.admin.MovieHallManagmentPage;
+import ui.view.admin.BookingManagementPage;
+import ui.view.admin.MovieHallManagementPage;
 import ui.view.admin.MovieManagementPage;
-import ui.view.admin.PaymentManagment;
-import ui.view.admin.SeatManagmentPage;
+import ui.view.admin.PaymentManagementPage;
+import ui.view.admin.SeatManagementPage;
 import ui.view.admin.ShowManagementPage;
-import ui.view.admin.UserManagmentPage;
+import ui.view.admin.UserManagementPage;
 
 @DisplayName("Admin views render key UI elements")
 class AdminViewTest extends ApplicationTest {
@@ -46,8 +46,8 @@ class AdminViewTest extends ApplicationTest {
     }
 
     @Test
-    void movieHallManagmentPageHasTable() {
-        MovieHallManagmentPage page = new MovieHallManagmentPage();
+    void movieHallManagementPageHasTable() {
+        MovieHallManagementPage page = new MovieHallManagementPage();
         stage.getScene().setRoot(page.getView());
         assertNotNull(page.hallTable);
         assertNotNull(page.btnAddHall);
@@ -55,24 +55,24 @@ class AdminViewTest extends ApplicationTest {
     }
 
     @Test
-    void bookingManagmentPageHasTable() {
-        BookingManagmentPage page = new BookingManagmentPage();
+    void bookingManagementPageHasTable() {
+        BookingManagementPage page = new BookingManagementPage();
         stage.getScene().setRoot(page.getView());
         assertNotNull(page.bookingTable);
         assertNotNull(page.btnRefresh);
     }
 
     @Test
-    void paymentManagmentHasTable() {
-        PaymentManagment page = new PaymentManagment();
+    void paymentManagementHasTable() {
+        PaymentManagementPage page = new PaymentManagementPage();
         stage.getScene().setRoot(page.getView());
         assertNotNull(page.paymentTable);
         assertNotNull(page.btnRefresh);
     }
 
     @Test
-    void seatManagmentPageHasDropdown() {
-        SeatManagmentPage page = new SeatManagmentPage();
+    void seatManagementPageHasDropdown() {
+        SeatManagementPage page = new SeatManagementPage();
         stage.getScene().setRoot(page.getView());
         assertNotNull(page.hallDropdown);
         assertNotNull(page.btnGenerate);
@@ -88,8 +88,8 @@ class AdminViewTest extends ApplicationTest {
     }
 
     @Test
-    void userManagmentPageHasTable() {
-        UserManagmentPage page = new UserManagmentPage();
+    void userManagementPageHasTable() {
+        UserManagementPage page = new UserManagementPage();
         stage.getScene().setRoot(page.getView());
         assertNotNull(page.userTable);
         assertNotNull(page.roleDropdown);

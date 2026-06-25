@@ -25,22 +25,22 @@ class DomainModelTest {
 
     @Test
     void seatBookChangesStatus() {
-        Seat seat = new Seat(1L, 1L, "A1", "regular", "available");
+        Seat seat = new Seat(1L, 1L, "A1", "regular", SeatStatus.AVAILABLE);
         assertTrue(seat.isAvailable());
         seat.book();
         assertFalse(seat.isAvailable());
-        assertEquals("booked", seat.getStatus());
+        assertEquals(SeatStatus.BOOKED, seat.getStatus());
     }
 
     @Test
     void seatBookThrowsIfNotAvailable() {
-        Seat seat = new Seat(1L, 1L, "A1", "regular", "booked");
+        Seat seat = new Seat(1L, 1L, "A1", "regular", SeatStatus.BOOKED);
         assertThrows(IllegalStateException.class, seat::book);
     }
 
     @Test
     void seatReleaseMakesAvailable() {
-        Seat seat = new Seat(1L, 1L, "A1", "regular", "booked");
+        Seat seat = new Seat(1L, 1L, "A1", "regular", SeatStatus.BOOKED);
         seat.release();
         assertTrue(seat.isAvailable());
     }
@@ -77,7 +77,7 @@ class DomainModelTest {
     void bookingConfirmChangesStatus() {
         Booking booking = new Booking(1L, 1L, 1L, LocalDateTime.now(), 50.0, "pending");
         booking.confirm();
-        assertEquals("confirmed", booking.getBookingStatus());
+        assertEquals(BookingStatus.CONFIRMED, booking.getBookingStatus());
     }
 
     @Test
@@ -90,7 +90,7 @@ class DomainModelTest {
     void bookingCancelChangesStatus() {
         Booking booking = new Booking(1L, 1L, 1L, LocalDateTime.now(), 50.0, "confirmed");
         booking.cancel();
-        assertEquals("cancelled", booking.getBookingStatus());
+        assertEquals(BookingStatus.CANCELLED, booking.getBookingStatus());
     }
 
     @Test

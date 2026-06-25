@@ -6,7 +6,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
 @SuppressWarnings({"unchecked", "deprecation"})
-public class UserManagmentPage {
+public class UserManagementPage {
     public TableView<User> userTable;
     public ComboBox<String> roleDropdown;
     public Button btnUpdateRole;
@@ -15,14 +15,14 @@ public class UserManagmentPage {
     public Button btnDelete;
     public TextField searchField;
     private static final org.slf4j.Logger log =
-            org.slf4j.LoggerFactory.getLogger(UserManagmentPage.class);
+            org.slf4j.LoggerFactory.getLogger(UserManagementPage.class);
     private VBox root;
 
-    public UserManagmentPage() {
+    public UserManagementPage() {
         try {
             createUI();
         } catch (Exception e) {
-            log.error("Failed to create UserManagmentPage UI", e);
+            log.error("Failed to create UserManagementPage UI", e);
             root = new VBox();
             Label error = new Label("Error loading User Management page: " + e.getMessage());
             error.setWrapText(true);

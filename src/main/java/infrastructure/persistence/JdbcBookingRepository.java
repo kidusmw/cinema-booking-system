@@ -2,6 +2,7 @@ package infrastructure.persistence;
 
 import domain.model.Booking;
 import domain.model.BookingSeat;
+import domain.model.BookingStatus;
 import domain.port.BookingRepository;
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -34,7 +35,7 @@ public class JdbcBookingRepository implements BookingRepository {
             ps.setLong(1, booking.getUserId().longValue());
             ps.setLong(2, booking.getShowId().longValue());
             ps.setString(3, booking.getMovieName());
-            ps.setString(4, booking.getBookingStatus());
+            ps.setString(4, booking.getBookingStatus().getDbValue());
             ps.setDouble(5, booking.getAmount());
             ps.setTimestamp(
                     6,
@@ -61,7 +62,7 @@ public class JdbcBookingRepository implements BookingRepository {
             ps.setLong(1, booking.getUserId().longValue());
             ps.setLong(2, booking.getShowId().longValue());
             ps.setString(3, booking.getMovieName());
-            ps.setString(4, booking.getBookingStatus());
+            ps.setString(4, booking.getBookingStatus().getDbValue());
             ps.setDouble(5, booking.getAmount());
             ps.setLong(6, booking.getBookingId().longValue());
             ps.executeUpdate();
@@ -170,7 +171,7 @@ public class JdbcBookingRepository implements BookingRepository {
         booking.setUserId(Long.valueOf(rs.getLong("user_id")));
         booking.setShowId(Long.valueOf(rs.getLong("show_id")));
         booking.setMovieName(rs.getString("movie_name"));
-        booking.setBookingStatus(rs.getString("status"));
+        booking.setBookingStatus(BookingStatus.fromDbValue(rs.getString("status")));
         booking.setAmount(rs.getDouble("total_amount"));
         Timestamp ts = rs.getTimestamp("booking_date");
         if (ts != null) {

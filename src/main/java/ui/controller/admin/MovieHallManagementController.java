@@ -9,21 +9,21 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import ui.view.admin.MovieHallManagmentPage;
+import ui.view.admin.MovieHallManagementPage;
 
-public class MoviehallManagmentController {
+public class MovieHallManagementController {
 
     private static final org.slf4j.Logger log =
-            org.slf4j.LoggerFactory.getLogger(MoviehallManagmentController.class);
-    private MovieHallManagmentPage view;
+            org.slf4j.LoggerFactory.getLogger(MovieHallManagementController.class);
+    private MovieHallManagementPage view;
     private final AppContext ctx;
     private final AdminDashboardController dashboard;
     private ObservableList<Hall> hallList;
 
-    public MoviehallManagmentController(AppContext ctx, AdminDashboardController dashboard) {
+    public MovieHallManagementController(AppContext ctx, AdminDashboardController dashboard) {
         this.ctx = ctx;
         this.dashboard = dashboard;
-        this.view = new MovieHallManagmentPage();
+        this.view = new MovieHallManagementPage();
 
         view.btnBack.setOnAction(e -> handleBack());
         loadHalls();

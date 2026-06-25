@@ -6,11 +6,17 @@ import static org.mockito.Mockito.*;
 
 import domain.model.Booking;
 import domain.model.BookingSeat;
-import domain.model.Seat;
+import domain.model.SeatStatus;
+import domain.model.SeatUnavailableException;
 import domain.port.BookingRepository;
 import domain.port.SeatRepository;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,32 +34,36 @@ class BookingServiceTest {
 
     @Test
     void createBookingSucceedsWhenSeatsAvailable() {
-        Seat seat = new Seat(1L, 1L, "A1", "regular", "available");
-        when(seatRepo.findById(1L)).thenReturn(Optional.of(seat));
         Booking savedBooking = new Booking(1L, 1L, 1L, null, 50.0, "pending");
         when(bookingRepo.save(any())).thenReturn(savedBooking);
+        when(seatRepo.claimSeat(1L)).thenReturn(1);
 
         Booking result = bookingService.createBooking(1L, 1L, List.of(1L), 50.0);
 
         assertNotNull(result);
         assertEquals(1L, result.getBookingId());
-        verify(seatRepo).updateStatus(1L, "booked");
+        verify(seatRepo).claimSeat(1L);
     }
 
     @Test
     void createBookingThrowsWhenSeatNotFound() {
-        when(seatRepo.findById(999L)).thenReturn(Optional.empty());
+        Booking savedBooking = new Booking(1L, 1L, 1L, null, 50.0, "pending");
+        when(bookingRepo.save(any())).thenReturn(savedBooking);
+        when(seatRepo.claimSeat(999L)).thenReturn(0);
+
         assertThrows(
-                IllegalArgumentException.class,
+                SeatUnavailableException.class,
                 () -> bookingService.createBooking(1L, 1L, List.of(999L), 50.0));
     }
 
     @Test
     void createBookingThrowsWhenSeatNotAvailable() {
-        Seat seat = new Seat(1L, 1L, "A1", "regular", "booked");
-        when(seatRepo.findById(1L)).thenReturn(Optional.of(seat));
+        Booking savedBooking = new Booking(1L, 1L, 1L, null, 50.0, "pending");
+        when(bookingRepo.save(any())).thenReturn(savedBooking);
+        when(seatRepo.claimSeat(1L)).thenReturn(0);
+
         assertThrows(
-                IllegalStateException.class,
+                SeatUnavailableException.class,
                 () -> bookingService.createBooking(1L, 1L, List.of(1L), 50.0));
     }
 
@@ -67,8 +77,8 @@ class BookingServiceTest {
         bookingService.cancelBooking(1L);
 
         verify(bookingRepo).cancel(1L);
-        verify(seatRepo).updateStatus(1L, "available");
-        verify(seatRepo).updateStatus(2L, "available");
+        verify(seatRepo).updateStatus(1L, SeatStatus.AVAILABLE);
+        verify(seatRepo).updateStatus(2L, SeatStatus.AVAILABLE);
     }
 
     @Test
@@ -91,12 +101,55 @@ class BookingServiceTest {
 
     @Test
     void createBookingThrowsWhenPriceMismatch() {
-        Seat seat = new Seat(1L, 1L, "A1", "regular", "available");
-        when(seatRepo.findById(1L)).thenReturn(Optional.of(seat));
         when(bookingRepo.save(any())).thenThrow(new RuntimeException("DB error"));
 
         assertThrows(
                 RuntimeException.class,
                 () -> bookingService.createBooking(1L, 1L, List.of(1L), 50.0));
+    }
+
+    @Test
+    void concurrentBookingOnlyOneSucceeds() throws Exception {
+        Booking savedBooking = new Booking(1L, 1L, 1L, null, 50.0, "pending");
+        when(bookingRepo.save(any())).thenReturn(savedBooking);
+
+        AtomicInteger callOrder = new AtomicInteger(0);
+        when(seatRepo.claimSeat(1L)).thenAnswer(inv -> callOrder.incrementAndGet() == 1 ? 1 : 0);
+
+        CyclicBarrier barrier = new CyclicBarrier(2);
+        ExecutorService es = Executors.newFixedThreadPool(2);
+
+        try {
+            List<Future<Booking>> futures =
+                    es.invokeAll(
+                            List.of(
+                                    () -> {
+                                        barrier.await();
+                                        return bookingService.createBooking(
+                                                1L, 1L, List.of(1L), 50.0);
+                                    },
+                                    () -> {
+                                        barrier.await();
+                                        return bookingService.createBooking(
+                                                1L, 1L, List.of(1L), 50.0);
+                                    }));
+
+            long success =
+                    futures.stream()
+                            .filter(
+                                    f -> {
+                                        try {
+                                            f.get();
+                                            return true;
+                                        } catch (Exception e) {
+                                            return false;
+                                        }
+                                    })
+                            .count();
+
+            assertEquals(1, success);
+        } finally {
+            es.shutdown();
+        }
     }
 }

@@ -5,18 +5,18 @@ import domain.model.Payment;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import ui.view.admin.PaymentManagment;
+import ui.view.admin.PaymentManagementPage;
 
-public class PaymentManagmentController {
-    private final PaymentManagment view;
+public class PaymentManagementController {
+    private final PaymentManagementPage view;
     private final AppContext ctx;
     private final AdminDashboardController dashboard;
     private final ObservableList<Payment> list = FXCollections.observableArrayList();
 
-    public PaymentManagmentController(AppContext ctx, AdminDashboardController dashboard) {
+    public PaymentManagementController(AppContext ctx, AdminDashboardController dashboard) {
         this.ctx = ctx;
         this.dashboard = dashboard;
-        this.view = new PaymentManagment();
+        this.view = new PaymentManagementPage();
 
         initController();
     }

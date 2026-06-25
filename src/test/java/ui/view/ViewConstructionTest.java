@@ -7,13 +7,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ui.view.admin.AdminDashboardPage;
-import ui.view.admin.BookingManagmentPage;
-import ui.view.admin.MovieHallManagmentPage;
+import ui.view.admin.BookingManagementPage;
+import ui.view.admin.MovieHallManagementPage;
 import ui.view.admin.MovieManagementPage;
-import ui.view.admin.PaymentManagment;
-import ui.view.admin.SeatManagmentPage;
+import ui.view.admin.PaymentManagementPage;
+import ui.view.admin.SeatManagementPage;
 import ui.view.admin.ShowManagementPage;
-import ui.view.admin.UserManagmentPage;
+import ui.view.admin.UserManagementPage;
 import ui.view.common.AuthChoice;
 import ui.view.common.LoginPage;
 import ui.view.common.SignUpPage;
@@ -101,13 +101,13 @@ class ViewConstructionTest {
     }
 
     @Test
-    void bookingManagmentPage() {
-        assertNotNull(new BookingManagmentPage().getView());
+    void bookingManagementPage() {
+        assertNotNull(new BookingManagementPage().getView());
     }
 
     @Test
-    void movieHallManagmentPage() {
-        assertNotNull(new MovieHallManagmentPage().getView());
+    void movieHallManagementPage() {
+        assertNotNull(new MovieHallManagementPage().getView());
     }
 
     @Test
@@ -116,13 +116,13 @@ class ViewConstructionTest {
     }
 
     @Test
-    void paymentManagment() {
-        assertNotNull(new PaymentManagment().getView());
+    void paymentManagementPage() {
+        assertNotNull(new PaymentManagementPage().getView());
     }
 
     @Test
-    void seatManagmentPage() {
-        assertNotNull(new SeatManagmentPage().getView());
+    void seatManagementPage() {
+        assertNotNull(new SeatManagementPage().getView());
     }
 
     @Test
@@ -131,7 +131,7 @@ class ViewConstructionTest {
     }
 
     @Test
-    void userManagmentPage() {
-        assertNotNull(new UserManagmentPage().getView());
+    void userManagementPage() {
+        assertNotNull(new UserManagementPage().getView());
     }
 }

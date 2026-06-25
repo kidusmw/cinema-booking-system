@@ -1,6 +1,7 @@
 package infrastructure.persistence;
 
 import domain.model.Seat;
+import domain.model.SeatStatus;
 import domain.port.SeatRepository;
 import java.sql.*;
 import java.util.ArrayList;
@@ -46,13 +47,25 @@ public class JdbcSeatRepository implements SeatRepository {
     }
 
     @Override
-    public void updateStatus(Long seatId, String status) {
+    public int claimSeat(Long seatId) {
+        String sql = "UPDATE seat SET status = 'booked' WHERE seat_id = ? AND status = 'available'";
+        try (Connection conn = connectionProvider.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setLong(1, seatId.longValue());
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to claim seat", e);
+        }
+    }
+
+    @Override
+    public int updateStatus(Long seatId, SeatStatus status) {
         String sql = "UPDATE seat SET status = ? WHERE seat_id = ?";
         try (Connection conn = connectionProvider.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, status);
+            ps.setString(1, status.getDbValue());
             ps.setLong(2, seatId.longValue());
-            ps.executeUpdate();
+            return ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to update seat status", e);
         }
@@ -76,7 +89,7 @@ public class JdbcSeatRepository implements SeatRepository {
             ps.setLong(1, seat.getHallId().longValue());
             ps.setString(2, seat.getSeatNumber());
             ps.setString(3, seat.getSeatType());
-            ps.setString(4, seat.getStatus());
+            ps.setString(4, seat.getStatus().getDbValue());
             ps.executeUpdate();
             try (ResultSet keys = ps.getGeneratedKeys()) {
                 if (keys.next()) seat.setSeatId(Long.valueOf(keys.getLong(1)));
@@ -95,7 +108,7 @@ public class JdbcSeatRepository implements SeatRepository {
             ps.setLong(1, seat.getHallId().longValue());
             ps.setString(2, seat.getSeatNumber());
             ps.setString(3, seat.getSeatType());
-            ps.setString(4, seat.getStatus());
+            ps.setString(4, seat.getStatus().getDbValue());
             ps.setLong(5, seat.getSeatId().longValue());
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -110,6 +123,6 @@ public class JdbcSeatRepository implements SeatRepository {
                 Long.valueOf(rs.getLong("hall_id")),
                 rs.getString("seat_number"),
                 rs.getString("seat_type"),
-                rs.getString("status"));
+                SeatStatus.fromDbValue(rs.getString("status")));
     }
 }

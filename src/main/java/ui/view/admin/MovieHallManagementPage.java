@@ -6,7 +6,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
 @SuppressWarnings({"unchecked", "deprecation"})
-public class MovieHallManagmentPage {
+public class MovieHallManagementPage {
 
     public TableView<Hall> hallTable;
     public TextField searchField;
@@ -22,13 +22,13 @@ public class MovieHallManagmentPage {
     private VBox root;
 
     private static final org.slf4j.Logger log =
-            org.slf4j.LoggerFactory.getLogger(MovieHallManagmentPage.class);
+            org.slf4j.LoggerFactory.getLogger(MovieHallManagementPage.class);
 
-    public MovieHallManagmentPage() {
+    public MovieHallManagementPage() {
         try {
             createUI();
         } catch (Exception e) {
-            log.error("Failed to create MovieHallManagmentPage UI", e);
+            log.error("Failed to create MovieHallManagementPage UI", e);
             root = new VBox();
             root.getChildren().add(new Label("Error: " + e.getMessage()));
         }

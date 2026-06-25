@@ -15,7 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import ui.view.admin.ShowManagementPage;
 
-public class ShowManagmentController {
+public class ShowManagementController {
     private final ShowManagementPage view;
     private final AppContext ctx;
     private final AdminDashboardController dashboard;
@@ -25,7 +25,7 @@ public class ShowManagmentController {
     private final Map<String, String> movieMapById = new HashMap<>();
     private final Map<String, String> hallMapById = new HashMap<>();
 
-    public ShowManagmentController(AppContext ctx, AdminDashboardController dashboard) {
+    public ShowManagementController(AppContext ctx, AdminDashboardController dashboard) {
         this.ctx = ctx;
         this.dashboard = dashboard;
         this.view = new ShowManagementPage();

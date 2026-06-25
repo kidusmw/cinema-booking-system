@@ -103,7 +103,7 @@ public class SeatSelectionController {
 
         boolean clickable = true;
 
-        if ("BOOKED".equalsIgnoreCase(seat.getStatus())) {
+        if (seat.getStatus() == SeatStatus.BOOKED) {
             btn.getStyleClass().add("seat-booked");
             clickable = false;
         } else if (selectedSeats.contains(String.valueOf(seat.getSeatId()))) {

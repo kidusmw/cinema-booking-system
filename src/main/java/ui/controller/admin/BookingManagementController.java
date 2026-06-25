@@ -9,20 +9,20 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ui.view.admin.BookingManagmentPage;
+import ui.view.admin.BookingManagementPage;
 
-public class BookingManagmentController {
-    private static final Logger log = LoggerFactory.getLogger(BookingManagmentController.class);
+public class BookingManagementController {
+    private static final Logger log = LoggerFactory.getLogger(BookingManagementController.class);
 
-    private BookingManagmentPage view;
+    private BookingManagementPage view;
     private final AppContext ctx;
     private final AdminDashboardController dashboard;
     private ObservableList<Booking> masterList;
 
-    public BookingManagmentController(AppContext ctx, AdminDashboardController dashboard) {
+    public BookingManagementController(AppContext ctx, AdminDashboardController dashboard) {
         this.ctx = ctx;
         this.dashboard = dashboard;
-        this.view = new BookingManagmentPage();
+        this.view = new BookingManagementPage();
 
         // 1. Initial Load
         loadTableData();

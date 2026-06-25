@@ -6,7 +6,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
 @SuppressWarnings({"unchecked", "deprecation"})
-public class PaymentManagment {
+public class PaymentManagementPage {
     public TableView<Payment> paymentTable;
     public Button btnRefresh;
     public Button btnBack;
@@ -14,7 +14,7 @@ public class PaymentManagment {
 
     private VBox root;
 
-    public PaymentManagment() {
+    public PaymentManagementPage() {
         createUI();
     }
 
