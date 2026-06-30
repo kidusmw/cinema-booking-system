@@ -2,20 +2,18 @@ package infrastructure.persistence;
 
 import domain.model.Seat;
 import domain.model.SeatStatus;
-import domain.port.SeatRepository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class JdbcSeatRepository implements SeatRepository {
+public class JdbcSeatRepository {
     private final ConnectionProvider connectionProvider;
 
     public JdbcSeatRepository(ConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
     }
 
-    @Override
     public List<Seat> findByHallId(Long hallId) {
         String sql = "SELECT * FROM seat WHERE hall_id = ? ORDER BY seat_number";
         List<Seat> seats = new ArrayList<>();
@@ -31,7 +29,6 @@ public class JdbcSeatRepository implements SeatRepository {
         return seats;
     }
 
-    @Override
     public Optional<Seat> findById(Long id) {
         String sql = "SELECT * FROM seat WHERE seat_id = ?";
         try (Connection conn = connectionProvider.getConnection();
@@ -46,7 +43,6 @@ public class JdbcSeatRepository implements SeatRepository {
         return Optional.empty();
     }
 
-    @Override
     public int claimSeat(Long seatId) {
         String sql = "UPDATE seat SET status = 'booked' WHERE seat_id = ? AND status = 'available'";
         try (Connection conn = connectionProvider.getConnection();
@@ -58,7 +54,6 @@ public class JdbcSeatRepository implements SeatRepository {
         }
     }
 
-    @Override
     public int updateStatus(Long seatId, SeatStatus status) {
         String sql = "UPDATE seat SET status = ? WHERE seat_id = ?";
         try (Connection conn = connectionProvider.getConnection();
@@ -71,7 +66,6 @@ public class JdbcSeatRepository implements SeatRepository {
         }
     }
 
-    @Override
     public Seat save(Seat seat) {
         if (seat.getSeatId() == null) {
             return insert(seat);

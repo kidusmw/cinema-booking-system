@@ -1,21 +1,19 @@
 package infrastructure.persistence;
 
 import domain.model.Showtime;
-import domain.port.ShowtimeRepository;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class JdbcShowtimeRepository implements ShowtimeRepository {
+public class JdbcShowtimeRepository {
     private final ConnectionProvider connectionProvider;
 
     public JdbcShowtimeRepository(ConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
     }
 
-    @Override
     public List<Showtime> findByMovieId(Long movieId) {
         String sql =
                 "SELECT s.*, m.title AS movie_name, h.name AS hall_name "
@@ -36,7 +34,6 @@ public class JdbcShowtimeRepository implements ShowtimeRepository {
         return list;
     }
 
-    @Override
     public Optional<Showtime> findById(Long id) {
         String sql =
                 "SELECT s.*, m.title AS movie_name, h.name AS hall_name "
@@ -56,7 +53,6 @@ public class JdbcShowtimeRepository implements ShowtimeRepository {
         return Optional.empty();
     }
 
-    @Override
     public List<Showtime> findByDate(LocalDate date) {
         String sql =
                 "SELECT s.*, m.title AS movie_name, h.name AS hall_name "
@@ -77,7 +73,6 @@ public class JdbcShowtimeRepository implements ShowtimeRepository {
         return list;
     }
 
-    @Override
     public List<Showtime> findAll() {
         String sql =
                 "SELECT s.*, m.title AS movie_name, h.name AS hall_name "
@@ -96,7 +91,6 @@ public class JdbcShowtimeRepository implements ShowtimeRepository {
         return list;
     }
 
-    @Override
     public Showtime save(Showtime showtime) {
         if (showtime.getShowId() == null) {
             return insert(showtime);
@@ -144,7 +138,6 @@ public class JdbcShowtimeRepository implements ShowtimeRepository {
         return showtime;
     }
 
-    @Override
     public void delete(Long id) {
         String sql = "DELETE FROM showtime WHERE show_id=?";
         try (Connection conn = connectionProvider.getConnection();

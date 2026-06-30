@@ -4,17 +4,17 @@ import domain.model.Booking;
 import domain.model.BookingSeat;
 import domain.model.BookingStatus;
 import domain.model.SeatStatus;
-import domain.port.BookingRepository;
-import domain.port.SeatRepository;
+import infrastructure.persistence.JdbcBookingRepository;
+import infrastructure.persistence.JdbcSeatRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 public class BookingService {
-    private final BookingRepository bookingRepo;
-    private final SeatRepository seatRepo;
+    private final JdbcBookingRepository bookingRepo;
+    private final JdbcSeatRepository seatRepo;
 
-    public BookingService(BookingRepository bookingRepo, SeatRepository seatRepo) {
+    public BookingService(JdbcBookingRepository bookingRepo, JdbcSeatRepository seatRepo) {
         this.bookingRepo = bookingRepo;
         this.seatRepo = seatRepo;
     }

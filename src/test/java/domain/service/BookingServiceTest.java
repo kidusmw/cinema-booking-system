@@ -8,8 +8,8 @@ import domain.model.Booking;
 import domain.model.BookingSeat;
 import domain.model.BookingStatus;
 import domain.model.SeatStatus;
-import domain.port.BookingRepository;
-import domain.port.SeatRepository;
+import infrastructure.persistence.JdbcBookingRepository;
+import infrastructure.persistence.JdbcSeatRepository;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -21,9 +21,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class BookingServiceTest {
 
-    @Mock BookingRepository bookingRepo;
+    @Mock JdbcBookingRepository bookingRepo;
 
-    @Mock SeatRepository seatRepo;
+    @Mock JdbcSeatRepository seatRepo;
 
     @InjectMocks BookingService bookingService;
 

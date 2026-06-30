@@ -1,8 +1,5 @@
 package application.service;
 
-import domain.port.BookingRepository;
-import domain.port.PaymentRepository;
-import domain.port.SeatRepository;
 import domain.service.BookingService;
 import domain.service.PaymentService;
 import infrastructure.persistence.ConnectionProvider;
@@ -34,9 +31,9 @@ public class BookingFacade {
             conn = txProvider.getConnection();
             conn.setAutoCommit(false);
 
-            SeatRepository txSeatRepo = new JdbcSeatRepository(txProvider);
-            BookingRepository txBookingRepo = new JdbcBookingRepository(txProvider);
-            PaymentRepository txPaymentRepo = new JdbcPaymentRepository(txProvider);
+            JdbcSeatRepository txSeatRepo = new JdbcSeatRepository(txProvider);
+            JdbcBookingRepository txBookingRepo = new JdbcBookingRepository(txProvider);
+            JdbcPaymentRepository txPaymentRepo = new JdbcPaymentRepository(txProvider);
 
             BookingService txBookingService = new BookingService(txBookingRepo, txSeatRepo);
             PaymentService txPaymentService = new PaymentService(txPaymentRepo);

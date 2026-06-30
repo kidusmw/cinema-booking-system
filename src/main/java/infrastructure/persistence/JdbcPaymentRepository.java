@@ -1,20 +1,18 @@
 package infrastructure.persistence;
 
 import domain.model.Payment;
-import domain.port.PaymentRepository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class JdbcPaymentRepository implements PaymentRepository {
+public class JdbcPaymentRepository {
     private final ConnectionProvider connectionProvider;
 
     public JdbcPaymentRepository(ConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
     }
 
-    @Override
     public Payment save(Payment payment) {
         if (payment.getPaymentId() == null) {
             return insert(payment);
@@ -67,7 +65,6 @@ public class JdbcPaymentRepository implements PaymentRepository {
         return payment;
     }
 
-    @Override
     public Optional<Payment> findById(Long id) {
         String sql = "SELECT * FROM payment WHERE payment_id = ?";
         try (Connection conn = connectionProvider.getConnection();
@@ -82,7 +79,6 @@ public class JdbcPaymentRepository implements PaymentRepository {
         return Optional.empty();
     }
 
-    @Override
     public List<Payment> findAll() {
         String sql = "SELECT * FROM payment ORDER BY payment_id DESC";
         List<Payment> list = new ArrayList<>();
@@ -96,7 +92,6 @@ public class JdbcPaymentRepository implements PaymentRepository {
         return list;
     }
 
-    @Override
     public Optional<Payment> findByBookingId(Long bookingId) {
         String sql = "SELECT * FROM payment WHERE booking_id = ?";
         try (Connection conn = connectionProvider.getConnection();
