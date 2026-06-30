@@ -5,6 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +44,7 @@ public final class WindowManager {
         stage.setHeight(finalHeight);
         stage.centerOnScreen();
 
-        FadeTransition fade = new FadeTransition(AnimationConstants.FADE_DURATION, root);
+        FadeTransition fade = new FadeTransition(Duration.millis(200), root);
         fade.setFromValue(0.0);
         fade.setToValue(1.0);
         fade.play();
