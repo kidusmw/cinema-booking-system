@@ -9,8 +9,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
 public class TicketPage {
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(TicketPage.class);
-
     public Label successLabel;
     public Label movieTitle;
     public Label movieGenre;
@@ -28,13 +26,7 @@ public class TicketPage {
     private VBox root;
 
     public TicketPage() {
-        try {
-            createUI();
-        } catch (Exception e) {
-            log.error("Failed to create TicketPage UI", e);
-            root = new VBox();
-            root.getChildren().add(new Label("Error: " + e.getMessage()));
-        }
+        createUI();
     }
 
     private void createUI() {

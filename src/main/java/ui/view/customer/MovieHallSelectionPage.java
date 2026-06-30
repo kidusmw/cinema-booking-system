@@ -4,8 +4,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
 public class MovieHallSelectionPage {
-    private static final org.slf4j.Logger log =
-            org.slf4j.LoggerFactory.getLogger(MovieHallSelectionPage.class);
 
     public Button btnBack;
     public Label showInfoLabel;
@@ -15,13 +13,7 @@ public class MovieHallSelectionPage {
     private VBox root;
 
     public MovieHallSelectionPage() {
-        try {
-            createUI();
-        } catch (Exception e) {
-            log.error("Failed to create MovieHallSelectionPage UI", e);
-            root = new VBox();
-            root.getChildren().add(new Label("Error: " + e.getMessage()));
-        }
+        createUI();
     }
 
     private void createUI() {

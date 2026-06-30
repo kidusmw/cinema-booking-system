@@ -4,8 +4,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
 public class ShowSelectionPage {
-    private static final org.slf4j.Logger log =
-            org.slf4j.LoggerFactory.getLogger(ShowSelectionPage.class);
 
     public Button btnBack;
     public Label movieTitle;
@@ -18,13 +16,7 @@ public class ShowSelectionPage {
     private VBox root;
 
     public ShowSelectionPage() {
-        try {
-            createUI();
-        } catch (Exception e) {
-            log.error("Failed to create ShowSelectionPage UI", e);
-            root = new VBox();
-            root.getChildren().add(new Label("Error: " + e.getMessage()));
-        }
+        createUI();
     }
 
     private void createUI() {

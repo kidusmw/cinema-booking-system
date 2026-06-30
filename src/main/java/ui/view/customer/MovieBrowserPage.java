@@ -4,8 +4,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
 public class MovieBrowserPage {
-    private static final org.slf4j.Logger log =
-            org.slf4j.LoggerFactory.getLogger(MovieBrowserPage.class);
 
     public Button btnBack;
     public TextField searchField;
@@ -14,13 +12,7 @@ public class MovieBrowserPage {
     private VBox root;
 
     public MovieBrowserPage() {
-        try {
-            createUI();
-        } catch (Exception e) {
-            log.error("Failed to create MovieBrowserPage UI", e);
-            root = new VBox();
-            root.getChildren().add(new Label("Error: " + e.getMessage()));
-        }
+        createUI();
     }
 
     private void createUI() {
