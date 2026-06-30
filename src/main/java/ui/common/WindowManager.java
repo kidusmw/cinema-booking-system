@@ -35,7 +35,8 @@ public final class WindowManager {
         double finalHeight = clamp(targetHeight, minHeight, maxHeight);
 
         Scene scene = new Scene(root, finalWidth, finalHeight);
-        UITheme.loadStylesheet(scene);
+        scene.getStylesheets()
+                .add(WindowManager.class.getResource("/css/styles.css").toExternalForm());
 
         stage.setTitle("CinemaBook \u2014 " + pageTitle);
         stage.setScene(scene);
