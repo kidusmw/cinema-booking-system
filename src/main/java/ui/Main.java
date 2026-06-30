@@ -7,7 +7,16 @@ import domain.service.AuthService;
 import domain.service.BookingService;
 import domain.service.PaymentService;
 import infrastructure.config.AppConfig;
-import infrastructure.persistence.*;
+import infrastructure.persistence.ConnectionProvider;
+import infrastructure.persistence.FlywayMigrator;
+import infrastructure.persistence.HikariConnectionProvider;
+import infrastructure.persistence.JdbcBookingRepository;
+import infrastructure.persistence.JdbcHallRepository;
+import infrastructure.persistence.JdbcMovieRepository;
+import infrastructure.persistence.JdbcPaymentRepository;
+import infrastructure.persistence.JdbcSeatRepository;
+import infrastructure.persistence.JdbcShowtimeRepository;
+import infrastructure.persistence.JdbcUserRepository;
 import infrastructure.security.BCryptPasswordHasher;
 import infrastructure.security.PasswordHasher;
 import javafx.application.Application;
@@ -31,7 +40,7 @@ public class Main extends Application {
 
         FlywayMigrator.migrate(config);
 
-        ConnectionProvider connectionProvider = new DatabaseConnectionProvider();
+        ConnectionProvider connectionProvider = HikariConnectionProvider::getConnection;
         PasswordHasher passwordHasher = new BCryptPasswordHasher();
 
         UserRepository userRepo = new JdbcUserRepository(connectionProvider);
