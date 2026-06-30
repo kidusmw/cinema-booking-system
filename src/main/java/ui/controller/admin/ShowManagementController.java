@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -77,7 +76,7 @@ public class ShowManagementController {
     }
 
     private void loadShows() {
-        List<Showtime> shows = ctx.showtimeRepo.findAll().stream().collect(Collectors.toList());
+        List<Showtime> shows = ctx.showtimeRepo.findAll();
         for (Showtime show : shows) {
             if (show.getMovieId() != null
                     && movieMapById.containsKey(String.valueOf(show.getMovieId()))) {

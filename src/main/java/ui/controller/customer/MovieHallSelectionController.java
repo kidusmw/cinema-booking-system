@@ -6,7 +6,6 @@ import domain.model.Movie;
 import domain.model.Showtime;
 import domain.model.User;
 import java.util.List;
-import java.util.stream.Collectors;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -54,7 +53,7 @@ public class MovieHallSelectionController {
 
     private void loadHalls() {
         view.hallsContainer.getChildren().clear();
-        List<Hall> halls = ctx.hallRepo.findAll().stream().collect(Collectors.toList());
+        List<Hall> halls = ctx.hallRepo.findAll();
         if (halls.isEmpty()) {
             Label noHalls = new Label("🏛️ No halls available");
             noHalls.getStyleClass().add("empty-text");

@@ -5,7 +5,6 @@ import domain.model.Movie;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -71,7 +70,7 @@ public class MovieManagementController {
     }
 
     private void loadMovies() {
-        List<Movie> movies = ctx.movieRepo.findAll().stream().collect(Collectors.toList());
+        List<Movie> movies = ctx.movieRepo.findAll();
         movieList = FXCollections.observableArrayList(movies);
         view.movieTable.setItems(movieList);
     }

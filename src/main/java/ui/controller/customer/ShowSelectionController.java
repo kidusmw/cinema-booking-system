@@ -59,9 +59,7 @@ public class ShowSelectionController {
     private void loadShows() {
         view.showCardsContainer.getChildren().clear();
         view.dateButtonsContainer.getChildren().clear();
-        movieShows =
-                ctx.showtimeRepo.findByMovieId(selectedMovie.getMovieId()).stream()
-                        .collect(Collectors.toList());
+        movieShows = ctx.showtimeRepo.findByMovieId(selectedMovie.getMovieId());
 
         if (movieShows.isEmpty()) {
             Label noShows = new Label("🎬 No shows available for this movie yet.");

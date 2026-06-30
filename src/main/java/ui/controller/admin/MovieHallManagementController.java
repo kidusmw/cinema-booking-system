@@ -4,7 +4,6 @@ import application.AppContext;
 import domain.model.Hall;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -40,7 +39,7 @@ public class MovieHallManagementController {
 
     private void loadHalls() {
         try {
-            List<Hall> halls = ctx.hallRepo.findAll().stream().collect(Collectors.toList());
+            List<Hall> halls = ctx.hallRepo.findAll();
             hallList = FXCollections.observableArrayList(halls);
             view.hallTable.setItems(hallList);
             log.info("Loaded {} halls into table", Integer.valueOf(halls.size()));

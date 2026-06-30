@@ -4,7 +4,6 @@ import application.AppContext;
 import domain.model.User;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -54,7 +53,7 @@ public class UserManagementController {
 
     private void loadUsers() {
         try {
-            List<User> users = ctx.userRepo.findAll().stream().collect(Collectors.toList());
+            List<User> users = ctx.userRepo.findAll();
             if (users == null || users.isEmpty()) {
                 log.warn("Database query executed but returned 0 records.");
             }

@@ -5,7 +5,6 @@ import domain.model.Hall;
 import domain.model.Seat;
 import domain.model.SeatStatus;
 import java.util.List;
-import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -47,7 +46,7 @@ public class SeatManagementController {
 
     private void loadHalls() {
         try {
-            List<Hall> halls = ctx.hallRepo.findAll().stream().collect(Collectors.toList());
+            List<Hall> halls = ctx.hallRepo.findAll();
             if (halls != null) view.hallDropdown.setItems(FXCollections.observableArrayList(halls));
         } catch (Exception e) {
             log.error("Operation failed", e);
@@ -67,9 +66,7 @@ public class SeatManagementController {
     private void loadSeatsForSelectedHall() {
         if (selectedHall == null) return;
         try {
-            List<Seat> seats =
-                    ctx.seatRepo.findByHallId(selectedHall.getHallId()).stream()
-                            .collect(Collectors.toList());
+            List<Seat> seats = ctx.seatRepo.findByHallId(selectedHall.getHallId());
             view.seatTable.setItems(FXCollections.observableArrayList(seats));
             view.statsLabel.setText("📊 Total Seats: " + seats.size());
         } catch (Exception e) {

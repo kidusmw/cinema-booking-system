@@ -2,7 +2,6 @@ package ui.controller.admin;
 
 import application.AppContext;
 import domain.model.Payment;
-import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import ui.view.admin.PaymentManagementPage;
@@ -29,7 +28,7 @@ public class PaymentManagementController {
 
     private void refreshData() {
         list.clear();
-        list.addAll(ctx.paymentRepo.findAll().stream().collect(Collectors.toList()));
+        list.addAll(ctx.paymentRepo.findAll());
         view.paymentTable.setItems(list);
 
         // Realtime structural calculation metrics aggregation
