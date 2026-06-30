@@ -1,20 +1,18 @@
 package infrastructure.persistence;
 
 import domain.model.User;
-import domain.port.UserRepository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class JdbcUserRepository implements UserRepository {
+public class JdbcUserRepository {
     private final ConnectionProvider connectionProvider;
 
     public JdbcUserRepository(ConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
     }
 
-    @Override
     public Optional<User> findByUsername(String username) {
         String sql = "SELECT * FROM \"user\" WHERE username = ?";
         try (Connection conn = connectionProvider.getConnection();
@@ -29,7 +27,6 @@ public class JdbcUserRepository implements UserRepository {
         return Optional.empty();
     }
 
-    @Override
     public Optional<User> findById(Long id) {
         String sql = "SELECT * FROM \"user\" WHERE user_id = ?";
         try (Connection conn = connectionProvider.getConnection();
@@ -44,7 +41,6 @@ public class JdbcUserRepository implements UserRepository {
         return Optional.empty();
     }
 
-    @Override
     public List<User> findAll() {
         String sql = "SELECT * FROM \"user\" ORDER BY user_id";
         List<User> users = new ArrayList<>();
@@ -58,7 +54,6 @@ public class JdbcUserRepository implements UserRepository {
         return users;
     }
 
-    @Override
     public User save(User user) {
         if (user.getUserId() == null) {
             return insert(user);
@@ -110,7 +105,6 @@ public class JdbcUserRepository implements UserRepository {
         return user;
     }
 
-    @Override
     public void delete(Long id) {
         String sql = "DELETE FROM \"user\" WHERE user_id=?";
         try (Connection conn = connectionProvider.getConnection();

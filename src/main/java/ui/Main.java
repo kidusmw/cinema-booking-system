@@ -2,14 +2,12 @@ package ui;
 
 import application.AppContext;
 import application.service.BookingFacade;
-import domain.port.*;
 import domain.service.AuthService;
 import domain.service.BookingService;
 import domain.service.PaymentService;
 import infrastructure.config.AppConfig;
 import infrastructure.persistence.*;
 import infrastructure.security.BCryptPasswordHasher;
-import infrastructure.security.PasswordHasher;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -32,15 +30,15 @@ public class Main extends Application {
         FlywayMigrator.migrate(config);
 
         ConnectionProvider connectionProvider = new DatabaseConnectionProvider();
-        PasswordHasher passwordHasher = new BCryptPasswordHasher();
+        BCryptPasswordHasher passwordHasher = new BCryptPasswordHasher();
 
-        UserRepository userRepo = new JdbcUserRepository(connectionProvider);
-        MovieRepository movieRepo = new JdbcMovieRepository(connectionProvider);
-        HallRepository hallRepo = new JdbcHallRepository(connectionProvider);
-        SeatRepository seatRepo = new JdbcSeatRepository(connectionProvider);
-        ShowtimeRepository showtimeRepo = new JdbcShowtimeRepository(connectionProvider);
-        BookingRepository bookingRepo = new JdbcBookingRepository(connectionProvider);
-        PaymentRepository paymentRepo = new JdbcPaymentRepository(connectionProvider);
+        JdbcUserRepository userRepo = new JdbcUserRepository(connectionProvider);
+        JdbcMovieRepository movieRepo = new JdbcMovieRepository(connectionProvider);
+        JdbcHallRepository hallRepo = new JdbcHallRepository(connectionProvider);
+        JdbcSeatRepository seatRepo = new JdbcSeatRepository(connectionProvider);
+        JdbcShowtimeRepository showtimeRepo = new JdbcShowtimeRepository(connectionProvider);
+        JdbcBookingRepository bookingRepo = new JdbcBookingRepository(connectionProvider);
+        JdbcPaymentRepository paymentRepo = new JdbcPaymentRepository(connectionProvider);
 
         AuthService authService = new AuthService(userRepo, passwordHasher);
         BookingService bookingService = new BookingService(bookingRepo, seatRepo);

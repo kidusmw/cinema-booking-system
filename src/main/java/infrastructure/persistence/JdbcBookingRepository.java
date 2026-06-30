@@ -3,21 +3,19 @@ package infrastructure.persistence;
 import domain.model.Booking;
 import domain.model.BookingSeat;
 import domain.model.BookingStatus;
-import domain.port.BookingRepository;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class JdbcBookingRepository implements BookingRepository {
+public class JdbcBookingRepository {
     private final ConnectionProvider connectionProvider;
 
     public JdbcBookingRepository(ConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
     }
 
-    @Override
     public Booking save(Booking booking) {
         if (booking.getBookingId() == null) {
             return insert(booking);
@@ -72,7 +70,6 @@ public class JdbcBookingRepository implements BookingRepository {
         return booking;
     }
 
-    @Override
     public Optional<Booking> findById(Long id) {
         String sql = "SELECT * FROM booking WHERE booking_id = ?";
         try (Connection conn = connectionProvider.getConnection();
@@ -91,7 +88,6 @@ public class JdbcBookingRepository implements BookingRepository {
         return Optional.empty();
     }
 
-    @Override
     public List<Booking> findByUserId(Long userId) {
         String sql = "SELECT * FROM booking WHERE user_id = ? ORDER BY booking_date DESC";
         List<Booking> bookings = new ArrayList<>();
@@ -111,7 +107,6 @@ public class JdbcBookingRepository implements BookingRepository {
         return bookings;
     }
 
-    @Override
     public List<Booking> findAll() {
         String sql =
                 "SELECT b.*, u.username FROM booking b "
@@ -132,7 +127,6 @@ public class JdbcBookingRepository implements BookingRepository {
         return bookings;
     }
 
-    @Override
     public void cancel(Long bookingId) {
         String sql = "UPDATE booking SET status = 'cancelled' WHERE booking_id = ?";
         try (Connection conn = connectionProvider.getConnection();

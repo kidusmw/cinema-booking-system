@@ -1,15 +1,15 @@
 package domain.service;
 
 import domain.model.User;
-import domain.port.UserRepository;
-import infrastructure.security.PasswordHasher;
+import infrastructure.persistence.JdbcUserRepository;
+import infrastructure.security.BCryptPasswordHasher;
 import java.util.Optional;
 
 public class AuthService {
-    private final UserRepository userRepo;
-    private final PasswordHasher hasher;
+    private final JdbcUserRepository userRepo;
+    private final BCryptPasswordHasher hasher;
 
-    public AuthService(UserRepository userRepo, PasswordHasher hasher) {
+    public AuthService(JdbcUserRepository userRepo, BCryptPasswordHasher hasher) {
         this.userRepo = userRepo;
         this.hasher = hasher;
     }

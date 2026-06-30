@@ -1,32 +1,38 @@
 package application;
 
 import application.service.BookingFacade;
-import domain.port.*;
 import domain.service.AuthService;
 import domain.service.BookingService;
 import domain.service.PaymentService;
+import infrastructure.persistence.JdbcBookingRepository;
+import infrastructure.persistence.JdbcHallRepository;
+import infrastructure.persistence.JdbcMovieRepository;
+import infrastructure.persistence.JdbcPaymentRepository;
+import infrastructure.persistence.JdbcSeatRepository;
+import infrastructure.persistence.JdbcShowtimeRepository;
+import infrastructure.persistence.JdbcUserRepository;
 
 public class AppContext {
-    public final UserRepository userRepo;
-    public final MovieRepository movieRepo;
-    public final HallRepository hallRepo;
-    public final SeatRepository seatRepo;
-    public final ShowtimeRepository showtimeRepo;
-    public final BookingRepository bookingRepo;
-    public final PaymentRepository paymentRepo;
+    public final JdbcUserRepository userRepo;
+    public final JdbcMovieRepository movieRepo;
+    public final JdbcHallRepository hallRepo;
+    public final JdbcSeatRepository seatRepo;
+    public final JdbcShowtimeRepository showtimeRepo;
+    public final JdbcBookingRepository bookingRepo;
+    public final JdbcPaymentRepository paymentRepo;
     public final AuthService authService;
     public final BookingService bookingService;
     public final PaymentService paymentService;
     public final BookingFacade bookingFacade;
 
     public AppContext(
-            UserRepository userRepo,
-            MovieRepository movieRepo,
-            HallRepository hallRepo,
-            SeatRepository seatRepo,
-            ShowtimeRepository showtimeRepo,
-            BookingRepository bookingRepo,
-            PaymentRepository paymentRepo,
+            JdbcUserRepository userRepo,
+            JdbcMovieRepository movieRepo,
+            JdbcHallRepository hallRepo,
+            JdbcSeatRepository seatRepo,
+            JdbcShowtimeRepository showtimeRepo,
+            JdbcBookingRepository bookingRepo,
+            JdbcPaymentRepository paymentRepo,
             AuthService authService,
             BookingService bookingService,
             PaymentService paymentService,

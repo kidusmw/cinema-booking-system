@@ -1,14 +1,14 @@
 package domain.service;
 
 import domain.model.Payment;
-import domain.port.PaymentRepository;
+import infrastructure.persistence.JdbcPaymentRepository;
 import java.util.Optional;
 import java.util.UUID;
 
 public class PaymentService {
-    private final PaymentRepository paymentRepo;
+    private final JdbcPaymentRepository paymentRepo;
 
-    public PaymentService(PaymentRepository paymentRepo) {
+    public PaymentService(JdbcPaymentRepository paymentRepo) {
         this.paymentRepo = paymentRepo;
     }
 

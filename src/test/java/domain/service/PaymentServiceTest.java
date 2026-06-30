@@ -5,7 +5,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import domain.model.Payment;
-import domain.port.PaymentRepository;
+import infrastructure.persistence.JdbcPaymentRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class PaymentServiceTest {
 
-    @Mock PaymentRepository paymentRepo;
+    @Mock JdbcPaymentRepository paymentRepo;
 
     @InjectMocks PaymentService paymentService;
 

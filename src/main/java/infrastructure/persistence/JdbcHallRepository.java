@@ -1,20 +1,18 @@
 package infrastructure.persistence;
 
 import domain.model.Hall;
-import domain.port.HallRepository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class JdbcHallRepository implements HallRepository {
+public class JdbcHallRepository {
     private final ConnectionProvider connectionProvider;
 
     public JdbcHallRepository(ConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
     }
 
-    @Override
     public Optional<Hall> findById(Long id) {
         String sql = "SELECT * FROM hall WHERE hall_id = ?";
         try (Connection conn = connectionProvider.getConnection();
@@ -29,7 +27,6 @@ public class JdbcHallRepository implements HallRepository {
         return Optional.empty();
     }
 
-    @Override
     public List<Hall> findAll() {
         String sql = "SELECT * FROM hall ORDER BY hall_id";
         List<Hall> halls = new ArrayList<>();
@@ -43,7 +40,6 @@ public class JdbcHallRepository implements HallRepository {
         return halls;
     }
 
-    @Override
     public Hall save(Hall hall) {
         if (hall.getHallId() == null) {
             return insert(hall);
@@ -85,7 +81,6 @@ public class JdbcHallRepository implements HallRepository {
         return hall;
     }
 
-    @Override
     public void delete(Long id) {
         String sql = "DELETE FROM hall WHERE hall_id=?";
         try (Connection conn = connectionProvider.getConnection();

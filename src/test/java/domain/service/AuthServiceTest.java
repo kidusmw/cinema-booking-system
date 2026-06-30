@@ -5,8 +5,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import domain.model.User;
-import domain.port.UserRepository;
-import infrastructure.security.PasswordHasher;
+import infrastructure.persistence.JdbcUserRepository;
+import infrastructure.security.BCryptPasswordHasher;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,9 +17,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
 
-    @Mock UserRepository userRepo;
+    @Mock JdbcUserRepository userRepo;
 
-    @Mock PasswordHasher hasher;
+    @Mock BCryptPasswordHasher hasher;
 
     @InjectMocks AuthService authService;
 

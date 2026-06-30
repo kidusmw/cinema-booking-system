@@ -1,20 +1,18 @@
 package infrastructure.persistence;
 
 import domain.model.Movie;
-import domain.port.MovieRepository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class JdbcMovieRepository implements MovieRepository {
+public class JdbcMovieRepository {
     private final ConnectionProvider connectionProvider;
 
     public JdbcMovieRepository(ConnectionProvider connectionProvider) {
         this.connectionProvider = connectionProvider;
     }
 
-    @Override
     public Optional<Movie> findById(Long id) {
         String sql = "SELECT * FROM movie WHERE movie_id = ?";
         try (Connection conn = connectionProvider.getConnection();
@@ -29,7 +27,6 @@ public class JdbcMovieRepository implements MovieRepository {
         return Optional.empty();
     }
 
-    @Override
     public List<Movie> findAll() {
         String sql = "SELECT * FROM movie ORDER BY movie_id";
         List<Movie> movies = new ArrayList<>();
@@ -43,7 +40,6 @@ public class JdbcMovieRepository implements MovieRepository {
         return movies;
     }
 
-    @Override
     public List<Movie> searchByTitle(String title) {
         String sql = "SELECT * FROM movie WHERE title ILIKE ?";
         List<Movie> movies = new ArrayList<>();
@@ -59,7 +55,6 @@ public class JdbcMovieRepository implements MovieRepository {
         return movies;
     }
 
-    @Override
     public Movie save(Movie movie) {
         if (movie.getMovieId() == null) {
             return insert(movie);
@@ -121,7 +116,6 @@ public class JdbcMovieRepository implements MovieRepository {
         return movie;
     }
 
-    @Override
     public void delete(Long id) {
         String sql = "DELETE FROM movie WHERE movie_id=?";
         try (Connection conn = connectionProvider.getConnection();
