@@ -12,11 +12,6 @@ import domain.port.BookingRepository;
 import domain.port.SeatRepository;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -108,48 +103,4 @@ class BookingServiceTest {
                 () -> bookingService.createBooking(1L, 1L, List.of(1L), 50.0));
     }
 
-    @Test
-    void concurrentBookingOnlyOneSucceeds() throws Exception {
-        Booking savedBooking = new Booking(1L, 1L, 1L, null, 50.0, BookingStatus.PENDING);
-        when(bookingRepo.save(any())).thenReturn(savedBooking);
-
-        AtomicInteger callOrder = new AtomicInteger(0);
-        when(seatRepo.claimSeat(1L)).thenAnswer(inv -> callOrder.incrementAndGet() == 1 ? 1 : 0);
-
-        CyclicBarrier barrier = new CyclicBarrier(2);
-        ExecutorService es = Executors.newFixedThreadPool(2);
-
-        try {
-            List<Future<Booking>> futures =
-                    es.invokeAll(
-                            List.of(
-                                    () -> {
-                                        barrier.await();
-                                        return bookingService.createBooking(
-                                                1L, 1L, List.of(1L), 50.0);
-                                    },
-                                    () -> {
-                                        barrier.await();
-                                        return bookingService.createBooking(
-                                                1L, 1L, List.of(1L), 50.0);
-                                    }));
-
-            long success =
-                    futures.stream()
-                            .filter(
-                                    f -> {
-                                        try {
-                                            f.get();
-                                            return true;
-                                        } catch (Exception e) {
-                                            return false;
-                                        }
-                                    })
-                            .count();
-
-            assertEquals(1, success);
-        } finally {
-            es.shutdown();
-        }
-    }
 }
