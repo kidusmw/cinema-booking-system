@@ -148,7 +148,11 @@ class FlywayMigrationTest {
         props.setProperty("db.password", password);
 
         AppConfig config = new AppConfig(props);
-        FlywayMigrator.migrate(config);
+        Flyway.configure()
+                .dataSource(config.getJdbcUrl(), config.getUser(), config.getPassword())
+                .locations("classpath:db/migration")
+                .load()
+                .migrate();
 
         // Verify tables exist after migration
         String[] expectedTables = {
