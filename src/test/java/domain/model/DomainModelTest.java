@@ -75,33 +75,36 @@ class DomainModelTest {
 
     @Test
     void bookingConfirmChangesStatus() {
-        Booking booking = new Booking(1L, 1L, 1L, LocalDateTime.now(), 50.0, "pending");
+        Booking booking = new Booking(1L, 1L, 1L, LocalDateTime.now(), 50.0, BookingStatus.PENDING);
         booking.confirm();
         assertEquals(BookingStatus.CONFIRMED, booking.getBookingStatus());
     }
 
     @Test
     void bookingConfirmThrowsIfNotPending() {
-        Booking booking = new Booking(1L, 1L, 1L, LocalDateTime.now(), 50.0, "confirmed");
+        Booking booking =
+                new Booking(1L, 1L, 1L, LocalDateTime.now(), 50.0, BookingStatus.CONFIRMED);
         assertThrows(IllegalStateException.class, booking::confirm);
     }
 
     @Test
     void bookingCancelChangesStatus() {
-        Booking booking = new Booking(1L, 1L, 1L, LocalDateTime.now(), 50.0, "confirmed");
+        Booking booking =
+                new Booking(1L, 1L, 1L, LocalDateTime.now(), 50.0, BookingStatus.CONFIRMED);
         booking.cancel();
         assertEquals(BookingStatus.CANCELLED, booking.getBookingStatus());
     }
 
     @Test
     void bookingCancelThrowsIfAlreadyCancelled() {
-        Booking booking = new Booking(1L, 1L, 1L, LocalDateTime.now(), 50.0, "cancelled");
+        Booking booking =
+                new Booking(1L, 1L, 1L, LocalDateTime.now(), 50.0, BookingStatus.CANCELLED);
         assertThrows(IllegalStateException.class, booking::cancel);
     }
 
     @Test
     void bookingTotalSumsSeatPrices() {
-        Booking booking = new Booking(1L, 1L, 1L, LocalDateTime.now(), 0, "pending");
+        Booking booking = new Booking(1L, 1L, 1L, LocalDateTime.now(), 0, BookingStatus.PENDING);
         booking.addSeat(new BookingSeat(1L, 1L, 25.0));
         booking.addSeat(new BookingSeat(1L, 2L, 25.0));
         assertEquals(50.0, booking.total());
@@ -160,7 +163,7 @@ class DomainModelTest {
 
     @Test
     void bookingAddSeatAccumulatesTotal() {
-        Booking booking = new Booking(1L, 1L, 1L, LocalDateTime.now(), 0, "pending");
+        Booking booking = new Booking(1L, 1L, 1L, LocalDateTime.now(), 0, BookingStatus.PENDING);
         booking.addSeat(new BookingSeat(1L, 1L, 25.0));
         booking.addSeat(new BookingSeat(1L, 2L, 25.0));
         booking.addSeat(new BookingSeat(1L, 3L, 50.0));
@@ -169,7 +172,7 @@ class DomainModelTest {
 
     @Test
     void bookingTotalZeroWhenNoSeats() {
-        Booking booking = new Booking(1L, 1L, 1L, LocalDateTime.now(), 0, "pending");
+        Booking booking = new Booking(1L, 1L, 1L, LocalDateTime.now(), 0, BookingStatus.PENDING);
         assertEquals(0.0, booking.total());
     }
 

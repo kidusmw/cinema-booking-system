@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 
 import domain.model.Booking;
 import domain.model.BookingSeat;
+import domain.model.BookingStatus;
 import domain.model.SeatStatus;
 import domain.model.SeatUnavailableException;
 import domain.port.BookingRepository;
@@ -34,7 +35,7 @@ class BookingServiceTest {
 
     @Test
     void createBookingSucceedsWhenSeatsAvailable() {
-        Booking savedBooking = new Booking(1L, 1L, 1L, null, 50.0, "pending");
+        Booking savedBooking = new Booking(1L, 1L, 1L, null, 50.0, BookingStatus.PENDING);
         when(bookingRepo.save(any())).thenReturn(savedBooking);
         when(seatRepo.claimSeat(1L)).thenReturn(1);
 
@@ -47,7 +48,7 @@ class BookingServiceTest {
 
     @Test
     void createBookingThrowsWhenSeatNotFound() {
-        Booking savedBooking = new Booking(1L, 1L, 1L, null, 50.0, "pending");
+        Booking savedBooking = new Booking(1L, 1L, 1L, null, 50.0, BookingStatus.PENDING);
         when(bookingRepo.save(any())).thenReturn(savedBooking);
         when(seatRepo.claimSeat(999L)).thenReturn(0);
 
@@ -58,7 +59,7 @@ class BookingServiceTest {
 
     @Test
     void createBookingThrowsWhenSeatNotAvailable() {
-        Booking savedBooking = new Booking(1L, 1L, 1L, null, 50.0, "pending");
+        Booking savedBooking = new Booking(1L, 1L, 1L, null, 50.0, BookingStatus.PENDING);
         when(bookingRepo.save(any())).thenReturn(savedBooking);
         when(seatRepo.claimSeat(1L)).thenReturn(0);
 
@@ -69,7 +70,7 @@ class BookingServiceTest {
 
     @Test
     void cancelBookingReleasesSeats() {
-        Booking booking = new Booking(1L, 1L, 1L, null, 50.0, "confirmed");
+        Booking booking = new Booking(1L, 1L, 1L, null, 50.0, BookingStatus.CONFIRMED);
         booking.addSeat(new BookingSeat(1L, 1L, 25.0));
         booking.addSeat(new BookingSeat(1L, 2L, 25.0));
         when(bookingRepo.findById(1L)).thenReturn(Optional.of(booking));
@@ -89,8 +90,8 @@ class BookingServiceTest {
 
     @Test
     void getHistoryReturnsUserBookings() {
-        Booking b1 = new Booking(1L, 1L, 1L, null, 50.0, "confirmed");
-        Booking b2 = new Booking(2L, 1L, 2L, null, 30.0, "cancelled");
+        Booking b1 = new Booking(1L, 1L, 1L, null, 50.0, BookingStatus.CONFIRMED);
+        Booking b2 = new Booking(2L, 1L, 2L, null, 30.0, BookingStatus.CANCELLED);
         when(bookingRepo.findByUserId(1L)).thenReturn(List.of(b1, b2));
 
         List<Booking> result = bookingService.getHistory(1L);
@@ -110,7 +111,7 @@ class BookingServiceTest {
 
     @Test
     void concurrentBookingOnlyOneSucceeds() throws Exception {
-        Booking savedBooking = new Booking(1L, 1L, 1L, null, 50.0, "pending");
+        Booking savedBooking = new Booking(1L, 1L, 1L, null, 50.0, BookingStatus.PENDING);
         when(bookingRepo.save(any())).thenReturn(savedBooking);
 
         AtomicInteger callOrder = new AtomicInteger(0);
