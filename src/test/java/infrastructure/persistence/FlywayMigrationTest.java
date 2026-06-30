@@ -2,7 +2,6 @@ package infrastructure.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import infrastructure.config.AppConfig;
 import java.net.URI;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -147,9 +146,9 @@ class FlywayMigrationTest {
         props.setProperty("db.user", user);
         props.setProperty("db.password", password);
 
-        AppConfig config = new AppConfig(props);
+        String url = "jdbc:postgresql://" + uri.getHost() + ":" + uri.getPort() + "/" + dbName;
         Flyway.configure()
-                .dataSource(config.getJdbcUrl(), config.getUser(), config.getPassword())
+                .dataSource(url, user, password)
                 .locations("classpath:db/migration")
                 .load()
                 .migrate();

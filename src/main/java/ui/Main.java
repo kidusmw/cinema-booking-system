@@ -6,19 +6,12 @@ import domain.port.*;
 import domain.service.AuthService;
 import domain.service.BookingService;
 import domain.service.PaymentService;
-import infrastructure.config.AppConfig;
-import infrastructure.persistence.ConnectionProvider;
-import infrastructure.persistence.FlywayMigrator;
-import infrastructure.persistence.HikariConnectionProvider;
-import infrastructure.persistence.JdbcBookingRepository;
-import infrastructure.persistence.JdbcHallRepository;
-import infrastructure.persistence.JdbcMovieRepository;
-import infrastructure.persistence.JdbcPaymentRepository;
-import infrastructure.persistence.JdbcSeatRepository;
-import infrastructure.persistence.JdbcShowtimeRepository;
-import infrastructure.persistence.JdbcUserRepository;
+import infrastructure.persistence.*;
 import infrastructure.security.BCryptPasswordHasher;
 import infrastructure.security.PasswordHasher;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.flywaydb.core.Flyway;
@@ -37,10 +30,24 @@ public class Main extends Application {
                 (thread, throwable) ->
                         log.error(
                                 "Uncaught exception in thread [{}]", thread.getName(), throwable));
-        AppConfig config = AppConfig.load("/db.properties");
-
+        Properties props = new Properties();
+        try (InputStream in = Main.class.getResourceAsStream("/db.properties")) {
+            if (in != null) props.load(in);
+        } catch (IOException e) {
+            log.warn("Failed to load db.properties: {}", e.getMessage());
+        }
+        String url =
+                "jdbc:postgresql://"
+                        + props.getProperty("db.host", "localhost")
+                        + ":"
+                        + props.getProperty("db.port", "5432")
+                        + "/"
+                        + props.getProperty("db.name", "cinema_booking");
         Flyway.configure()
-                .dataSource(config.getJdbcUrl(), config.getUser(), config.getPassword())
+                .dataSource(
+                        url,
+                        props.getProperty("db.user", "java_user"),
+                        props.getProperty("db.password", "java_pass"))
                 .locations("classpath:db/migration")
                 .load()
                 .migrate();
