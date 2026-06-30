@@ -3,7 +3,6 @@ package ui.controller.customer;
 import application.AppContext;
 import domain.model.*;
 import java.util.*;
-import java.util.stream.Collectors;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -62,9 +61,7 @@ public class SeatSelectionController {
 
     private void loadSeats() {
         view.seatGrid.getChildren().clear();
-        allSeats =
-                ctx.seatRepo.findByHallId(selectedHall.getHallId()).stream()
-                        .collect(Collectors.toList());
+        allSeats = ctx.seatRepo.findByHallId(selectedHall.getHallId());
 
         if (allSeats.isEmpty()) {
             Label noSeats =

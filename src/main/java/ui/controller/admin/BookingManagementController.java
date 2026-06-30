@@ -2,7 +2,6 @@ package ui.controller.admin;
 
 import application.AppContext;
 import domain.model.Booking;
-import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -35,9 +34,7 @@ public class BookingManagementController {
     }
 
     private void loadTableData() {
-        this.masterList =
-                FXCollections.observableArrayList(
-                        ctx.bookingRepo.findAll().stream().collect(Collectors.toList()));
+        this.masterList = FXCollections.observableArrayList(ctx.bookingRepo.findAll());
         view.bookingTable.setItems(masterList);
         log.info("Data Loaded: {} bookings.", Integer.valueOf(masterList.size()));
     }

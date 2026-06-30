@@ -5,7 +5,6 @@ import domain.model.Movie;
 import domain.model.User;
 import java.io.File;
 import java.util.List;
-import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
@@ -44,7 +43,7 @@ public class MovieBrowserController {
     }
 
     private void loadMovies() {
-        List<Movie> movieList = ctx.movieRepo.findAll().stream().collect(Collectors.toList());
+        List<Movie> movieList = ctx.movieRepo.findAll();
         movies = FXCollections.observableArrayList(movieList);
         view.movieContainer.getChildren().clear();
 
