@@ -4,7 +4,7 @@ import domain.model.Booking;
 import domain.model.BookingSeat;
 import domain.model.BookingStatus;
 import domain.model.SeatStatus;
-import domain.model.SeatUnavailableException;
+
 import domain.port.BookingRepository;
 import domain.port.SeatRepository;
 import java.time.LocalDateTime;
@@ -29,7 +29,7 @@ public class BookingService {
         for (Long seatId : seatIds) {
             int rows = seatRepo.claimSeat(seatId);
             if (rows == 0) {
-                throw new SeatUnavailableException("Seat " + seatId + " is not available");
+                throw new IllegalStateException("Seat " + seatId + " is not available");
             }
             saved.addSeat(new BookingSeat(saved.getBookingId(), seatId, amount / seatIds.size()));
         }

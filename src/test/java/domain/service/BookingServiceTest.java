@@ -7,7 +7,7 @@ import static org.mockito.Mockito.*;
 import domain.model.Booking;
 import domain.model.BookingSeat;
 import domain.model.SeatStatus;
-import domain.model.SeatUnavailableException;
+
 import domain.port.BookingRepository;
 import domain.port.SeatRepository;
 import java.util.List;
@@ -52,7 +52,7 @@ class BookingServiceTest {
         when(seatRepo.claimSeat(999L)).thenReturn(0);
 
         assertThrows(
-                SeatUnavailableException.class,
+                IllegalStateException.class,
                 () -> bookingService.createBooking(1L, 1L, List.of(999L), 50.0));
     }
 
@@ -63,7 +63,7 @@ class BookingServiceTest {
         when(seatRepo.claimSeat(1L)).thenReturn(0);
 
         assertThrows(
-                SeatUnavailableException.class,
+                IllegalStateException.class,
                 () -> bookingService.createBooking(1L, 1L, List.of(1L), 50.0));
     }
 
