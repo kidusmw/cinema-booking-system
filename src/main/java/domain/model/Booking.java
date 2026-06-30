@@ -22,21 +22,6 @@ public class Booking {
             Long showId,
             LocalDateTime bookingDate,
             double amount,
-            String bookingStatus) {
-        this.bookingId = bookingId;
-        this.userId = userId;
-        this.showId = showId;
-        this.bookingDate = bookingDate;
-        this.amount = amount;
-        this.bookingStatus = BookingStatus.fromDbValue(bookingStatus);
-    }
-
-    public Booking(
-            Long bookingId,
-            Long userId,
-            Long showId,
-            LocalDateTime bookingDate,
-            double amount,
             BookingStatus bookingStatus) {
         this.bookingId = bookingId;
         this.userId = userId;
