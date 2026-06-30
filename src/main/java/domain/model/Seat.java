@@ -11,14 +11,6 @@ public class Seat {
 
     public Seat() {}
 
-    public Seat(Long seatId, Long hallId, String seatNumber, String seatType, String status) {
-        this.seatId = seatId;
-        this.hallId = hallId;
-        this.seatNumber = seatNumber;
-        this.seatType = seatType;
-        this.status = SeatStatus.fromDbValue(status);
-    }
-
     public Seat(Long seatId, Long hallId, String seatNumber, String seatType, SeatStatus status) {
         this.seatId = seatId;
         this.hallId = hallId;
