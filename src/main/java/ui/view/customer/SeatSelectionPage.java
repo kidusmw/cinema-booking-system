@@ -5,8 +5,6 @@ import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 
 public class SeatSelectionPage {
-    private static final org.slf4j.Logger log =
-            org.slf4j.LoggerFactory.getLogger(SeatSelectionPage.class);
 
     public Button btnBack;
     public Label hallNameLabel;
@@ -21,14 +19,7 @@ public class SeatSelectionPage {
     private VBox root;
 
     public SeatSelectionPage() {
-        try {
-            createUI();
-        } catch (Exception e) {
-            log.error("Failed to create SeatSelectionPage UI", e);
-            root = new VBox();
-            root.getChildren().add(new Label("Error: " + e.getMessage()));
-        }
-        seatContainer = new FlowPane();
+        createUI();
     }
 
     private void createUI() {

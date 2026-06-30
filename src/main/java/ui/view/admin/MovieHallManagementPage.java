@@ -21,17 +21,8 @@ public class MovieHallManagementPage {
 
     private VBox root;
 
-    private static final org.slf4j.Logger log =
-            org.slf4j.LoggerFactory.getLogger(MovieHallManagementPage.class);
-
     public MovieHallManagementPage() {
-        try {
-            createUI();
-        } catch (Exception e) {
-            log.error("Failed to create MovieHallManagementPage UI", e);
-            root = new VBox();
-            root.getChildren().add(new Label("Error: " + e.getMessage()));
-        }
+        createUI();
     }
 
     private void createUI() {

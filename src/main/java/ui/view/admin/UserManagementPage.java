@@ -14,20 +14,10 @@ public class UserManagementPage {
     public Button btnBack;
     public Button btnDelete;
     public TextField searchField;
-    private static final org.slf4j.Logger log =
-            org.slf4j.LoggerFactory.getLogger(UserManagementPage.class);
     private VBox root;
 
     public UserManagementPage() {
-        try {
-            createUI();
-        } catch (Exception e) {
-            log.error("Failed to create UserManagementPage UI", e);
-            root = new VBox();
-            Label error = new Label("Error loading User Management page: " + e.getMessage());
-            error.setWrapText(true);
-            root.getChildren().add(error);
-        }
+        createUI();
     }
 
     private void createUI() {

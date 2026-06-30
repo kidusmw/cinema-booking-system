@@ -6,8 +6,6 @@ import javafx.scene.layout.*;
 import javafx.util.Duration;
 
 public class PaymentPage {
-    private static final org.slf4j.Logger log =
-            org.slf4j.LoggerFactory.getLogger(PaymentPage.class);
 
     public Button btnBack;
     public TextField usernameField;
@@ -23,13 +21,7 @@ public class PaymentPage {
     private VBox root;
 
     public PaymentPage() {
-        try {
-            createUI();
-        } catch (Exception e) {
-            log.error("Failed to create PaymentPage UI", e);
-            root = new VBox();
-            root.getChildren().add(new Label("Error: " + e.getMessage()));
-        }
+        createUI();
     }
 
     private void createUI() {

@@ -5,8 +5,6 @@ import javafx.scene.layout.*;
 import ui.common.Sidebar;
 
 public class CustomerDashboardPage {
-    private static final org.slf4j.Logger log =
-            org.slf4j.LoggerFactory.getLogger(CustomerDashboardPage.class);
 
     public Label welcomeLabel;
     public Button btnBrowseMovies;
@@ -18,13 +16,7 @@ public class CustomerDashboardPage {
     private BorderPane root;
 
     public CustomerDashboardPage() {
-        try {
-            createUI();
-        } catch (Exception e) {
-            log.error("Failed to create CustomerDashboardPage UI", e);
-            root = new BorderPane();
-            root.setCenter(new Label("Error: " + e.getMessage()));
-        }
+        createUI();
     }
 
     private void createUI() {
