@@ -5,8 +5,6 @@ import com.zaxxer.hikari.HikariDataSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -58,37 +56,6 @@ public class HikariConnectionProvider {
     }
 
     public static Connection getConnection() throws SQLException {
-        Connection connection = getDataSource().getConnection();
-        return connection;
-    }
-
-    static HikariDataSource getDataSourceField() {
-        return dataSource;
-    }
-
-    public static void printDatabaseInfo() {
-        String sql =
-                "SELECT current_database() AS current_database, "
-                        + "current_user AS login_name, "
-                        + "inet_server_addr() AS server_address";
-
-        try (Connection conn = getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                log.info("Connected database: {}", rs.getString("current_database"));
-                log.info("Login name: {}", rs.getString("login_name"));
-                log.info("Server address: {}", rs.getString("server_address"));
-            }
-        } catch (SQLException e) {
-            log.error("Database info query failed", e);
-        }
-    }
-
-    public static void closePool() {
-        HikariDataSource ds = dataSource;
-        if (ds != null && !ds.isClosed()) {
-            ds.close();
-        }
+        return getDataSource().getConnection();
     }
 }
