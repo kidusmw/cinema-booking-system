@@ -4,7 +4,6 @@ import domain.model.Booking;
 import domain.model.BookingSeat;
 import domain.model.BookingStatus;
 import domain.model.SeatStatus;
-
 import domain.port.BookingRepository;
 import domain.port.SeatRepository;
 import java.time.LocalDateTime;

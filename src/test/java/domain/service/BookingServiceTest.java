@@ -7,7 +7,6 @@ import static org.mockito.Mockito.*;
 import domain.model.Booking;
 import domain.model.BookingSeat;
 import domain.model.SeatStatus;
-
 import domain.port.BookingRepository;
 import domain.port.SeatRepository;
 import java.util.List;
