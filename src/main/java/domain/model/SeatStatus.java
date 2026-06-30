@@ -2,8 +2,7 @@ package domain.model;
 
 public enum SeatStatus {
     AVAILABLE("available"),
-    BOOKED("booked"),
-    RESERVED("reserved");
+    BOOKED("booked");
 
     private final String dbValue;
 

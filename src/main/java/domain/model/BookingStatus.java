@@ -3,8 +3,7 @@ package domain.model;
 public enum BookingStatus {
     PENDING("pending"),
     CONFIRMED("confirmed"),
-    CANCELLED("cancelled"),
-    NO_SHOW("no-show");
+    CANCELLED("cancelled");
 
     private final String dbValue;
 
