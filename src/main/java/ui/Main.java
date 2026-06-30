@@ -21,6 +21,7 @@ import infrastructure.security.BCryptPasswordHasher;
 import infrastructure.security.PasswordHasher;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import org.flywaydb.core.Flyway;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ui.controller.common.NavigationManager;
@@ -38,7 +39,11 @@ public class Main extends Application {
                                 "Uncaught exception in thread [{}]", thread.getName(), throwable));
         AppConfig config = AppConfig.load("/db.properties");
 
-        FlywayMigrator.migrate(config);
+        Flyway.configure()
+                .dataSource(config.getJdbcUrl(), config.getUser(), config.getPassword())
+                .locations("classpath:db/migration")
+                .load()
+                .migrate();
 
         ConnectionProvider connectionProvider = HikariConnectionProvider::getConnection;
         PasswordHasher passwordHasher = new BCryptPasswordHasher();
